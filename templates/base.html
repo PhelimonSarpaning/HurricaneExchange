@@ -1,14 +1,36 @@
+{% load static from staticfiles %}
 <!DOCTYPE HTML>
 <!-- This HTML file is used as a base template for all other HTML files,
     every HTML file created MUST extend from this file. -->
 
 <html>
+    <!-- Title of website, appears on the browser tab -->
     <head>
         <title>Hurricane Exchange</title>
     </head>
     <body>
+        <nav>
+            <ul>
+            <!-- If user is already logged in, give the user an option to logout. -->
+            {% if user.is_authenticated %}
+                <li>
+                    <form class="logout-link" action="{% url 'users:logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="Submit">Logout</button>
+                    </form>
+                </li>
+            {% else %}
+            <!-- If user is not logged in, give the user an option to login. -->
+                <li>
+                    <a href="{% url 'users:login'%}">Login</a>
+                </li>
+                <li>
+                    <a href="{% url 'users:signup'%}">Signup</a>
+                </li>
+            {% endif %}
+            </ul>
+        </nav>
         {% block content %}
-        content in this file is replaced by other HTML files.
         {% endblock %}
     </body>
 </html>
