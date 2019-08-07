@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # OWN Custom installed apps, go here
+    'pages',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +57,7 @@ ROOT_URLCONF = 'HurricaneExchange.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -97,7 +100,7 @@ DATABASES = {
 #         'PORT': '3306',
 #         'NAME': 'hurricaneExchange',
 #         'USER': 'HEx-db account',
-#         "PASSWORD": '=yUpjMv6(PH+!N)z',
+#         "PASSWORD": '=yUpjMv6(PH+!N)z',home
 #     }
 # }
 
