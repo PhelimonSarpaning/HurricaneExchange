@@ -1,0 +1,4 @@
+#dont track these files
+*.sqlite3
+__pycache__
+cloud_sql_proxy
