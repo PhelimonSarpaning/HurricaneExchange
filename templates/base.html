@@ -4,12 +4,14 @@
     every HTML file created MUST extend from this file. -->
 
 <html>
+    <!-- Title of website, appears on the browser tab -->
     <head>
         <title>Hurricane Exchange</title>
     </head>
     <body>
         <nav>
             <ul>
+            <!-- If user is already logged in, give the user an option to logout. -->
             {% if user.is_authenticated %}
                 <li>
                     <form class="logout-link" action="{% url 'users:logout' %}" method="post">
@@ -18,6 +20,7 @@
                     </form>
                 </li>
             {% else %}
+            <!-- If user is not logged in, give the user an option to login. -->
                 <li>
                     <a href="{% url 'users:login'%}">Login</a>
                 </li>

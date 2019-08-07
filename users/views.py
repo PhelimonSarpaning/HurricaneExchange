@@ -8,7 +8,6 @@ def users_signup_view(request, *args, **kwargs):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # log user in
             login(request, user)
             return redirect('index')
             
@@ -20,7 +19,6 @@ def users_login_view(request, *args, **kwargs):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            # log in the user
             user = form.get_user()
             login(request, user)
             return redirect('index')
