@@ -25,6 +25,9 @@
 					<a href="{% url 'index'%}">Home</a>
 				</li>
             {% if user.is_authenticated %}
+				<li>
+					<a href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+				</li>
                 <li>
                     <form class="logout-link" action="{% url 'users:logout' %}" method="post">
                     {% csrf_token %}
