@@ -10,7 +10,7 @@ def users_signup_view(request, *args, **kwargs):
             user = form.save()
             login(request, user)
             return redirect('index')
-            
+
     else:
         form = UserCreationForm()
     return render(request, 'users/users_signup.html', {'form': form})
