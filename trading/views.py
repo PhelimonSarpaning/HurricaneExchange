@@ -8,8 +8,12 @@ from stock.models import Stock_Amount
 
 def trading_list_view(request, *args, **kwargs):
     queryset = Trading_Account.objects.filter(user_id=request.user.id)
+    no_trading = 'It appears you have no trading accounts. Please add a trading account'
+    if queryset.exists():
+        no_trading = ''
     context = {
-        'trading_accounts': queryset
+        'trading_accounts': queryset,
+        'no_trading': no_trading
     }
     return render(request, 'trading/trading_list.html', context)
 
