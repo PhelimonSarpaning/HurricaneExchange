@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     # OWN Custom installed apps, go here
     'pages',
     'users',
-	'dashboard',
 ]
 
 MIDDLEWARE = [
