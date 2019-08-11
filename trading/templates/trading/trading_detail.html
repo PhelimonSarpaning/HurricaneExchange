@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Trading Account: {{ trading_account.trading_name }}</h1>
+<h2>Available funds in trading account: ${{ trading_account.trading_amount }}</h2>
+<h2>Stocks in trading account: </h2>
+
+{% for instance in stock_amount %}
+    <h3>{{ instance.stock_name }}</h3>
+{% endfor %}
+
+<form action="/stock/create/{{ trading_account.id }}">
+    <button type="submit">Add Stock</button>
+</form>
+
+{% endblock %}

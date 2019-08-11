@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import TradingForm
 
 from .models import Trading_Account
+from stock.models import Stock_Amount
 # Create your views here.
 
 def trading_list_view(request, *args, **kwargs):
@@ -26,3 +27,14 @@ def trading_create_view(request, *args, **kwargs):
     }
     return render(request, 'trading/trading_create.html', context)
 
+def trading_detail_view(request, id, *args, **kwargs):
+    try:
+        obj = Trading_Account.objects.get(id=id)
+        objStock = Stock_Amount.objects.filter(trading_id=obj.id)
+    except Trading_Account.DoesNotExist:
+        raise Http404
+    context = {
+        'trading_account': obj,
+        'stock_amount': objStock
+    }
+    return render(request, 'trading/trading_detail.html', context)

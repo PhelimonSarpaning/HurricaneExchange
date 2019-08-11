@@ -12,7 +12,7 @@ class Trading_Account(models.Model):
     #     return reverse("trading:list", kwargs={"id": self.pk})
     
 
-class Stock_Amount(models.Model):
-    trading_id = models.ForeignKey('Trading_Account', on_delete=models.CASCADE)
-    stock_name = models.CharField(max_length=100)
-    stock_amount = models.FloatField()
+# class Stock_Amount(models.Model):
+#     trading_id = models.ForeignKey('Trading_Account', on_delete=models.CASCADE)
+#     stock_name = models.CharField(max_length=100)
+#     stock_amount = models.FloatField()
