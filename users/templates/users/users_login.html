@@ -1,49 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
- <div style = "max-width:470px;">
-   <center>
-     <h1>Login to your account</h1>
-   </center>
-</div>
+<div align="center">
+   <div style = "max-width:470px;">
+     <center>
+       <h1>Login to your account</h1>
+     </center>
+  </div>
 
-<form class="site-form" action="." method="post">
-        {% csrf_token %}
+  <form class="site-form" action="." method="post">
+          {% csrf_token %}
 
-        <!--username field styling -->
-         <div style = "max-width:470px;">
-            <center>
-              <label for="username">Username</label>
-               <input type = "text" style = "margin-left:20%;"
-                  placeholder = "username" name = "username" />
-            </center>
-         </div>
+          <div align= "center">
+            <!--username field styling -->
+             <div style = "max-width:470px;">
+                  <label for="username">Username</label>
+                   <input type = "text" style = "margin-left:20%;"
+                      placeholder = "username" name = "username" />
+             </div>
 
-         <br>
+             <br>
 
-         <!--password field styling -->
-         <div style = "max-width:470px;">
-            <center>
-              <label for="password">Password</label>
-               <input type = "password" style = "margin-left:20%;"
-                  placeholder = "password" name = "password" />
-            </center>
-         </div>
+             <!--password field styling -->
+             <div style = "max-width:470px;">
+                  <label for="password">Password</label>
+                   <input type = "password" style = "margin-left:20%;"
+                      placeholder = "password" name = "password" />
+             </div>
 
-         <br>
+             <br>
 
-         <!--submit button field styling -->
-         <div style = "max-width:470px;">
-            <center>
+             <!--submit button field styling -->
+             <div style = "max-width:470px;">
 
-               <button style = "border:0px; background-color: #008080;
-                  height:35px; width:60%" type = "submit"
-                  value = "Login" >
-                   <font color="white">Login</font>
-               </button>
+                   <button style = "border:0px; background-color: #008080;
+                      height:35px; width:60%" type = "submit"
+                      value = "Login" >
+                       <font color="white">Login</font>
+                   </button>
 
-            </center>
-         </div>
+              </div>
 
-      </form>
+        </form>
+
+    </div>
 {% endblock %}
