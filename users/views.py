@@ -8,7 +8,7 @@ from .forms import UserFundForm
 def users_signup_view(request, *args, **kwargs):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
-        fundForm = UserFundForm(request.POST)
+        fundForm = UserFundForm(request.POST, initial={'fund': '1000000'})
         if form.is_valid() and fundForm.is_valid():
             user = form.save()
 
@@ -20,7 +20,7 @@ def users_signup_view(request, *args, **kwargs):
             return redirect('index')
     else:
         form = UserCreationForm()
-        fundForm = UserFundForm()
+        fundForm = UserFundForm(initial={'fund': '1000000'})
     context = {
         'form': form,
         'fundForm': fundForm
