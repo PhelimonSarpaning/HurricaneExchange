@@ -21,7 +21,10 @@ def users_login_view(request, *args, **kwargs):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('index')
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('index')
     else:
         form = AuthenticationForm()
     return render(request, 'users/users_login.html', {'form': form})
