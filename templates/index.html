@@ -2,6 +2,10 @@
 
 {% block content %}
     <h1>Hurricanes Exchange - HomePage</h1>
-    <p>This is a HTML file that will be the homepage for Hurricanes Exchange</p>
-    <h2> Welcome {{ username }}!</h2>
+    {% if user.is_authenticated %}
+        <h2> Welcome {{ user.username }}!</h2>
+        <h3>Funds available ${{ user.userfund.fund }}</h3>
+    {% else %}
+        <h2> Welcome to Hurricanes Exchange, please login </h2>
+    {% endif %}
 {% endblock %}
