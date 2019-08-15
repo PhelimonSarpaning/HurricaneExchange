@@ -25,7 +25,7 @@ SECRET_KEY = 'f@=0&rhfsmkj=1r^*8ez8(!x%@hl@tzr6s%(xzx&as16q+8_8i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS ='hurricane-exchange-staging.herokuapp.com']
+ALLOWED_HOSTS =['hurricane-exchange-staging.herokuapp.com']
 
 
 # Application definition
