@@ -37,7 +37,8 @@
 	      <img src="" class="w3-circle w3-margin-right" style="width:46px">
 	    </div>
 	    <div class="w3-col s8 w3-bar">
-	      <span>Welcome, <strong>{{request.user.username}}</strong></span><br>
+	      <span><strong>{{request.user.username}}</strong></span><br>
+				<span>Funds: <strong>${{request.user.userfund.fund}}</strong></span><br>
 	      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
 	    </div>
 	  </div>
@@ -63,29 +64,7 @@
 	</div>
 	</body>
 
-	<script>
-// Get the Sidebar
-var mySidebar = document.getElementById("mySidebar");
-
-// Get the DIV with overlay effect
-var overlayBg = document.getElementById("myOverlay");
-
-// Toggle between showing and hiding the sidebar, and add overlay effect
-function w3_open() {
-  if (mySidebar.style.display === 'block') {
-    mySidebar.style.display = 'none';
-    overlayBg.style.display = "none";
-  } else {
-    mySidebar.style.display = 'block';
-    overlayBg.style.display = "block";
-  }
-}
-
-// Close the sidebar with the close button
-function w3_close() {
-  mySidebar.style.display = "none";
-  overlayBg.style.display = "none";
-}
-</script>
+	{% load staticfiles %}
+	<script src="{% static "HurricaneExchange/js/base.js" %}"></script>
 
 </html>

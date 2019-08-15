@@ -7,4 +7,6 @@ from django.forms import ModelForm
 class TradingForm(ModelForm):
     class Meta:
         model = Trading_Account
-        fields = ('trading_name', 'trading_amount')
+        fields = [
+            'trading_name'
+        ]
