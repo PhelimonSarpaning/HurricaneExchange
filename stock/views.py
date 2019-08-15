@@ -32,3 +32,7 @@ def stock_detail_view(request, id, *args, **kwargs):
         'stock_amount': obj,
     }
     return render(request, 'stock/stock_detail.html', context)
+
+@login_required(login_url="/users")
+def stock_list_view(request, *args, **kwargs):
+    return render(request, 'stock/stock_list.html')
