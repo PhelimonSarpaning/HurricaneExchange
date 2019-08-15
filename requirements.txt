@@ -1,1 +1,2 @@
-django
+django==2.2.4
+whitenoise==3.3.1
