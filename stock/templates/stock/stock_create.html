@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Add stock for {{ trading_account.trading_name }}</h1>
-<form action='.' method='POST'>{% csrf_token %}
+<h1>Buy shares for {{ trading_account.trading_name }}</h1>
+<p>Buying and Selling shares will be implemented in the next sprint</p>
+{% comment %} <form action='.' method='POST'>{% csrf_token %}
     {{ form.as_p }}
     <input type='submit' value='Save'>
-</form>
+</form> {% endcomment %}
 {% endblock %}
