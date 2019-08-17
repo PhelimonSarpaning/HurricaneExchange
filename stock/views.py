@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import StockForm
 from django.contrib.auth.decorators import login_required
 
-from stock.models import Stock_Amount
+from stock.models import Stock
 from trading.models import Trading_Account
 # Create your views here.
 

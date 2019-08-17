@@ -4,7 +4,7 @@ from .forms import TradingForm
 from django.contrib.auth.decorators import login_required
 
 from .models import Trading_Account
-from stock.models import Stock_Amount
+from stock.models import Shares
 # Create your views here.
 
 @login_required(login_url="/users")
@@ -37,15 +37,15 @@ def trading_create_view(request, *args, **kwargs):
 def trading_detail_view(request, id, *args, **kwargs):
     try:
         obj = Trading_Account.objects.get(id=id)
-        objStock = Stock_Amount.objects.filter(trading_id=obj.id)
-        no_stock = 'It appears you have no stock for this trading account. Please add stock'
-        if objStock.exists():
-            no_stock = ''
+        objShares = Shares.objects.filter(tradingID=obj.id)
+        no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
+        if objShares.exists():
+            no_Shares = ''
     except Trading_Account.DoesNotExist:
         raise Http404
     context = {
         'trading_account': obj,
-        'stock_amount': objStock,
-        'no_stock': no_stock
+        'Shares': objShares,
+        'no_Shares': no_Shares
     }
     return render(request, 'trading/trading_detail.html', context)
