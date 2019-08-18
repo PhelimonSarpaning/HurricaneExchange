@@ -1,11 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Hurricane Exchange - Signup form</h1>
-<form class="site-form" action="." method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    {{ fundForm.as_p }}
-    <input type="submit" value="Signup">
-</form>
+<div align='center'>
+    <h1 align='center'>Create a new account</h1>
+    <form method="post" style="max-width:470px;">
+        {% csrf_token %}
+        {% for field in form %}
+        <p>
+            <div style="float: left; width: 50%" align='left'>
+                {{ field.label_tag }}
+            </div>
+            <div style="float: left; width: 50%" align='right'>
+                {{ field }}
+            </div>
+            {% if field.help_text %}
+            <!-- {{ field.help_text }} -->
+            {% endif %}
+            {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        </p>
+        <br>
+        {% endfor %}
+        <br>
+        <button style="border:0px; background-color: #008080;
+            height:35px; width:60%" type="submit" value="Signup">
+            <font color="white">Sign Up</font>
+        </button>
+    </form>
+</div>
 {% endblock %}
