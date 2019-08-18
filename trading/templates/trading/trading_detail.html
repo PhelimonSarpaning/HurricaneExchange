@@ -2,15 +2,14 @@
 
 {% block content %}
 <h1>Trading Account: {{ trading_account.trading_name }}</h1>
-<h2>Available funds in trading account: ${{ trading_account.trading_amount }}</h2>
-<h2>Stocks in trading account: </h2>
-
-{% for instance in stock_amount %}
-    <h3>{{ instance.stock_name }}</h3>
+<h2>Shares in your trading account </h2>
+<h3>{{ no_stock }}</h3>
+{% for instance in stock %}
+    <p><a href="/stock/{{ instance.id }}/">{{ instance.stock_name }}</a></p>
 {% endfor %}
 
 <form action="/stock/create/{{ trading_account.id }}">
-    <button type="submit">Add Stock</button>
+    <button type="submit">Buy Share</button>
 </form>
 
 {% endblock %}
