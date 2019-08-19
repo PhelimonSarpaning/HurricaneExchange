@@ -35,4 +35,13 @@ def stock_detail_view(request, id, *args, **kwargs):
 
 @login_required(login_url="/users")
 def stock_list_view(request, *args, **kwargs):
-    return render(request, 'stock/stock_list.html')
+    return render(request, 'stock/stock_list.html',{'stocks' : Stock.objects.all()})
+
+@login_required(login_url="/users")
+def stock_buy(request, *args, **kwargs):
+
+    return render(request, 'stock/stock_buy.html')
+
+@login_required(login_url="/users")
+def stock_sell(request, *args, **kwargs):
+    return render(request, 'stock/stock_sell.html')

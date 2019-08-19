@@ -9,33 +9,21 @@
   <tr>
     <th>Stock</th>
     <th>Price</th>
+    <th>GICS</th>
+    <th>Ticker</th>
     <th></th>
+
   </tr>
   <tr>
-    <td>STOCKPLACEHOLDER</td>
-    <td>PRICEPLACEHOLDER</td>
-    <td> <button type="button">Buy</button> </td>
-  </tr>
-  <tr>
-    <td>STOCKPLACEHOLDER</td>
-    <td>PRICEPLACEHOLDER</td>
-    <td> <button type="button">Buy</button> </td>
-  </tr>
-  <tr>
-    <td>STOCKPLACEHOLDER</td>
-    <td>PRICEPLACEHOLDER</td>
-    <td> <button type="button">Buy</button> </td>
-  </tr>
-  <tr>
-    <td>STOCKPLACEHOLDER</td>
-    <td>PRICEPLACEHOLDER</td>
-    <td> <button type="button">Buy</button> </td>
-  </tr>
-  <tr>
-    <td>STOCKPLACEHOLDER</td>
-    <td>PRICEPLACEHOLDER</td>
-    <td> <button type="button">Buy</button> </td>
-  </tr>
+  {% for stock in stocks %}
+     <tr>
+          <th> {{stock.stock_name}} </th>
+          <th> {{stock.stock_gics}} </th>
+          <th> {{stock.stock_ticker}} </th>
+          <th></th>
+          <td> <button type="button">Buy</button> </td>
+     </tr>
+  {% endfor %}
 </table>
 
 {% endblock %}
