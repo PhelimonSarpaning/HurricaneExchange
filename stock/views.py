@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import StockForm
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from stock.models import Stock
 from trading.models import Trading_Account
@@ -32,3 +33,35 @@ def stock_detail_view(request, id, *args, **kwargs):
         'stock_amount': obj,
     }
     return render(request, 'stock/stock_detail.html', context)
+
+@login_required(login_url="/users")
+def stock_list_view(request, *args, **kwargs):
+    stock_list = Stock.objects.all()
+    paginator = Paginator(stock_list, 10)
+    page = request.GET.get('page')
+    try:
+        stocks = paginator.get_page(page)
+    except(EmptyPage, InvalidPage):
+        stocks = paginator.page(page)
+
+    #index of the current page
+    index = stocks.number - 1
+    #maximum index of pages
+    max_index = len(paginator.page_range)
+    #set range of index to 7
+    start_index = index - 6 if index >= 6 else 0
+    end_index = index + 6 if index <= max_index - 6 else max_index
+    page_range = list(paginator.page_range)[start_index:end_index]
+    return render(request, 'stock/stock_list.html', {
+    'stocks': stocks,
+    'page_range':page_range,
+    })
+
+@login_required(login_url="/users")
+def stock_buy(request, *args, **kwargs):
+
+    return render(request, 'stock/stock_buy.html')
+
+@login_required(login_url="/users")
+def stock_sell(request, *args, **kwargs):
+    return render(request, 'stock/stock_sell.html')
