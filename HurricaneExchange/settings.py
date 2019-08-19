@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'users',
     'trading',
     'stock',
+
+    #from Django-avatar
+    'avatar',
 ]
 
 MIDDLEWARE = [
@@ -141,6 +144,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+#Avatar settings
+AVATAR_CACHE_ENABLED = False
+AVATAR_GRAVATAR_DEFAULT = 'retro'
+
+
+MEDIA_URL = os.path.join(BASE_DIR,'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
