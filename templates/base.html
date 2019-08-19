@@ -34,12 +34,14 @@
 	<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;top:43px;" id="mySidebar"><br>
 	  <div class="w3-container w3-row">
 	    <div class="w3-col s4">
-	      <img src="" class="w3-circle w3-margin-right" style="width:46px">
+				{% load avatar_tags %}
+				{% avatar user 46 class="w3-circle w3-margin-right" id="user_avatar" %}
 	    </div>
 	    <div class="w3-col s8 w3-bar">
 	      <span><strong>{{request.user.username}}</strong></span><br>
 				<span>Funds: <strong>${{request.user.userfund.fund}}</strong></span><br>
-	      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+	      <a href="{% url 'avatar_add' %}" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+				<a href="{% url 'avatar_delete' %}" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
 	    </div>
 	  </div>
 	  <hr>
