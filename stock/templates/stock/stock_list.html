@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>List of stocks to purchase shares in</h1>
+
+
+<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+  <tr>
+    <th>Stock</th>
+    <th>Price</th>
+    <th>GICS</th>
+    <th>Ticker</th>
+    <th></th>
+
+  </tr>
+  <tr>
+  {% for stock in stocks %}
+     <tr>
+          <th> {{stock.stock_name}} </th>
+          <th> {{stock.stock_gics}} </th>
+          <th> {{stock.stock_ticker}} </th>
+          <th></th>
+          <td> <button type="button">Buy</button> </td>
+     </tr>
+  {% endfor %}
+</table>
+
+<div class="w3-center">
+<div class="w3-bar w3-xlarge w3-border w3-round">
+    {% if stocks.has_previous %}
+        <a class="w3-button w3-hover-grey" href="?page={{stocks.previous_page_number}}">&laquo;</a>
+    {% endif %}
+      {% for pg in page_range %}
+          {% if stocks.number == pg %}
+              <a class="w3-button w3-green" href="?page={{pg}}" >{{pg}}</a>
+          {% else %}
+              <a class="w3-button w3-hover-grey" href="?page={{pg}}" >{{pg}}</a>
+          {% endif %}
+      {% endfor %}
+
+      {% if stocks.has_next %}
+          <a class="w3-button w3-hover-grey" href="?page={{stocks.next_page_number}}">&raquo;</a>
+      {% endif %}
+</div>
+</div>
+{% endblock %}
