@@ -4,27 +4,28 @@
 
 <h1>List of stocks to purchase shares in</h1>
 
+<div class="w3-container">
+  <table class="w3-table-all w3-border w3-hoverable">
+    <tr>
+      <th>Stock</th>
+      <th>GICS</th>
+      <th>Ticker</th>
+      <th>Price</th>
+      <th></th>
 
-<table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-  <tr>
-    <th>Stock</th>
-    <th>Price</th>
-    <th>GICS</th>
-    <th>Ticker</th>
-    <th></th>
-
-  </tr>
-  <tr>
-  {% for stock in stocks %}
-     <tr>
-          <th> {{stock.stock_name}} </th>
-          <th> {{stock.stock_gics}} </th>
-          <th> {{stock.stock_ticker}} </th>
-          <th></th>
-          <td> <button type="button">Buy</button> </td>
-     </tr>
-  {% endfor %}
-</table>
+    </tr>
+    <tr>
+    {% for stock in stocks %}
+       <tr>
+            <th> {{stock.stock_name}} </th>
+            <th> {{stock.stock_gics}} </th>
+            <th> {{stock.stock_ticker}} </th>
+            <th></th>
+            <td> <button type="button">Buy</button> </td>
+       </tr>
+    {% endfor %}
+  </table>`
+</div>
 
 <div class="w3-center">
 <div class="w3-bar w3-xlarge w3-border w3-round">
