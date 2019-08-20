@@ -85,13 +85,24 @@ WSGI_APPLICATION = 'HurricaneExchange.wsgi.application'
 
 # Use sqlite3 for development.
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+# Use local PostgreSQL for development.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hurricanes',
+        'USER': 'admin',
+        'PASSWORD': 'hurricanes123',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
-
 
 # This database setting utilisies gcloud proxy, which we may use later on
 
