@@ -3,7 +3,7 @@
 {% block content %}
 <div align='center'>
     <h1 align='center'>Create a new account</h1>
-    <form method="post" style="max-width:470px;">
+    <form class="site-form" action="." method="post" style="max-width:470px;">
         {% csrf_token %}
         {% for field in form %}
         <p>
