@@ -6,13 +6,11 @@
 <h3>{{ no_trading }}</h3>
 
 {% for instance in trading_accounts %}
-    {% comment %} <p><a href='{{ instance.get_absolute_url }}'>{{ instance.trading_name }}</p> {% endcomment %}
-    {% comment %} <p>{{ instance.trading_name }}</p> {% endcomment %}
     <p><a href="/trading/{{ instance.id }}/">{{ instance.trading_name }}</a></p>
 {% endfor %}
 
 <form action="/trading/create">
-    <button type="submit">Open Trading Account</button>
+    <button type="submit">Open a trading account</button>
 </form>
 
 {% endblock %}
