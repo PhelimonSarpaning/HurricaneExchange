@@ -22,7 +22,7 @@
             <th> {{stock.stock_gics}} </th>
             <th> {{stock.stock_ticker}} </th>
             <th> {{stock.stock_price}} </th>
-            <td><div>
+            <th><div>
               {% if stock.stock_dayChange > 0 %}
                   <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
               {% elif stock.stock_dayChange < 0 %}
@@ -30,7 +30,7 @@
               {% else %}
                   <div style="color:green">{{stock.stock_dayChange}}</div>
               {% endif %}
-            </td>
+            </th>
             <td> <button type="button">Buy</button> </td>
        </tr>
     {% endfor %}
