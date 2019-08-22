@@ -11,6 +11,7 @@
       <th>GICS</th>
       <th>Ticker</th>
       <th>Price</th>
+      <th>Day Change</th>
       <th></th>
 
     </tr>
@@ -20,7 +21,8 @@
             <th> {{stock.stock_name}} </th>
             <th> {{stock.stock_gics}} </th>
             <th> {{stock.stock_ticker}} </th>
-            <th></th>
+            <th> {{stock.stock_price}} </th>
+            <th> {{stock.stock_dayChange}} </th>
             <td> <button type="button">Buy</button> </td>
        </tr>
     {% endfor %}
