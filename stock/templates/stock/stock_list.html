@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <h1>List of stocks to purchase shares in</h1>
+
 
 <div class="w3-container">
   <table class="w3-table-all w3-border w3-hoverable">
@@ -13,7 +13,7 @@
       <th>Price</th>
       <th>Day Change</th>
       <th></th>
-
+      <th></th>
     </tr>
     <tr>
     {% for stock in stocks %}
@@ -22,7 +22,15 @@
             <th> {{stock.stock_gics}} </th>
             <th> {{stock.stock_ticker}} </th>
             <th> {{stock.stock_price}} </th>
-            <th> {{stock.stock_dayChange}} </th>
+            <td><div>
+              {% if stock.stock_dayChange > 0 %}
+                  <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
+              {% elif stock.stock_dayChange < 0 %}
+                  <div style="color:red">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
+              {% else %}
+                  <div style="color:green">{{stock.stock_dayChange}}</div>
+              {% endif %}
+            </td>
             <td> <button type="button">Buy</button> </td>
        </tr>
     {% endfor %}
