@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'users/css/validator.css' %}"></link>
+
 <div align='center'>
     <h1 align='center'>Create a new account</h1>
     <form class="site-form" action="." method="post" style="max-width:470px;">
@@ -24,11 +26,20 @@
         {% endfor %}
         <br>
         {{ fundForm.as_p }}
-        <br>
+        <div id="message">
+            <h3>Your password must contain the following:</h3>
+            <p id="letter" class="invalid">A lowercase letter</p>
+            <p id="capital" class="invalid">A capital letter</p>
+            <p id="number" class="invalid">At least one number</p>
+            <p id="length" class="invalid">Minimum 8 characters</p>
+        </div>
         <button style="border:0px; background-color: #008080;
             height:35px; width:60%" type="submit" value="Signup">
             <font color="white">Sign Up</font>
         </button>
+        
     </form>
-</div>
+    <script src="{% static 'users/js/validator.js' %}"></script>
+
+
 {% endblock %}
