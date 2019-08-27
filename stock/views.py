@@ -49,8 +49,15 @@ def stock_list_view(request, *args, **kwargs):
     #maximum index of pages
     max_index = len(paginator.page_range)
     #set range of index to 7
-    start_index = index - 6 if index >= 6 else 0
-    end_index = index + 6 if index <= max_index - 6 else max_index
+    start_index = index - 3 if index > 3 else 0
+    #end_index = index + 3 if index <= max_index - 3 else max_index
+    if index <= max_index:
+        if index <= 3:
+            end_index = 7
+        else:
+            end_index = index+4
+    else:
+        end_index = max_index
     page_range = list(paginator.page_range)[start_index:end_index]
     return render(request, 'stock/stock_list.html', {
     'stocks': stocks,
