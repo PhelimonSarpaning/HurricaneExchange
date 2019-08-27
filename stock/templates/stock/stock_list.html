@@ -1,15 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <h1>List of stocks to purchase shares in</h1>
-
   <table class="w3-table-all w3-border w3-hoverable">
     <tr>
       <th>Stock</th>
       <th>GICS</th>
       <th>Ticker</th>
       <th>Price</th>
+      <th>Day Change</th>
       <th></th>
 
     </tr>
@@ -19,7 +18,16 @@
             <th> {{stock.stock_name}} </th>
             <th> {{stock.stock_gics}} </th>
             <th> {{stock.stock_ticker}} </th>
-            <th></th>
+            <th> {{stock.stock_price}} </th>
+            <th><div>
+              {% if stock.stock_dayChange > 0 %}
+                  <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
+              {% elif stock.stock_dayChange < 0 %}
+                  <div style="color:red">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
+              {% else %}
+                  <div style="color:green">{{stock.stock_dayChange}}</div>
+              {% endif %}
+            </th>
             <td> <button type="button">Buy</button> </td>
        </tr>
     {% endfor %}
@@ -29,7 +37,8 @@
 <div class="w3-center">
 <div class="w3-bar w3-xlarge w3-border w3-round">
     {% if stocks.has_previous %}
-        <a class="w3-button w3-hover-grey" href="?page={{stocks.previous_page_number}}">&laquo;</a>
+        <a class="w3-button w3-hover-grey material-icons" href="?page={{stocks.number|add:"-10"}}">first_page</a>
+        <a class="w3-button w3-hover-grey material-icons" href="?page={{stocks.previous_page_number}}">arrow_back</a>
     {% endif %}
       {% for pg in page_range %}
           {% if stocks.number == pg %}
@@ -40,7 +49,8 @@
       {% endfor %}
 
       {% if stocks.has_next %}
-          <a class="w3-button w3-hover-grey" href="?page={{stocks.next_page_number}}">&raquo;</a>
+          <a class="w3-button w3-hover-grey material-icons" href="?page={{stocks.next_page_number}}">arrow_forward</a>
+          <a class="w3-button w3-hover-grey material-icons" href="?page={{stocks.number|add:"+10"}}" >last_page</a>
       {% endif %}
 </div>
 {% endblock %}
