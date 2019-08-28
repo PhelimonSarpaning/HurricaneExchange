@@ -49,3 +49,25 @@ def trading_detail_view(request, id, *args, **kwargs):
         'no_Shares': no_Shares
     }
     return render(request, 'trading/trading_detail.html', context)
+
+@login_required(login_url="/users")
+def trading_delete_view(request, id, *args, **kwargs):
+    if request.method == 'POST':
+        try:
+            tradingObject = Trading_Account.objects.get(id=id)
+            tradingObject.delete()
+        except Trading_Account.DoesNotExist:
+            pass
+        return redirect('trading:list')
+        context = {
+            'trading_account': tradingObject
+        }
+    else:
+        try:
+            tradingObject = Trading_Account.objects.get(id=id)
+        except Trading_Account.DoesNotExist:
+            raise Http404
+        context = {
+            'trading_account': tradingObject
+        }
+    return render(request, 'trading/trading_delete.html', context)
