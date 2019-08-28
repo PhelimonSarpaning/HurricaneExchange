@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import UserFund
 
 class UserFundForm(forms.ModelForm):
+    fund = forms.FloatField(widget=forms.HiddenInput(), initial=1000000)
     class Meta:
         model = UserFund
         fields = [
