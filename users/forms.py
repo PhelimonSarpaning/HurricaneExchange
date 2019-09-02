@@ -14,7 +14,7 @@ class UserFundForm(forms.ModelForm):
         ]
 
 
-class userEmailForm(UserCreationForm):
+class userSignupForm(UserCreationForm):
     email = forms.EmailField(max_length=200)
     class Meta:
         model = User
