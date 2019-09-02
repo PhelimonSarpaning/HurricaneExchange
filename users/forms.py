@@ -10,4 +10,12 @@ class UserFundForm(forms.ModelForm):
         model = UserFund
         fields = [
             'fund'
+
         ]
+
+
+class userEmailForm(UserCreationForm):
+    email = forms.EmailField(max_length=200)
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
