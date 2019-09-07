@@ -75,7 +75,14 @@ def trading_delete_view(request, id, *args, **kwargs):
 @login_required(login_url="/users")
 def trading_history_view(request, *args, **kwargs):
     qs = Transaction_History.objects.filter(user_id=request.user.id)
-    context = {
-        'object': qs
-    }
+
+    if (qs.exists()):
+        context = {
+            'object': qs,
+            'noHistory': False
+        }
+    else:
+        context = {
+            'noHistory': True
+        }
     return render(request, 'trading/trading_history.html', context)

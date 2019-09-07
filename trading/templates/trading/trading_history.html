@@ -4,6 +4,12 @@
 <h1>Transaction history</h1>
 <h2>Your transaction history: </h2>
 
+
+{% if noHistory %}
+  <br>
+  <h3>It appears you have not made any transactions on this trading account. </h3>
+
+{% else %}
 <table class="w3-table-all w3-border w3-hoverable">
   <thead>
     <tr>
@@ -25,4 +31,5 @@
   </tbody>
 </table>
 
+{% endif %}
 {% endblock %}
