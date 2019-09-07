@@ -71,3 +71,7 @@ def trading_delete_view(request, id, *args, **kwargs):
             'trading_account': tradingObject
         }
     return render(request, 'trading/trading_delete.html', context)
+
+@login_required(login_url="/users")
+def trading_history_view(request, *args, **kwargs):
+    return render(request, 'trading/trading_history.html', {})
