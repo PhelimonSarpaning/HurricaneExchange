@@ -1,6 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 from trading.models import Trading_Account
 
+
+TRANSACTION_TYPE = (
+    ('P', 'Purchased'),
+    ('S', 'Sold')
+)
 
 
 # Create your models here.
@@ -23,3 +29,8 @@ class Shares(models.Model):
     tradingID = models.ForeignKey(Trading_Account, on_delete=models.CASCADE)
     stockID = models.ForeignKey(Stock, on_delete=models.CASCADE)
     shares_amount = models.FloatField()
+
+class Transaction_History(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    shares = models.ForeignKey(Shares, on_delete=models.CASCADE)
+    transaction = models.CharField(choices=TRANSACTION_TYPE, max_length=1)

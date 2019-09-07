@@ -9,17 +9,19 @@
     <tr>
       <th scope="col">Stock</th>
       <th scope="col">GICS</th>
-      <th scope="col">Share</th>
+      <th scope="col">Price</th>
+      <th scope="col">Share Amount</th>
       <th scope="col">Type</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
+    {% for history in object %}
+        <td>{{ history.shares.stockID.stock_name }}</td>
+        <td>{{ history.shares.stockID.stock_gics }}</td>
+        <td>{{ history.shares.stockID.stock_price }}</td>
+        <td>${{ history.shares.shares_amount }}</td>
+        <td>{{ history.get_transaction_display }}</td>
+    {% endfor %}
   </tbody>
 </table>
 
