@@ -2,55 +2,82 @@
 
 {% block content %}
 <h1>List of stocks to purchase shares in</h1>
-  <table class="w3-table-all w3-border w3-hoverable">
+<table class="table table-striped">
+  <thead class="thead-dark">
     <tr>
-      <th>Stock</th>
-      <th>GICS</th>
-      <th>Ticker</th>
-      <th>Price</th>
-      <th>Day Change</th>
+      <th scope="col">Stock</th>
+      <th scope="col">GICS</th>
+      <th scope="col">Ticker</th>
+      <th scope="col">Price</th>
+      <th scope="col">Day Change</th>
       <th></th>
 
     </tr>
-    <tr>
+  </thead>
+  <tr>
     {% for stock in stocks %}
-       <tr>
-            <th> {{stock.stock_name}} </th>
-            <th> {{stock.stock_gics}} </th>
-            <th> {{stock.stock_ticker}} </th>
-            <th> {{stock.stock_price}} </th>
-            <th><div>
-              {% if stock.stock_dayChange > 0 %}
-                  <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
-              {% elif stock.stock_dayChange < 0 %}
-                  <div style="color:red">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
-              {% else %}
-                  <div style="color:green">{{stock.stock_dayChange}}</div>
-              {% endif %}
-            </th>
-            <td> <button type="button">Buy</button> </td>
-       </tr>
-    {% endfor %}
-  </table>`
+  <tr>
+    <th scope="row"> {{stock.stock_name}} </th>
+    <th scope="row"> {{stock.stock_gics}} </th>
+    <th scope="row"> {{stock.stock_ticker}} </th>
+    <th scope="row"> {{stock.stock_price}} </th>
+    <th scope="row">
+      <div>
+        {% if stock.stock_dayChange > 0 %}
+        <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons"
+            style="vertical-align:middle;">arrow_drop_up</i></div>
+        {% elif stock.stock_dayChange < 0 %}
+        <div style="color:red">{{stock.stock_dayChange}}<i class="material-icons"
+            style="vertical-align:middle;">arrow_drop_down</i></div>
+        {% else %}
+        <div style="color:green">{{stock.stock_dayChange}}</div>
+        {% endif %}
+    </th>
+    <td> <button type="button">Buy</button> </td>
+  </tr>
+  {% endfor %}
+</table>`
 </div>
 
-<div class="w3-center">
-<div class="w3-bar w3-xlarge w3-border w3-round">
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
     {% if stocks.has_previous %}
-        <a class="w3-button w3-hover-grey material-icons" href="?page={{stocks.number|add:"-10"}}">first_page</a>
-        <a class="w3-button w3-hover-grey material-icons" href="?page={{stocks.previous_page_number}}">arrow_back</a>
-    {% endif %}
-      {% for pg in page_range %}
-          {% if stocks.number == pg %}
-              <a class="w3-button w3-green" href="?page={{pg}}" >{{pg}}</a>
-          {% else %}
-              <a class="w3-button w3-hover-grey" href="?page={{pg}}" >{{pg}}</a>
-          {% endif %}
-      {% endfor %}
-
-      {% if stocks.has_next %}
-          <a class="w3-button w3-hover-grey material-icons" href="?page={{stocks.next_page_number}}">arrow_forward</a>
-          <a class="w3-button w3-hover-grey material-icons" href="?page={{stocks.number|add:"+10"}}" >last_page</a>
+    <li class="page-item">
+      <a class="page-link" aria-label="Back10" href="?page={{stocks.number|add:"-10"}}">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Back_10</span>
+      </a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" aria-label="Previous" href="?page={{stocks.previous_page_number}}">
+        <span aria-hidden="true">&lt;</span>
+        <span class="sr-only">Previous</span>
+      </a>
       {% endif %}
-</div>
+    </li>
+    {% for pg in page_range %}
+    {% if stocks.number == pg %}
+    <li class="page-item active"><a class="page-link" href="?page={{pg}}">{{pg}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{pg}}">{{pg}}</a></li>
+    {% endif %}
+
+    {% endfor %}
+
+    {% if stocks.has_next %}
+    <li class="page-item">
+      <a class="page-link" aria-label="Next" href="?page={{stocks.next_page_number}}">
+        <span aria-hidden="true">&gt;</span>
+        <span class="sr-only">Forward</span>
+      </a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" aria-label="Next10" href="?page={{stocks.number|add:"+10"}}">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Forward_10</span>
+      </a>
+      {% endif %}
+    </li>
+  </ul>
+</nav>
 {% endblock %}
