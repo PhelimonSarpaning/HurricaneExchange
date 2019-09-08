@@ -1,19 +1,23 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'users/css/validator.css' %}"></link>
+<link rel="stylesheet" href="{% static 'users/css/validator.css' %}">
+</link>
 
-<div align='center'>
-    <h1 align='center'>Create a new account</h1>
-    <form class="site-form" action="." method="post" style="max-width:470px;">
+<div class='container'>
+    <h1>Create a new account</h1>
+    <br>
+    <form class="site-form" action="." method="post">
         {% csrf_token %}
         {% for field in form %}
-        <p>
-            <div style="float: left; width: 50%" align='left'>
-                {{ field.label_tag }}
-            </div>
-            <div style="float: left; width: 50%" align='right'>
-                {{ field }}
+        <div class="form-group">
+            <div class="row h-50">
+                <div class='col-sm'>
+                    {{ field.label_tag }}
+                </div>
+                <div class='col-sm'>
+                    {{ field }}
+                </div>
             </div>
             {% if field.help_text %}
             <!-- {{ field.help_text }} -->
@@ -21,25 +25,25 @@
             {% for error in field.errors %}
             <p style="color: red">{{ error }}</p>
             {% endfor %}
-        </p>
+        </div>
         <br>
         {% endfor %}
-        <br>
         {{ fundForm.as_p }}
-        <div id="message">
-            <h3>Your password must contain the following:</h3>
-            <p id="letter" class="invalid">A lowercase letter</p>
-            <p id="capital" class="invalid">A capital letter</p>
-            <p id="number" class="invalid">At least one number</p>
-            <p id="length" class="invalid">Minimum 8 characters</p>
+        <div class='container' id="message" align='center'>
+            <h5>Your password must contain the following:</h5>
+            <div id="letter" class="invalid">A lowercase letter</div>
+            <div id="capital" class="invalid">A capital letter</div>
+            <div id="number" class="invalid">At least one number</div>
+            <div id="length" class="invalid">Minimum 8 characters</div>
         </div>
-        <button style="border:0px; background-color: #008080;
-            height:35px; width:60%" type="submit" value="Signup">
-            <font color="white">Sign Up</font>
-        </button>
-        
+        <br>
+        <div class='container' align='center'>
+            <button type="submit" value='Signup' class="btn btn-success" style=background-color:#008080;>Sign Up
+            </button>
+        </div>
+
     </form>
     <script src="{% static 'users/js/validator.js' %}"></script>
 
 
-{% endblock %}
+    {% endblock %}
