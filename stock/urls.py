@@ -12,6 +12,6 @@ urlpatterns = [
     path('create/<int:id>/', stock_create_view, name='create'),
     path('<int:id>/', stock_detail_view, name='detail'),
     path('stocklist', stock_list_view, name='list'),
-    path('sell/<int:id>/', stock_sell, name='detail'),
-    path('buy/<int:id>/', stock_buy, name='detail')
+    path('sell/', stock_sell, name='sell'),
+    path('buy/<str:stock_ticker>/', stock_buy, name='buy')
 ]

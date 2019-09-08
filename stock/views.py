@@ -65,9 +65,20 @@ def stock_list_view(request, *args, **kwargs):
     })
 
 @login_required(login_url="/users")
-def stock_buy(request, *args, **kwargs):
-
-    return render(request, 'stock/stock_buy.html')
+def stock_buy(request, stock_ticker, *args, **kwargs):
+    stock = request.GET.get('stock')
+    try:
+        stock = Stock.objects.get(stock_ticker=stock_ticker)
+    except Stock.DoesNotExist:
+        raise Http404
+    stock_available = stock.stock_max - stock.stock_sold
+    context = {
+        'stock_ticker': stock_ticker,
+        'stock_name': stock.stock_name,
+        'stock_price' : stock.stock_price,
+        'stock_available': stock_available
+    }
+    return render(request, 'stock/stock_buy.html', context)
 
 @login_required(login_url="/users")
 def stock_sell(request, *args, **kwargs):

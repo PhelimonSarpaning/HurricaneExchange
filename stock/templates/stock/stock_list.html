@@ -28,7 +28,10 @@
                   <div style="color:green">{{stock.stock_dayChange}}</div>
               {% endif %}
             </th>
-            <td> <button type="button">Buy</button> </td>
+            <td>
+
+              <a class="w3-button" href="/stock/buy/{{stock.stock_ticker}}">Buy</a>
+          </td>
        </tr>
     {% endfor %}
   </table>`

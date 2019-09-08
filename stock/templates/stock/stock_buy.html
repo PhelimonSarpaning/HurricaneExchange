@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Confirm purchase of stock: {{ stock_amount.stock_name }}<h1>
-<form>
- Number of shares:<br>
- Price:<br>
+<h1>Confirm purchase of stock: {{ stock_name}}<h1>
+ Available shares: {{stock_available}}<br>
+ Price: {{stock_price}}<br>
+ <form>
  <input type="submit" value="Buy">
 </form>
 {% endblock %}
