@@ -4,7 +4,7 @@ from .forms import TradingForm
 from django.contrib.auth.decorators import login_required
 
 from .models import Trading_Account
-from stock.models import Shares
+from stock.models import Shares, Transaction_History
 # Create your views here.
 
 @login_required(login_url="/users")
@@ -71,3 +71,18 @@ def trading_delete_view(request, id, *args, **kwargs):
             'trading_account': tradingObject
         }
     return render(request, 'trading/trading_delete.html', context)
+
+@login_required(login_url="/users")
+def trading_history_view(request, *args, **kwargs):
+    qs = Transaction_History.objects.filter(user_id=request.user.id)
+
+    if (qs.exists()):
+        context = {
+            'object': qs,
+            'noHistory': False
+        }
+    else:
+        context = {
+            'noHistory': True
+        }
+    return render(request, 'trading/trading_history.html', context)
