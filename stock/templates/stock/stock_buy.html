@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Confirm purchase of stock: {{ stock_name}}<h1>
+<h1>Confirm purchase of stock: {{ stock_name}}</h1>
  Available shares: {{stock_available}}<br>
  Price (per share): {{stock_price}}<br>
 
@@ -10,7 +10,7 @@
  <!--- <input type="number" name="quantity" min="1" max="{{stock_available}}"> <br> --->
  {{form.shares_amount}} <br>
  Select trading account:
-    <select id = "selectedAccount">
+    <select name = "selectedAccount">
       {%for account in trading_accounts%}
         <option> {{account.trading_name}}</option>
       {% endfor %}

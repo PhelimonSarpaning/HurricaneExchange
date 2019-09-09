@@ -80,13 +80,15 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
         shares = form.save(commit=False)
         #account = document.getElementById("selectedAccount").value
         account = request.POST.get('selectedAccount')
-        #shares.tradingID= account.tradingID
-        shares.stockID = stock.stock_ticker
+        print(account)
+        tradingAccount = Trading_Account.objects.filter(trading_name=account, user_id=user.id)
+        print(tradingAccount[0])
+        shares.tradingID= tradingAccount[0]
+        shares.stockID = stock
         #quantity = request.POST.get('number')
         stock.stock_sold += shares.shares_amount
         shares.save()
         form = SharesForm()
-        return redirect('stock:stocklist')
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,

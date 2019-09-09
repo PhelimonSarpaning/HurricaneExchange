@@ -12,4 +12,4 @@ class StockForm(ModelForm):
 class SharesForm(ModelForm):
     class Meta:
         model = Shares
-        fields = ['shares_amount',]
+        fields = ['shares_amount']
