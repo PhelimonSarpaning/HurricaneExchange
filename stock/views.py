@@ -76,12 +76,17 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     trading_accounts = Trading_Account.objects.filter(user_id=user.id)
     form = SharesForm(request.POST or None)
     if form.is_valid():
+        tradingID = request.POST.get('selectedAccount')
         shares = form.save(commit=False)
-        accountID = request.POST.get('selectedAccount')
-        tradingAccount = Trading_Account.objects.filter(pk=accountID)
-        shares.tradingID= tradingAccount[0]
-        shares.stockID = stock
-        stock.stock_sold += shares.shares_amount
+        quantity = shares.shares_amount
+        if Shares.objects.filter(tradingID=tradingID, stockID=stock).exists():
+            shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
+            shares.shares_amount += quantity
+        else:
+            tradingAccount = Trading_Account.objects.filter(pk=tradingID)
+            shares.tradingID= tradingAccount[0]
+            shares.stockID = stock
+        stock.stock_sold += quantity
         shares.save()
         stock.save()
         form = SharesForm()
