@@ -46,8 +46,8 @@ def stock_list_view(request, *args, **kwargs):
         if(int(page)>paginator.num_pages):
             page=paginator.num_pages
         stocks = paginator.get_page(page)
-    except(ValueError):
-        raise Http404
+    except:
+        stocks = paginator.get_page(page)
 
     #index of the current page
     index = stocks.number - 1
