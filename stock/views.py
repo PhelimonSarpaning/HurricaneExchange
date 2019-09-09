@@ -1,10 +1,10 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import StockForm
+from .forms import StockForm, SharesForm
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
-from stock.models import Stock
+from stock.models import Stock, Shares
 from trading.models import Trading_Account
 # Create your views here.
 
@@ -72,11 +72,28 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     except Stock.DoesNotExist:
         raise Http404
     stock_available = stock.stock_max - stock.stock_sold
+    user= request.user
+    trading_accounts = Trading_Account.objects.filter(user_id=user.id)
+    form = SharesForm(request.POST or None)
+    if form.is_valid():
+    #if request.method =='POST':
+        shares = form.save(commit=False)
+        #account = document.getElementById("selectedAccount").value
+        account = request.POST.get('selectedAccount')
+        #shares.tradingID= account.tradingID
+        shares.stockID = stock.stock_ticker
+        #quantity = request.POST.get('number')
+        stock.stock_sold += shares.shares_amount
+        shares.save()
+        form = SharesForm()
+        return redirect('stock:stocklist')
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
         'stock_price' : stock.stock_price,
-        'stock_available': stock_available
+        'stock_available': stock_available,
+        'trading_accounts': trading_accounts,
+        'form': form
     }
     return render(request, 'stock/stock_buy.html', context)
 

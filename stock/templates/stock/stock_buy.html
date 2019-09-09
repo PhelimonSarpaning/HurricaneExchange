@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <h1>Confirm purchase of stock: {{ stock_name}}<h1>
  Available shares: {{stock_available}}<br>
- Price: {{stock_price}}<br>
- <form>
+ Price (per share): {{stock_price}}<br>
+
+ <form method='POST'>{% csrf_token %}
+
+ Quantity (between 1 and {{stock_available}}):
+ <!--- <input type="number" name="quantity" min="1" max="{{stock_available}}"> <br> --->
+ {{form.shares_amount}} <br>
+ Select trading account:
+    <select id = "selectedAccount">
+      {%for account in trading_accounts%}
+        <option> {{account.trading_name}}</option>
+      {% endfor %}
+    </select> <br>
+    Total: (Not implemented) <br>
  <input type="submit" value="Buy">
 </form>
+
 {% endblock %}

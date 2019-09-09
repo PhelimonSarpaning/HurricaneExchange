@@ -3,6 +3,11 @@
 {% block content %}
 <h1>Trading Account: {{ trading_account.trading_name }}</h1>
 <h2>Shares in your trading account </h2>
+
+{% for share in Shares %}
+    <p>{{share}}</p>
+{% endfor %}
+
 <h3>{{ no_stock }}</h3>
 {% for instance in stock %}
     <p><a href="/stock/{{ instance.id }}/">{{ instance.stock_name }}</a></p>
