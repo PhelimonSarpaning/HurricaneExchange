@@ -76,17 +76,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     trading_accounts = Trading_Account.objects.filter(user_id=user.id)
     form = SharesForm(request.POST or None)
     if form.is_valid():
-    #if request.method =='POST':
-        shares = form.save(commit=False)
-        #account = document.getElementById("selectedAccount").value
-        accountID = request.POST.get('selectedAccount')
-        tradingAccount = Trading_Account.objects.filter(pk=accountID)
-        shares.tradingID= tradingAccount[0]
-        shares.stockID = stock
-        #quantity = request.POST.get('number')
-        stock.stock_sold += shares.shares_amount
-        shares.save()
-        form = SharesForm()
+        shares_buy(request,stock,form)
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
@@ -96,6 +86,19 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
         'form': form
     }
     return render(request, 'stock/stock_buy.html', context)
+
+@login_required(login_url="/users")
+def shares_buy(request,stock, form):
+    shares = form.save(commit=False)
+    accountID = request.POST.get('selectedAccount')
+    tradingAccount = Trading_Account.objects.filter(pk=accountID)
+    shares.tradingID= tradingAccount[0]
+    shares.stockID = stock
+    stock.stock_sold += shares.shares_amount
+    shares.save()
+    stock.save()
+    form = SharesForm()
+    return redirect('/stock/buy/'+stock.stock_ticker)
 
 @login_required(login_url="/users")
 def stock_sell(request, *args, **kwargs):
