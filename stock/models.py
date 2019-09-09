@@ -34,3 +34,4 @@ class Transaction_History(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     shares = models.ForeignKey(Shares, on_delete=models.CASCADE)
     transaction = models.CharField(choices=TRANSACTION_TYPE, max_length=1)
+    date_of_transaction = models.DateTimeField(auto_now_add=True)
