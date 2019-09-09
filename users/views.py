@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 
-from .forms import UserFundForm
+from .forms import UserFundForm, userSignupForm
+
 
 # Create your views here.
 def users_signup_view(request, *args, **kwargs):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        fundForm = UserFundForm(request.POST, initial={'fund': '1000000'})
+        form = userSignupForm(request.POST)
+        fundForm = UserFundForm(request.POST)
         if form.is_valid() and fundForm.is_valid():
             user = form.save()
 
@@ -19,11 +21,11 @@ def users_signup_view(request, *args, **kwargs):
             login(request, user)
             return redirect('index')
     else:
-        form = UserCreationForm()
-        fundForm = UserFundForm(initial={'fund': '1000000'})
+        form = userSignupForm()
+        fundForm = UserFundForm(initial={'fund': 1000000})
     context = {
         'form': form,
-        'fundForm': fundForm
+        'fundForm': fundForm,
     }
     return render(request, 'users/users_signup.html', context)
 
@@ -48,3 +50,7 @@ def users_logout_view(request, *args, **kwargs):
     if request.method == 'POST':
         logout(request)
         return redirect('index')
+
+@login_required(login_url="/users")
+def users_manage_view(request, *args, **kwargs):
+    return render(request, 'users/users_manage.html')

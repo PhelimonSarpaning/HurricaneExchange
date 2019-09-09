@@ -7,6 +7,3 @@ class UserFund(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     fund = models.FloatField(default=1000000)
-
-    # def __str__(self):
-    #     return self.user.username

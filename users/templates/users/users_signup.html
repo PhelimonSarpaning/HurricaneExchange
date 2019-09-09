@@ -1,11 +1,49 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<h1>Hurricane Exchange - Signup form</h1>
-<form class="site-form" action="." method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    {{ fundForm.as_p }}
-    <input type="submit" value="Signup">
-</form>
-{% endblock %}
+<link rel="stylesheet" href="{% static 'users/css/validator.css' %}">
+</link>
+
+<div class='container'>
+    <h1>Create a new account</h1>
+    <br>
+    <form class="site-form" action="." method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <div class="row h-50">
+                <div class='col-sm'>
+                    {{ field.label_tag }}
+                </div>
+                <div class='col-sm'>
+                    {{ field }}
+                </div>
+            </div>
+            {% if field.help_text %}
+            <!-- {{ field.help_text }} -->
+            {% endif %}
+            {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+            {% endfor %}
+        </div>
+        <br>
+        {% endfor %}
+        {{ fundForm.as_p }}
+        <div class='container' id="message" align='center'>
+            <h5>Your password must contain the following:</h5>
+            <div id="letter" class="invalid">A lowercase letter</div>
+            <div id="capital" class="invalid">A capital letter</div>
+            <div id="number" class="invalid">At least one number</div>
+            <div id="length" class="invalid">Minimum 8 characters</div>
+        </div>
+        <br>
+        <div class='container' align='center'>
+            <button type="submit" value='Signup' class="btn btn-success" style=background-color:#008080;>Sign Up
+            </button>
+        </div>
+
+    </form>
+    <script src="{% static 'users/js/validator.js' %}"></script>
+
+
+    {% endblock %}

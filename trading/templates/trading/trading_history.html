@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Transaction history</h1>
+<h2>Your transaction history: </h2>
+
+
+{% if noHistory %}
+  <br>
+  <h3>It appears you have not made any transactions on this trading account. </h3>
+
+{% else %}
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Stock</th>
+      <th scope="col">GICS</th>
+      <th scope="col">Price</th>
+      <th scope="col">Share Amount</th>
+      <th scope="col">Type</th>
+      <th scope="col">Date of transaction</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for history in object %}
+      <tr>
+        <td>{{ history.shares.stockID.stock_name }}</td>
+        <td>{{ history.shares.stockID.stock_gics }}</td>
+        <td>${{ history.shares.stockID.stock_price }}</td>
+        <td>${{ history.shares.shares_amount }}</td>
+        <td>{{ history.get_transaction_display }}</td>
+        <td>{{ history.date_of_transaction }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endif %}
+{% endblock %}

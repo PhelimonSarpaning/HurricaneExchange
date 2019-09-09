@@ -3,13 +3,40 @@
 {% block content %}
 <h1>Trading Account: {{ trading_account.trading_name }}</h1>
 <h2>Shares in your trading account </h2>
-<h3>{{ no_stock }}</h3>
-{% for instance in stock %}
-    <p><a href="/stock/{{ instance.id }}/">{{ instance.stock_name }}</a></p>
-{% endfor %}
 
-<form action="/stock/create/{{ trading_account.id }}">
-    <button type="submit">Buy Share</button>
+<h3>{{ no_stock }}</h3>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Stock</th>
+      <th scope="col">Number of shares</th>
+      <th scope="col"></th>
+      <th></th>
+
+    </tr>
+  </thead>
+  <tr>
+    {% for share in Shares %}
+       <tr>
+            <th> <a href="/stock/buy/{{ share.stockID.stock_ticker }}/">{{ share.stockID.stock_name }}</a> </th>
+            <th> {{share.shares_amount}}</th>
+            <th> <button onclick="window.location.href='/stock/{{trading_account.id}}/sell/{{share.stockID.stock_ticker}}'" class= "btn-secondary btn-sm">Sell</button> </th>
+            <td>
+
+          </td>
+       </tr>
+    {% endfor %}
+  </table>
+
+<form action="/stock/stocklist">
+    <button type="submit">Buy Shares</button>
+</form>
+
+<br>
+
+<form action="/trading/delete/{{ trading_account.id }}">
+    <button type="submit">Delete this trading account</button>
 </form>
 
 {% endblock %}
