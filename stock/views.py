@@ -4,7 +4,7 @@ from .forms import StockForm, SharesForm
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
-from stock.models import Stock, Shares
+from stock.models import Stock, Shares, Transaction_History
 from trading.models import Trading_Account
 from users.models import UserFund
 # Create your views here.
@@ -23,7 +23,7 @@ def stock_create_view(request, id, *args, **kwargs):
         'trading_account': Trading_Account.objects.get(id=id)
     }
     return render(request, 'stock/stock_create.html', context)
-
+ 
 @login_required(login_url="/users")
 def stock_detail_view(request, id, *args, **kwargs):
     try:
@@ -80,6 +80,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     stock_available = stock.stock_max - stock.stock_sold
     user= request.user
     trading_accounts = Trading_Account.objects.filter(user_id=user.id)
+    transaction_history = Transaction_History()
     form = SharesForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -101,6 +102,14 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                     stock.save()
                     user.userfund.save()
                     form = SharesForm()
+
+                    # Add to trading history
+                    transaction_history.user = user
+                    transaction_history.shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
+                    transaction_history.transaction = 'P'
+                    transaction_history.save()
+                    
+
                     return redirect('/stock/buy/'+stock_ticker)
     context = {
         'stock_ticker': stock_ticker,
