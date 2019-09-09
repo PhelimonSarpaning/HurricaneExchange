@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 
 from stock.models import Stock, Shares
 from trading.models import Trading_Account
+from users.models import UserFund
 # Create your views here.
 
 @login_required(login_url="/users")
@@ -75,22 +76,25 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     user= request.user
     trading_accounts = Trading_Account.objects.filter(user_id=user.id)
     form = SharesForm(request.POST or None)
-    if form.is_valid():
-        tradingID = request.POST.get('selectedAccount')
-        shares = form.save(commit=False)
-        quantity = shares.shares_amount
-        if Shares.objects.filter(tradingID=tradingID, stockID=stock).exists():
-            shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
-            shares.shares_amount += quantity
-        else:
-            tradingAccount = Trading_Account.objects.filter(pk=tradingID)
-            shares.tradingID= tradingAccount[0]
-            shares.stockID = stock
-        stock.stock_sold += quantity
-        shares.save()
-        stock.save()
-        form = SharesForm()
-        return redirect('/stock/buy/'+stock_ticker)
+    if request.method == 'POST':
+        if form.is_valid():
+            tradingID = request.POST.get('selectedAccount')
+            shares = form.save(commit=False)
+            quantity = shares.shares_amount
+            if Shares.objects.filter(tradingID=tradingID, stockID=stock).exists():
+                shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
+                shares.shares_amount += quantity
+            else:
+                tradingAccount = Trading_Account.objects.filter(pk=tradingID)
+                shares.tradingID= tradingAccount[0]
+                shares.stockID = stock
+            stock.stock_sold += quantity
+            user.userfund.fund-= stock.stock_price * quantity
+            shares.save()
+            stock.save()
+            user.userfund.save()
+            form = SharesForm()
+            return redirect('/stock/buy/'+stock_ticker)
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
@@ -102,5 +106,32 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     return render(request, 'stock/stock_buy.html', context)
 
 @login_required(login_url="/users")
-def stock_sell(request, *args, **kwargs):
-    return render(request, 'stock/stock_sell.html')
+def stock_sell(request, id, stock_ticker, *args, **kwargs):
+    try:
+        stock = Stock.objects.get(stock_ticker=stock_ticker)
+    except Stock.DoesNotExist:
+        raise Http404
+    tradingID  = Trading_Account.objects.get(id=id)
+    shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
+    user= request.user
+
+    form = SharesForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            quantity = form.cleaned_data['shares_amount']
+            stock.stock_sold -= quantity
+            shares.shares_amount -= quantity
+            user.userfund.fund += stock.stock_price * quantity
+            stock.save()
+            shares.save()
+            user.userfund.save()
+            if shares.shares_amount == 0:
+                shares.delete()
+                return redirect('/trading/')
+            form = SharesForm()
+    context = {
+    'stock_name': stock.stock_name,
+    'num_shares': shares.shares_amount,
+    'form': form,
+    }
+    return render(request, 'stock/stock_sell.html', context)
