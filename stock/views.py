@@ -129,6 +129,7 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
         raise Http404
 
     tradingID  = Trading_Account.objects.get(id=id)
+    transaction_history = Transaction_History()
     try:
         shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
     except Shares.DoesNotExist:
@@ -147,6 +148,12 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
                 stock.save()
                 shares.save()
                 user.userfund.save()
+
+                # Add to trading history
+                transaction_history.user = user
+                transaction_history.shares = shares
+                transaction_history.transaction = 'S'
+                transaction_history.save()
                 if shares.shares_amount == 0:
                     shares.delete()
                     return redirect('/trading/')
