@@ -12,7 +12,7 @@
  Select trading account:
     <select name = "selectedAccount">
       {%for account in trading_accounts%}
-        <option> {{account.trading_name}}</option>
+        <option value="{{account.pk}}">{{account.trading_name}}</option>
       {% endfor %}
     </select> <br>
     Total: (Not implemented) <br>

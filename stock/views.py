@@ -79,10 +79,8 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     #if request.method =='POST':
         shares = form.save(commit=False)
         #account = document.getElementById("selectedAccount").value
-        account = request.POST.get('selectedAccount')
-        print(account)
-        tradingAccount = Trading_Account.objects.filter(trading_name=account, user_id=user.id)
-        print(tradingAccount[0])
+        accountID = request.POST.get('selectedAccount')
+        tradingAccount = Trading_Account.objects.filter(pk=accountID)
         shares.tradingID= tradingAccount[0]
         shares.stockID = stock
         #quantity = request.POST.get('number')
