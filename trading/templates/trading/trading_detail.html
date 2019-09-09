@@ -5,12 +5,32 @@
 <h2>Shares in your trading account </h2>
 
 <h3>{{ no_stock }}</h3>
-{% for share in Shares %}
-    <p><a href="/stock/buy/{{ share.stockID.stock_ticker }}/">{{ share.stockID.stock_name }}</a><br> Shares owned:{{share.shares_amount}}</p>
-{% endfor %}
 
-<form action="/stock/buy/{{ trading_account.id }}">
-    <button type="submit">Buy Share</button>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Stock</th>
+      <th scope="col">Number of shares</th>
+      <th scope="col"></th>
+      <th></th>
+
+    </tr>
+  </thead>
+  <tr>
+    {% for share in Shares %}
+       <tr>
+            <th> <a href="/stock/buy/{{ share.stockID.stock_ticker }}/">{{ share.stockID.stock_name }}</a> </th>
+            <th> {{share.shares_amount}}</th>
+            <th> <a class="button" href="/stock/sell/{{stockID.stock_ticker}}">Sell</a> </th>
+            <td>
+
+          </td>
+       </tr>
+    {% endfor %}
+  </table>`
+
+<form action="/stock/stocklist">
+    <button type="submit">Buy Shares</button>
 </form>
 
 <br>
