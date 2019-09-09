@@ -16,30 +16,26 @@
   </thead>
   <tr>
     {% for stock in stocks %}
-  <tr>
-    <th scope="row"> {{stock.stock_name}} </th>
-    <th scope="row"> {{stock.stock_gics}} </th>
-    <th scope="row"> {{stock.stock_ticker}} </th>
-    <th scope="row"> {{stock.stock_price}} </th>
-    <th scope="row">
-      <div>
-        {% if stock.stock_dayChange > 0 %}
-        <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons"
-            style="vertical-align:middle;">arrow_drop_up</i></div>
-        {% elif stock.stock_dayChange < 0 %}
-        <div style="color:red">{{stock.stock_dayChange}}<i class="material-icons"
-            style="vertical-align:middle;">arrow_drop_down</i></div>
-        {% else %}
-        <div style="color:green">{{stock.stock_dayChange}}</div>
-        {% endif %}
-    </th>
-    <!-- Currently showing disabled -->
-    <td> <button type="button" class="btn btn-secondary btn-sm" disabled>Buy</button> </td>
-  </tr>
-  {% endfor %}
-</table>`
-</div>
-
+       <tr>
+            <th> {{stock.stock_name}} </th>
+            <th> {{stock.stock_gics}} </th>
+            <th> {{stock.stock_ticker}} </th>
+            <th> {{stock.stock_price}} </th>
+            <th><div>
+              {% if stock.stock_dayChange > 0 %}
+                  <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
+              {% elif stock.stock_dayChange < 0 %}
+                  <div style="color:red">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
+              {% else %}
+                  <div style="color:green">{{stock.stock_dayChange}}</div>
+              {% endif %}
+            </th>
+            <td>
+              <button onclick="window.location.href='/stock/buy/{{stock.stock_ticker}}'" class="btn btn-secondary btn-sm">Buy</button>
+          </td>
+       </tr>
+    {% endfor %}
+  </table>
 <nav aria-label="Page navigation example">
   <ul class="pagination justify-content-center">
     {% if stocks.has_previous %}
