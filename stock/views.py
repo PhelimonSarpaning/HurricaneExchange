@@ -105,11 +105,13 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
 
                     # Add to trading history
                     transaction_history.user = user
-                    transaction_history.shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
+                    transaction_history.stock_name = stock.stock_name
+                    transaction_history.stock_gics = stock.stock_gics
+                    transaction_history.stock_price = stock.stock_price
+                    transaction_history.no_of_shares = shares.shares_amount
                     transaction_history.transaction = 'P'
                     transaction_history.save()
                     
-
                     return redirect('/stock/buy/'+stock_ticker)
     context = {
         'stock_ticker': stock_ticker,

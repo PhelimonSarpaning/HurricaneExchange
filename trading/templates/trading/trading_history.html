@@ -24,10 +24,10 @@
   <tbody>
     {% for history in object %}
       <tr>
-        <td>{{ history.shares.stockID.stock_name }}</td>
-        <td>{{ history.shares.stockID.stock_gics }}</td>
-        <td>${{ history.shares.stockID.stock_price }}</td>
-        <td>${{ history.shares.shares_amount }}</td>
+        <td>{{ history.stock_name}}</td>
+        <td>{{ history.stock_gics }}</td>
+        <td>${{ history.stock_price }}</td>
+        <td>${{ history.no_of_shares }}</td>
         <td>{{ history.get_transaction_display }}</td>
         <td>{{ history.date_of_transaction }}</td>
       </tr>
