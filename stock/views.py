@@ -7,6 +7,10 @@ from django.core.paginator import Paginator
 from stock.models import Stock, Shares, Transaction_History
 from trading.models import Trading_Account
 from users.models import UserFund
+
+#for historical graph
+from yahoo_historical import Fetcher
+from datetime import datetime
 # Create your views here.
 
 @login_required(login_url="/users")
@@ -23,7 +27,7 @@ def stock_create_view(request, id, *args, **kwargs):
         'trading_account': Trading_Account.objects.get(id=id)
     }
     return render(request, 'stock/stock_create.html', context)
- 
+
 @login_required(login_url="/users")
 def stock_detail_view(request, id, *args, **kwargs):
     try:
@@ -111,8 +115,10 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                     transaction_history.no_of_shares = shares.shares_amount
                     transaction_history.transaction = 'P'
                     transaction_history.save()
-                    
+
                     return redirect('/stock/buy/'+stock_ticker)
+
+    get_historical(stock_ticker+".ax")
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
@@ -122,6 +128,10 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
         'form': form
     }
     return render(request, 'stock/stock_buy.html', context)
+
+def get_historical(stock_ticker):
+    data = data = Fetcher(stock_ticker, [2014,1,1])
+    print(data.getHistorical())
 
 @login_required(login_url="/users")
 def stock_sell(request, id, stock_ticker, *args, **kwargs):
@@ -159,7 +169,7 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
                 transaction_history.no_of_shares = quantity
                 transaction_history.transaction = 'S'
                 transaction_history.save()
-                    
+
                 if shares.shares_amount == 0:
                     shares.delete()
                     return redirect('/trading/')
