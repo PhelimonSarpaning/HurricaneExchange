@@ -153,9 +153,13 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
 
                 # Add to trading history
                 transaction_history.user = user
-                transaction_history.shares = shares
+                transaction_history.stock_name = stock.stock_name
+                transaction_history.stock_gics = stock.stock_gics
+                transaction_history.stock_price = stock.stock_price
+                transaction_history.no_of_shares = quantity
                 transaction_history.transaction = 'S'
                 transaction_history.save()
+                    
                 if shares.shares_amount == 0:
                     shares.delete()
                     return redirect('/trading/')
