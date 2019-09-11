@@ -32,6 +32,9 @@ class Shares(models.Model):
 
 class Transaction_History(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    shares = models.ForeignKey(Shares, on_delete=models.CASCADE)
+    stock_name = models.CharField(max_length=100)
+    stock_gics = models.CharField(max_length=100)
+    stock_price = models.FloatField()
+    no_of_shares = models.FloatField()
     transaction = models.CharField(choices=TRANSACTION_TYPE, max_length=1)
     date_of_transaction = models.DateTimeField(auto_now_add=True)
