@@ -16,7 +16,8 @@
       <th scope="col">Stock</th>
       <th scope="col">GICS</th>
       <th scope="col">Price</th>
-      <th scope="col">Share Amount</th>
+      <th scope="col">Shares</th>
+      <th scope="col">Funds</th>
       <th scope="col">Type</th>
       <th scope="col">Date of transaction</th>
     </tr>
@@ -29,17 +30,28 @@
         <td>${{ history.stock_price }}</td>
         {% if history.transaction == 'P' %}
           <td>
+            <div style="color:green">
+              + {{history.no_of_shares}}
+            </div>
+          </td>
+          <td>
             <div style="color:red">
-              - ${{history.no_of_shares}}
+              - ${{ history.funds }}
             </div>
           </td>
         {% else %}
           <td>
+            <div style="color:red">
+              - {{history.no_of_shares}}
+            </div>
+          </td>
+          <td>
             <div style="color:green">
-              + ${{history.no_of_shares}}
+              + ${{history.funds}}
             </div>
           </td>
         {% endif %}
+        
         <td>{{ history.get_transaction_display }}</td>
         <td>{{ history.date_of_transaction }}</td>
       </tr>
