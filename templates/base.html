@@ -28,30 +28,26 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		{% if user.is_authenticated %}
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
         <a class="nav-link" href="{% url 'index'%}">Home <span class="sr-only">(current)</span></a>
-
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
+          Trading
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/trading"><i class="fa fa-users fa-fw"></i>  Trading Accounts</a>
 					<div class="dropdown-divider"></div>
-		  <a class="dropdown-item" href="/trading/history"><i class="fa fa-bank fa-fw"></i>  Transaction History</a>
+		  		<a class="dropdown-item" href="/trading/history"><i class="fa fa-bank fa-fw"></i>  Transaction History</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/stock/stocklist"><i class="fa fa-diamond fa-fw"></i>  Stock Shares</a>
-          <div class="dropdown-divider"></div>
-
-          <a class="dropdown-item" href="#">Something else here</a>
+          
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-      </li>
     </ul>
+		{% endif %}
   </div>
 	<div class="my-sm-0mr-1">
 	{% if user.is_authenticated %}
