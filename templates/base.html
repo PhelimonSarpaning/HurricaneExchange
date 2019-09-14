@@ -49,8 +49,10 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Accounts</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/trading/1"><i class="fa fa-users fa-fw"></i> Jono's Trade</a>
+		  {% for instance in list_accounts %}
+          <a class="dropdown-item" href="/trading/{{ instance.id }}"><i class="fa fa-users fa-fw"></i>{{ instance.trading_name }}</a>
 		  <div class="dropdown-divider"></div></a>
+		  {% endfor %}
 		  <a class="dropdown-item" href="/trading/create"><i class="fa fa-cog fa-fw"></i> Open a new trading account</a>
         </div>
       </li>
