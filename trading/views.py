@@ -35,14 +35,33 @@ def trading_create_view(request, *args, **kwargs):
 
 @login_required(login_url="/users")
 def trading_detail_view(request, id, *args, **kwargs):
-    try:
-        obj = Trading_Account.objects.get(id=id)
-        objShares = Shares.objects.filter(tradingID=obj.id)
-        no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
-        if objShares.exists():
-            no_Shares = ''
-    except Trading_Account.DoesNotExist:
-        raise Http404
+    if request.method == 'POST':
+        try: 
+            currentDefault = Trading_Account.objects.get(user_id=request.user.id, is_default=True)
+            currentDefault.is_default = False
+            currentDefault.save()
+        except Trading_Account.DoesNotExist:
+            pass
+        try: 
+            obj = Trading_Account.objects.get(id=id)
+            obj.is_default = True
+            obj.save()
+
+            objShares = Shares.objects.filter(tradingID=obj.id)
+            no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
+            if objShares.exists():
+                no_Shares = ''
+        except Trading_Account.DoesNotExist:
+            return Http404
+    else:
+        try:
+            obj = Trading_Account.objects.get(id=id)
+            objShares = Shares.objects.filter(tradingID=obj.id)
+            no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
+            if objShares.exists():
+                no_Shares = ''
+        except Trading_Account.DoesNotExist:
+            raise Http404
     context = {
         'trading_account': obj,
         'Shares': objShares,
