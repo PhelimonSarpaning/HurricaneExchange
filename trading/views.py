@@ -22,9 +22,17 @@ def trading_list_view(request, *args, **kwargs):
 @login_required(login_url="/users")
 def trading_create_view(request, *args, **kwargs):
     form = TradingForm(request.POST or None)
+    try:
+        queryset = Trading_Account.objects.filter(user_id=request.user.id, is_default=True)
+    except Trading_Account.DoesNotExist:
+        queryset = None
     if form.is_valid():
         trading = form.save(commit=False)
         trading.user_id = request.user
+        if queryset.exists():
+            trading.is_default = False
+        else:
+            trading.is_default = True
         trading.save()
         form = TradingForm()
         return redirect('trading:list')
