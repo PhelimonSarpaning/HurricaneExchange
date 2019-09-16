@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'trading',
     'stock',
+    'leaderboard',
 
     #from Django-avatar
     'avatar',

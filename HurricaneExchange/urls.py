@@ -27,6 +27,7 @@ urlpatterns = [
     path('trading/', include('trading.urls')),
     path('stock/', include('stock.urls')),
     path('avatar/', include('avatar.urls')),
+    path('leaderboard/', include('leaderboard.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
