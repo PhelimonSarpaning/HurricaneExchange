@@ -13,7 +13,6 @@
             <h3>Start Date</h3>
               <div class="form-group">
                   <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                      {% comment %} {{ form.as_p }} {% endcomment %}
                       <input type="text" name="date" class="form-control datetimepicker-input" data-target="#datetimepicker1" required="" id="id_date">
                       <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -22,18 +21,18 @@
               </div>
           <!-- End Start Date --> 
           </div>
-          {% comment %} <!-- End Date -->
+          <!-- End Date -->
           <div class="col-sm-3">
             <h3>End Date</h3>
               <div class="form-group">
                   <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                      <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2"/>
+                  <input type="text" name="date2" class="form-control datetimepicker-input" data-target="#datetimepicker2" required="" id="id_date2">
                       <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                           <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                      </div><input type="text" name="date" value="21/02/1998" class="form-control datetimepicker-input" data-target="#datetimepicker1" required="" id="id_date">
+                      </div>
                   </div>
               </div>        
-          <!-- End End Date -->  {% endcomment %}
+          <!-- End End Date -->
           </div>
           <div class='col-sm-3'>
             <br><br>

@@ -104,9 +104,12 @@ def trading_history_view(request, *args, **kwargs):
     if request.method == 'POST':
         form = DateForm(request.POST)
         if form.is_valid():
-            datevalue = form.cleaned_data['date']
-            print('Date value as shown: ')
-            print(datevalue)
+            startDate = form.cleaned_data['date']
+            endDate = form.cleaned_data['date2']
+            print('Start value as shown: ')
+            print(startDate)
+            print('End date value as shows: ')
+            print(endDate)
         else:
             print('Form is not valid!')
         context = {

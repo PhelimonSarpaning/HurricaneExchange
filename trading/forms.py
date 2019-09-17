@@ -19,3 +19,10 @@ class DateForm(forms.Form):
             'data-target': '#datetimepicker1'
         })
     )
+    date2 = forms.DateTimeField(
+        input_formats=['%m/%d/%Y'],
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control datetimepicker-input',
+            'data-target': '#datetimepicker2'
+        })
+    )
