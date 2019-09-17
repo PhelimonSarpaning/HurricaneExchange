@@ -5,6 +5,7 @@
 <h2>Your transaction history: </h2>
 <form method='POST' action='.' id='daterange'>
   {% csrf_token %}
+  {{ form.as_p }}
   <div class="container">
       <div class="row justify-content-md-center">
           <!-- Start Date -->

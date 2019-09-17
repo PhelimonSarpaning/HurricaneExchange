@@ -101,16 +101,28 @@ def trading_delete_view(request, id, *args, **kwargs):
 
 @login_required(login_url="/users")
 def trading_history_view(request, *args, **kwargs):
-    qs = Transaction_History.objects.filter(user_id=request.user.id)
-    form = DateForm()
-    if (qs.exists()):
+    if request.method == 'POST':
+        form = DateForm(request.POST)
+        if form.is_valid():
+            datevalue = form.cleaned_data('data-target')
+            print('Date value as shown: ')
+            print(datevalue)
+        else:
+            print('Form is not valid!')
         context = {
-            'object': qs,
-            'noHistory': False,
             'form': form
         }
     else:
-        context = {
-            'noHistory': True
-        }
+        qs = Transaction_History.objects.filter(user_id=request.user.id)
+        form = DateForm()
+        if (qs.exists()):
+            context = {
+                'object': qs,
+                'noHistory': False,
+                'form': form
+            }
+        else:
+            context = {
+                'noHistory': True
+            }
     return render(request, 'trading/trading_history.html', context)
