@@ -104,7 +104,7 @@ def trading_history_view(request, *args, **kwargs):
     if request.method == 'POST':
         form = DateForm(request.POST)
         if form.is_valid():
-            datevalue = form.cleaned_data('data-target')
+            datevalue = form.cleaned_data['date']
             print('Date value as shown: ')
             print(datevalue)
         else:
