@@ -106,13 +106,14 @@ def trading_history_view(request, *args, **kwargs):
         if form.is_valid():
             startDate = form.cleaned_data['date']
             endDate = form.cleaned_data['date2']
-            print('Start value as shown: ')
-            print(startDate)
-            print('End date value as shows: ')
-            print(endDate)
+            try: 
+                qs = Transaction_History.objects.filter(date_of_transaction__range=[startDate, endDate])
+            except Transaction_History.DoesNotExist:
+                pass
         else:
-            print('Form is not valid!')
+            return redirect('/trading/history')
         context = {
+            'object': qs,
             'form': form
         }
     else:
