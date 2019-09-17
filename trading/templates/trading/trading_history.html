@@ -9,9 +9,9 @@
         <div class="col-sm-3">
           <h3>Start Date</h3>
             <div class="form-group">
-                <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
-                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
                 </div>
@@ -22,9 +22,9 @@
         <div class="col-sm-3">
           <h3>End Date</h3>
             <div class="form-group">
-                <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
-                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2"/>
+                    <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                         <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                     </div>
                 </div>
@@ -37,7 +37,12 @@
         </div>
         <script type="text/javascript">
             $(function () {
-                $('#datetimepicker4').datetimepicker({
+                $('#datetimepicker1').datetimepicker({
+                    format: 'L'
+                });
+            });
+            $(function () {
+                $('#datetimepicker2').datetimepicker({
                     format: 'L'
                 });
             });
