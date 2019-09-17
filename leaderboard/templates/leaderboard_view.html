@@ -1,7 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Leaderboard View</h1>
-<p></p>
 
+{% if noHistory %}
+  <br>
+  <h3>It appears there are no users in database. </h3>
+
+{% else %}
+<h1>Fund Leaderboard:</h1>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Funds Owned</th>
+      <th></th>
+
+    </tr>
+  </thead>
+  <tr>
+    {% for user_id in object %}
+       <tr>
+            <th> {{userfund.user_id}} </th>
+            <th> {{userfund.fund}} </th>
+       </tr>
+    {% endfor %}
+
+{% endif %}
 {% endblock %}
