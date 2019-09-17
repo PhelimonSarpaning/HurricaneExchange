@@ -114,7 +114,9 @@ def trading_history_view(request, *args, **kwargs):
             return redirect('/trading/history')
         context = {
             'object': qs,
-            'form': form
+            'form': form,
+            'startDate': str(startDate),
+            'endDate': str(endDate)
         }
     else:
         qs = Transaction_History.objects.filter(user_id=request.user.id)
