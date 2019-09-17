@@ -107,7 +107,7 @@ def trading_history_view(request, *args, **kwargs):
             startDate = form.cleaned_data['date']
             endDate = form.cleaned_data['date2']
             try: 
-                qs = Transaction_History.objects.filter(date_of_transaction__date__range=[startDate, endDate])
+                qs = Transaction_History.objects.filter(user_id=request.user.id, date_of_transaction__date__range=[startDate, endDate])
             except Transaction_History.DoesNotExist:
                 pass
         else:
