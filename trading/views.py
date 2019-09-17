@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import TradingForm
+from .forms import TradingForm, DateForm
 from django.contrib.auth.decorators import login_required
 
 from .models import Trading_Account
@@ -102,11 +102,12 @@ def trading_delete_view(request, id, *args, **kwargs):
 @login_required(login_url="/users")
 def trading_history_view(request, *args, **kwargs):
     qs = Transaction_History.objects.filter(user_id=request.user.id)
-
+    form = DateForm()
     if (qs.exists()):
         context = {
             'object': qs,
-            'noHistory': False
+            'noHistory': False,
+            'form': form
         }
     else:
         context = {
