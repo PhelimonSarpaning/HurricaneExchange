@@ -3,53 +3,55 @@
 {% block content %}
 <h1>Transaction history</h1>
 <h2>Your transaction history: </h2>
-<div class="container">
-    <div class="row justify-content-md-center">
-        <!-- Start Date -->
-        <div class="col-sm-3">
-          <h3>Start Date</h3>
-            <div class="form-group">
-                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
-                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
-                </div>
-            </div>
-        <!-- End Start Date --> 
-        </div>
-        <!-- End Date -->
-        <div class="col-sm-3">
-          <h3>End Date</h3>
-            <div class="form-group">
-                <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2"/>
-                    <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
-                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
-                </div>
-            </div>        
-        <!-- End End Date --> 
-        </div>
-        <div class='col-sm-3'>
-          <br><br>
-        <button class='btn btn-primary'>Apply Range</button>
-        </div>
-        <script type="text/javascript">
-            $(function () {
-                $('#datetimepicker1').datetimepicker({
-                    format: 'L'
-                });
-            });
-            $(function () {
-                $('#datetimepicker2').datetimepicker({
-                    format: 'L'
-                });
-            });
-        </script>
-    </div>
-</div>
-
+<form method='POST' action='.' id='daterange'>
+  {% csrf_token %}
+  <div class="container">
+      <div class="row justify-content-md-center">
+          <!-- Start Date -->
+          <div class="col-sm-3">
+            <h3>Start Date</h3>
+              <div class="form-group">
+                  <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                      <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+                      <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                  </div>
+              </div>
+          <!-- End Start Date --> 
+          </div>
+          <!-- End Date -->
+          <div class="col-sm-3">
+            <h3>End Date</h3>
+              <div class="form-group">
+                  <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                      <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker2"/>
+                      <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                      </div>
+                  </div>
+              </div>        
+          <!-- End End Date --> 
+          </div>
+          <div class='col-sm-3'>
+            <br><br>
+          <button class='btn btn-primary' type='submit' form='daterange' value='Submit'>Apply Range</button>
+          </div>
+          <script type="text/javascript">
+              $(function () {
+                  $('#datetimepicker1').datetimepicker({
+                      format: 'L'
+                  });
+              });
+              $(function () {
+                  $('#datetimepicker2').datetimepicker({
+                      format: 'L'
+                  });
+              });
+          </script>
+      </div>
+  </div>
+</form>
 
 {% if noHistory %}
   <br>
