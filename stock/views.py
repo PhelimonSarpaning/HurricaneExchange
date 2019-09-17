@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import StockForm, SharesForm
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.contrib import messages
 
 from stock.models import Stock, Shares, Transaction_History
 from trading.models import Trading_Account
@@ -23,7 +24,7 @@ def stock_create_view(request, id, *args, **kwargs):
         'trading_account': Trading_Account.objects.get(id=id)
     }
     return render(request, 'stock/stock_create.html', context)
- 
+
 @login_required(login_url="/users")
 def stock_detail_view(request, id, *args, **kwargs):
     try:
@@ -87,40 +88,47 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
             tradingID = request.POST.get('selectedAccount')
             shares = form.save(commit=False)
             quantity = shares.shares_amount
-            if (user.userfund.fund - stock.stock_price * quantity) >= 0:
-                if stock_available - quantity >= 0:
-                    if Shares.objects.filter(tradingID=tradingID, stockID=stock).exists():
-                        shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
-                        shares.shares_amount += quantity
-                    else:
-                        tradingAccount = Trading_Account.objects.filter(pk=tradingID)
-                        shares.tradingID= tradingAccount[0]
-                        shares.stockID = stock
-                    stock.stock_sold += quantity
-                    user.userfund.fund-= stock.stock_price * quantity
-                    shares.save()
-                    stock.save()
-                    user.userfund.save()
-                    form = SharesForm()
+            if 0 < quantity <= stock_available:
+                if (user.userfund.fund - stock.stock_price * quantity) >= 0:
+                    if stock_available - quantity >= 0:
+                        if Shares.objects.filter(tradingID=tradingID, stockID=stock).exists():
+                            shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
+                            shares.shares_amount += quantity
+                        else:
+                            tradingAccount = Trading_Account.objects.filter(pk=tradingID)
+                            shares.tradingID= tradingAccount[0]
+                            shares.stockID = stock
+                        stock.stock_sold += quantity
+                        user.userfund.fund-= stock.stock_price * quantity
+                        shares.save()
+                        stock.save()
+                        user.userfund.save()
+                        form = SharesForm()
 
-                    # Add to trading history
-                    transaction_history.user = user
-                    transaction_history.stock_name = stock.stock_name
-                    transaction_history.stock_gics = stock.stock_gics
-                    transaction_history.stock_price = stock.stock_price
-                    transaction_history.no_of_shares = quantity
-                    transaction_history.funds = stock.stock_price * quantity
-                    transaction_history.transaction = 'P'
-                    transaction_history.save()
-                    
-                    return redirect('/stock/buy/'+stock_ticker)
+                        # Add to trading history
+                        transaction_history.user = user
+                        transaction_history.stock_name = stock.stock_name
+                        transaction_history.stock_gics = stock.stock_gics
+                        transaction_history.stock_price = stock.stock_price
+                        transaction_history.no_of_shares = quantity
+                        transaction_history.funds = stock.stock_price * quantity
+                        transaction_history.transaction = 'P'
+                        transaction_history.save()
+
+                        return redirect('/stock/buy/'+stock_ticker)
+                    else:
+                        messages.error(request, 'Not enough shares available')
+                else:
+                    messages.error(request, 'Not enough funds')
+            else:
+                messages.error(request, 'Quantity not in range')
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
         'stock_price' : stock.stock_price,
         'stock_available': stock_available,
         'trading_accounts': trading_accounts,
-        'form': form
+        'form': form,
     }
     return render(request, 'stock/stock_buy.html', context)
 
@@ -144,28 +152,33 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
     if request.method == 'POST':
         if form.is_valid():
             quantity = form.cleaned_data['shares_amount']
-            if (shares.shares_amount - quantity) >= 0:
-                stock.stock_sold -= quantity
-                shares.shares_amount -= quantity
-                user.userfund.fund += stock.stock_price * quantity
-                stock.save()
-                shares.save()
-                user.userfund.save()
+            if 0 < quantity <= shares.shares_amount:
+                if (shares.shares_amount - quantity) >= 0:
+                    stock.stock_sold -= quantity
+                    shares.shares_amount -= quantity
+                    user.userfund.fund += stock.stock_price * quantity
+                    stock.save()
+                    shares.save()
+                    user.userfund.save()
 
-                # Add to trading history
-                transaction_history.user = user
-                transaction_history.stock_name = stock.stock_name
-                transaction_history.stock_gics = stock.stock_gics
-                transaction_history.stock_price = stock.stock_price
-                transaction_history.no_of_shares = quantity
-                transaction_history.funds = stock.stock_price * quantity
-                transaction_history.transaction = 'S'
-                transaction_history.save()
-                    
-                if shares.shares_amount == 0:
-                    shares.delete()
-                    return redirect('/trading/')
-            form = SharesForm()
+                    # Add to trading history
+                    transaction_history.user = user
+                    transaction_history.stock_name = stock.stock_name
+                    transaction_history.stock_gics = stock.stock_gics
+                    transaction_history.stock_price = stock.stock_price
+                    transaction_history.no_of_shares = quantity
+                    transaction_history.funds = stock.stock_price * quantity
+                    transaction_history.transaction = 'S'
+                    transaction_history.save()
+
+                    if shares.shares_amount == 0:
+                        shares.delete()
+                        return redirect('/trading/')
+                else:
+                    messages.error(request, 'You do not own that many shares ')
+                form = SharesForm()
+            else:
+                messages.error(request, 'Quantity not in range')
     context = {
     'stock_name': stock.stock_name,
     'num_shares': shares.shares_amount,
