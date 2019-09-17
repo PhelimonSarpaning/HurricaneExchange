@@ -4,8 +4,10 @@
 <h1>Transaction history</h1>
 <h2>Your transaction history: </h2>
 <div class="container">
-    <div class="row">
-        <div class="col-sm-6">
+    <div class="row justify-content-md-center">
+        <!-- Start Date -->
+        <div class="col-sm-3">
+          <h3>Start Date</h3>
             <div class="form-group">
                 <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
                     <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
@@ -14,6 +16,24 @@
                     </div>
                 </div>
             </div>
+        <!-- End Start Date --> 
+        </div>
+        <!-- End Date -->
+        <div class="col-sm-3">
+          <h3>End Date</h3>
+            <div class="form-group">
+                <div class="input-group date" id="datetimepicker4" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker4"/>
+                    <div class="input-group-append" data-target="#datetimepicker4" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+            </div>        
+        <!-- End End Date --> 
+        </div>
+        <div class='col-sm-3'>
+          <br><br>
+        <button class='btn btn-primary'>Apply Range</button>
         </div>
         <script type="text/javascript">
             $(function () {
