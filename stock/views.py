@@ -11,6 +11,9 @@ from users.models import UserFund
 #for historical graph
 from yahoo_historical import Fetcher
 from datetime import datetime
+import json
+import pandas as pd
+import numpy as np
 # Create your views here.
 
 @login_required(login_url="/users")
@@ -117,21 +120,28 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                     transaction_history.save()
 
                     return redirect('/stock/buy/'+stock_ticker)
+    data = get_historical(stock_ticker+".ax")
 
-    get_historical(stock_ticker+".ax")
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
         'stock_price' : stock.stock_price,
         'stock_available': stock_available,
         'trading_accounts': trading_accounts,
-        'form': form
+        'form': form,
+        'historical':data,
     }
     return render(request, 'stock/stock_buy.html', context)
 
 def get_historical(stock_ticker):
-    data = data = Fetcher(stock_ticker, [2014,1,1])
-    print(data.getHistorical())
+    data = Fetcher(stock_ticker, [2014,1,1]).getHistorical()
+    data['Date'] = pd.to_datetime(data['Date'])
+    data = data.drop(columns=['Open', 'High', 'Low', 'Adj Close', 'Volume'])
+    data['Date']= pd.to_datetime(data['Date']).values.astype(np.int64) // 10**6
+    data = data.rename(columns={"Date": "x", "Close": "y"})
+    data = data.dropna()
+    data = data.to_dict('records')
+    return data
 
 @login_required(login_url="/users")
 def stock_sell(request, id, stock_ticker, *args, **kwargs):

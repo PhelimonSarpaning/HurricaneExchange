@@ -18,4 +18,29 @@
 <button onclick="submit" class="btn btn-secondary btn-sm">Buy</button>
 </form>
 
+<div id="container" style="height: 400px; min-width: 310px"></div>
+
+
+
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+{{ historical|json_script:"historicalData"}}
+<script type="text/javascript">
+  // Create the chart
+  var value = JSON.parse(document.getElementById('historicalData').textContent);
+
+  Highcharts.stockChart('container', {
+        rangeSelector: {
+            selected: 1
+        },
+        title: {
+            text: "{{stock_ticker}}"
+        },
+      series:  [{
+            data: value,
+            turboThreshold: 0
+        }],
+    });
+</script>
+
 {% endblock %}
