@@ -11,20 +11,25 @@
     <tr>
       <th scope="col">Stock</th>
       <th scope="col">Number of shares</th>
+      <th> Shares value</th>
       <th scope="col"></th>
       <th></th>
 
     </tr>
   </thead>
   <tr>
-    {% for share in Shares %}
+    {% for shares in share_list %}
        <tr>
-            <th> <a href="/stock/buy/{{ share.stockID.stock_ticker }}/">{{ share.stockID.stock_name }}</a> </th>
-            <th> {{share.shares_amount}}</th>
-            <th> <button onclick="window.location.href='/stock/{{trading_account.id}}/sell/{{share.stockID.stock_ticker}}'" class= "btn-secondary btn-sm">Sell</button> </th>
-            <td>
-
-          </td>
+         {% for key, value in shares.items %}
+          {% if key == 'shares' %}
+          <th> <a href="/stock/buy/{{ value.stockID.stock_ticker }}/">{{ value.stockID.stock_name }}</a> </th>
+          <th> {{value.shares_amount}}</th>
+          {% elif key == 'shares_price' %}
+            <th> {{value}} </th>
+          {% endif %}
+          {% endfor %}
+          <th> <button onclick="window.location.href='/stock/{{trading_account.id}}/sell/{{share.stockID.stock_ticker}}'" class= "btn-secondary btn-sm">Sell</button> </th>
+          <td></td>
        </tr>
     {% endfor %}
   </table>
