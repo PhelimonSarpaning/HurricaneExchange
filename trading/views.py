@@ -11,10 +11,10 @@ from stock.models import Shares, Transaction_History
 def trading_list_view(request, *args, **kwargs):
     queryset = Trading_Account.objects.filter(user_id=request.user.id)
     no_trading = 'It appears you have no trading accounts. Please add a trading account'
+    trading_list =[]
     if queryset.exists():
         no_trading = ''
 
-        trading_list =[]
         for trading in queryset:
             trading_dict = {}
             trading_dict['trading_account'] = trading
