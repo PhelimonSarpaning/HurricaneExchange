@@ -110,6 +110,12 @@ def trading_delete_view(request, id, *args, **kwargs):
     if request.method == 'POST':
         try:
             tradingObject = Trading_Account.objects.get(id=id)
+            shares = Shares.objects.filter(tradingID=tradingObject.id)
+            for share in shares:
+                stock = share.stockID
+                stock.stock_sold -= share.shares_amount
+                stock.save()
+                share.delete()
             tradingObject.delete()
         except Trading_Account.DoesNotExist:
             pass
