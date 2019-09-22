@@ -25,7 +25,7 @@
           <th> <a href="/stock/buy/{{ value.stockID.stock_ticker }}/">{{ value.stockID.stock_name }}</a> </th>
           <th> {{value.shares_amount}}</th>
           {% elif key == 'shares_price' %}
-            <th> {{value}} </th>
+            <th> ${{value}} </th>
           {% endif %}
           {% endfor %}
           <th> <button onclick="window.location.href='/stock/{{trading_account.id}}/sell/{{share.stockID.stock_ticker}}'" class= "btn-secondary btn-sm">Sell</button> </th>
