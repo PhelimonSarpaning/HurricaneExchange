@@ -13,8 +13,20 @@ def trading_list_view(request, *args, **kwargs):
     no_trading = 'It appears you have no trading accounts. Please add a trading account'
     if queryset.exists():
         no_trading = ''
+
+        trading_list =[]
+        for trading in queryset:
+            trading_dict = {}
+            trading_dict['trading_account'] = trading
+            trading_dict['stock_amount'] = Shares.objects.filter(tradingID=trading.id).count()
+            shares = Shares.objects.filter(tradingID=trading.id)
+            value = 0
+            for share in shares:
+                value += share.shares_amount * share.stockID.stock_price
+            trading_dict['value'] = value
+            trading_list.append(trading_dict)
     context = {
-        'trading_accounts': queryset,
+        'trading_accounts': trading_list,
         'no_trading': no_trading
     }
     return render(request, 'trading/trading_list.html', context)
@@ -57,6 +69,7 @@ def trading_detail_view(request, id, *args, **kwargs):
 
             objShares = Shares.objects.filter(tradingID=obj.id)
             no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
+            share_list =[]
             if objShares.exists():
                 no_Shares = ''
 
@@ -74,10 +87,10 @@ def trading_detail_view(request, id, *args, **kwargs):
             obj = Trading_Account.objects.get(id=id)
             objShares = Shares.objects.filter(tradingID=obj.id)
             no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
+            share_list =[]
             if objShares.exists():
                 no_Shares = ''
 
-                share_list =[]
                 for shares in objShares:
                     share_dict = {}
                     share_dict['shares'] = shares
