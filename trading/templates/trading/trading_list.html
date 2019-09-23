@@ -8,6 +8,31 @@
     <p><a href="/trading/{{ instance.id }}/">{{ instance.trading_name }}</a></p>
 {% endfor %}
 
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Account</th>
+      <th scope="col">Number of Stocks</th>
+      <th scope="col">Value</th>
+
+    </tr>
+  </thead>
+
+    {% for account in trading_accounts %}
+       <tr>
+         {% for key, value in account.items %}
+          {% if key == 'trading_account' %}
+          <th> <a href="/trading/{{ value.id }}/">{{ value.trading_name }}</a> </th>
+          {% elif key == 'stock_amount' %}
+            <th> {{value}} </th>
+            {% elif key == 'value' %}
+              <th> ${{value}} </th>
+          {% endif %}
+          {% endfor %}
+       </tr>
+    {% endfor %}
+  </table>
+
 <form action="/trading/create">
     <button type="submit">Open a trading account</button>
 </form>

@@ -2,6 +2,57 @@
 
 {% block content %}
 <h1>List of stocks to purchase shares in:</h1>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Purchase shares</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id='buy_form' method='POST'>{% csrf_token %}
+          <input type="hidden" name='stock_ticker' id="stock_ticker"></input>
+          <div class="form-group">
+            <label for="stock_name">Stock: </label>
+            <h5 id="stock_name"></h5>
+          </div>
+          <div class="form-group">
+            <label for="stock_price">Price: </label>
+            <h5 id="stock_price"></h5>
+          </div>
+          <div class="form-group">
+            <label for="shares_available">Available: </label>
+            <h5 id="shares_available"></h5>
+          </div>
+          <div class="form-group">
+            <label for="selectedAccount">Trading Account: </label>
+            <select name = "selectedAccount" id= "selectedAccount">
+              {%for account in trading_accounts%}
+                <option value="{{account.pk}}">{{account.trading_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="{{ shares_amount.id_for_label }}">Quantity: </label>
+              {{ form.shares_amount }}
+          </div>
+          <div class="form-group">
+             Total:<input type='text' id='total' value='$0.00' readonly/>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary buy-submit">Confirm</button>
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
@@ -17,7 +68,7 @@
   <tr>
     {% for stock in stocks %}
        <tr>
-            <th> {{stock.stock_name}} </th>
+            <th>  <a href="/stock/buy/{{stock.stock_ticker}}">{{stock.stock_name}}</a> </th>
             <th> {{stock.stock_gics}} </th>
             <th> {{stock.stock_ticker}} </th>
             <th> {{stock.stock_price}} </th>
@@ -31,7 +82,15 @@
               {% endif %}
             </th>
             <td>
-              <button onclick="window.location.href='/stock/buy/{{stock.stock_ticker}}'" class="btn btn-secondary btn-sm">Buy</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                      data-whatever='{
+                        "name":"{{stock.stock_name}}",
+                        "price":{{stock.stock_price}},
+                        "ticker":"{{stock.stock_ticker}}",
+                        "max":{{stock.stock_max}},
+                        "sold":{{stock.stock_sold}}
+                      }'
+              >Buy</button>
           </td>
        </tr>
     {% endfor %}
@@ -77,4 +136,63 @@
     </li>
   </ul>
 </nav>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+
+  function updateTotal(){
+    var amount = $("#id_shares_amount").val()
+    var price = $("#stock_price").text()
+    if(amount >= 0){
+      $("#total").val("$"+ price * amount)
+    }
+  }
+
+
+
+  $('#exampleModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+
+    //Get stock info from buy button
+    var name = button.data('whatever').name
+    var price = button.data('whatever').price
+    var ticker = button.data('whatever').ticker
+
+    //calculate stock available
+    var max = button.data('whatever').max
+    var sold = button.data('whatever').sold
+    var available = max - sold
+
+    $('#id_shares_amount').attr({'max': available})
+
+    // Update the modal's content
+    var modal = $(this)
+
+    //Pass stock information to modal
+    modal.find('.form-group #stock_name').text(name)
+    modal.find('.form-group #stock_price').text(price)
+    modal.find('#stock_ticker').val(ticker)
+    modal.find('.form-group #shares_available').text(max)
+    updateTotal()
+  })
+
+  $('#exampleModal').on('hide.bs.modal', function (event) {
+    $('#id_shares_amount').attr({'placeholder': 1, 'class':'is-valid'})
+    $('#id_shares_amount').val('1')
+    $('#id_shares_amount').end()
+    $("#total").val('$0.00')
+  })
+
+    $(function () {
+      $('body').on('click', '.buy-submit', function (e) {
+        debugger
+          $('#buy_form').submit();
+          //$('#exampleModal').modal('hide');
+      });
+    });
+
+
+
+</script>
 {% endblock %}
