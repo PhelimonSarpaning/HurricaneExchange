@@ -15,7 +15,7 @@
       </div>
       <div class="modal-body">
         <form id='buy_form' method='POST'>{% csrf_token %}
-          <input name='stock_ticker' id="stock_ticker"></input>
+          <input type="hidden" name='stock_ticker' id="stock_ticker"></input>
           <div class="form-group">
             <label for="stock_name">Stock: </label>
             <h5 id="stock_name"></h5>
