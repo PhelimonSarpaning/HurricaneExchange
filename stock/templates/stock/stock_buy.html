@@ -20,11 +20,20 @@
 
 <div id="container" style="height: 400px; min-width: 310px"></div>
 
-
-
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} Sorry! {% endif %}
+        {{ message }}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 {{ historical|json_script:"historicalData"}}
+
 <script type="text/javascript">
   // Create the chart
   var value = JSON.parse(document.getElementById('historicalData').textContent);

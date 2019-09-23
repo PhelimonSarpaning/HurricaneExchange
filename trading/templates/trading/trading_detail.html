@@ -35,6 +35,16 @@
 
 <br>
 
+
+{% if trading_account.is_default != True %}
+  <form action="." method='POST'>
+    {% csrf_token %}
+    <button type="submit">Make this my default trading account</button>
+  </form>
+{% endif %}
+
+<br>
+
 <form action="/trading/delete/{{ trading_account.id }}">
     <button type="submit">Delete this trading account</button>
 </form>
