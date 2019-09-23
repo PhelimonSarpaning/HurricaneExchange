@@ -2,35 +2,120 @@
 <!DOCTYPE HTML>
 <!-- This HTML file is used as a base template for all other HTML files,
     every HTML file created MUST extend from this file. -->
-
 <html>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="{% static 'HurricaneExchange/css/dashboard.css' %}"></link>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+	integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+	<style>
+	html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+	</style>
     <!-- Title of website, appears on the browser tab -->
     <head>
         <title>Hurricane Exchange</title>
     </head>
-    <body>
-        <nav>
-            <ul>
-            <!-- If user is already logged in, give the user an option to logout. -->
-            {% if user.is_authenticated %}
-                <li>
-                    <form class="logout-link" action="{% url 'users:logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="Submit">Logout</button>
-                    </form>
-                </li>
-            {% else %}
-            <!-- If user is not logged in, give the user an option to login. -->
-                <li>
-                    <a href="{% url 'users:login'%}">Login</a>
-                </li>
-                <li>
-                    <a href="{% url 'users:signup'%}">Signup</a>
-                </li>
-            {% endif %}
-            </ul>
-        </nav>
-        {% block content %}
-        {% endblock %}
-    </body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <a class="navbar-brand" href="{% url 'index'%}">Hurricane Exchange</a>
+  <button class="navbar-toggler ml-auto mr-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		{% if user.is_authenticated %}
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'index'%}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Trading
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/trading"><i class="fa fa-users fa-fw"></i>  Trading Accounts</a>
+					<div class="dropdown-divider"></div>
+		  		<a class="dropdown-item" href="/trading/history"><i class="fa fa-bank fa-fw"></i>  Transaction History</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/stock/stocklist"><i class="fa fa-diamond fa-fw"></i>  Stock Shares</a>
+        </div>
+      </li>
+    </ul>
+		{% endif %}
+  </div>
+	<div class="my-sm-0mr-1">
+	{% if user.is_authenticated %}
+	<form class="logout-link" action="{% url 'users:logout' %}" method="post">
+		{% csrf_token %}
+		<button class="btn btn-outline-success my-2 my-sm-0" type="Submit">Logout</button>
+	</form>
+	{% else %}
+			<!-- If user is not logged in, give the user an option to login. -->
+			<a class ="btn btn-outline-success mr-1" href="{% url 'users:login'%}">Login</a>
+			<a class ="btn btn-outline-success mr-1" href="{% url 'users:signup'%}">Signup</a>
+	{% endif %}
+</div>
+
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+		{% if user.is_authenticated %}
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+					<div class="row mt-2 ml-2 mb-2">
+						 {% load avatar_tags %}
+						 {% avatar user 46 class="rounded-circle ml-3" id="user_avatar" %}
+						 <div class="mt-1 ml-3">
+							 <span><strong>{{request.user.username}} </strong><br>
+							<span>Funds: <strong>${{request.user.userfund.fund}}</strong></span><br>
+						</div>
+				 </div>
+			    <a href='/trading/{{default_trading.id}}' class="nav-link"><i class="fa fa-users fa-fw"></i>  Trading Accounts</a>
+			    <a href="/trading/history" class="nav-link"><i class="fa fa-bank fa-fw"></i>  Transaction History</a>
+					<a href="/stock/stocklist" class="nav-link"><i class="fa fa-diamond fa-fw"></i>  Stock Shares</a>
+					<a href="/leaderboard" class="nav-link"><i class="fa fa-bar-chart fa-fw"></i> Leaderboard</a>
+			    <a href="/users/manage" class="nav-link"><i class="fa fa-cog fa-fw"></i>  Account Management</a><br><br>
+        </ul>
+			</ul>
+      </div>
+    </nav>
+  <main role="main" class="mt-3 col-md-9 ml-sm-auto col-lg-10 px-4">
+{% else %}
+  <main role="main" class="mt-3 mx-auto">
+{% endif %}
+
+<h> </h>
+	<!-- !PAGE CONTENT! -->
+	{% block content %}
+  {% endblock %}
+</main>
+</div>
+</div>
+
+	<script src="{% static 'HurricaneExchange/js/base.js' %}"></script>
+
+
+	{% block javascript %}
+
+	{% endblock %}
 </html>
+
+<script>$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})</script>

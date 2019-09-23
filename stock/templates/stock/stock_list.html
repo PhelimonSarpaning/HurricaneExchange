@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>List of stocks to purchase shares in:</h1>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Purchase shares</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id='buy_form' method='POST'>{% csrf_token %}
+          <input type="hidden" name='stock_ticker' id="stock_ticker"></input>
+          <div class="form-group">
+            <label for="stock_name">Stock: </label>
+            <h5 id="stock_name"></h5>
+          </div>
+          <div class="form-group">
+            <label for="stock_price">Price </label>
+            <h5 id="stock_price">$</h5>
+          </div>
+          <div class="form-group">
+            <label for="shares_available">Available: </label>
+            <h5 id="shares_available"></h5>
+          </div>
+          <div class="form-group">
+            <label for="selectedAccount">Trading Account: </label>
+            <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
+              {%for account in trading_accounts%}
+                <option value="{{account.pk}}">{{account.trading_name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="{{ shares_amount.id_for_label }}">Quantity: </label>
+              {{ form.shares_amount }}
+          </div>
+          <div class="form-group">
+             Total:<input class ='form-control' type='text' id='total' value='$0.00' readonly/>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button onclick="submit" class="btn btn-primary buy-submit">Confirm</button>
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Stock</th>
+      <th scope="col">GICS</th>
+      <th scope="col">Ticker</th>
+      <th scope="col">Price</th>
+      <th scope="col">Day Change</th>
+      <th></th>
+
+    </tr>
+  </thead>
+  <tr>
+    {% for stock in stocks %}
+       <tr>
+            <th>  <a href="/stock/buy/{{stock.stock_ticker}}" data-toggle="tooltip" data-placement="bottom" title="View more information">{{stock.stock_name}}</a> </th>
+            <th> {{stock.stock_gics}} </th>
+            <th> {{stock.stock_ticker}} </th>
+            <th> {{stock.stock_price}} </th>
+            <th><div>
+              {% if stock.stock_dayChange > 0 %}
+                  <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
+              {% elif stock.stock_dayChange < 0 %}
+                  <div style="color:red">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
+              {% else %}
+                  <div style="color:green">{{stock.stock_dayChange}}</div>
+              {% endif %}
+            </th>
+            <td>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                      data-whatever='{
+                        "name":"{{stock.stock_name}}",
+                        "price":{{stock.stock_price}},
+                        "ticker":"{{stock.stock_ticker}}",
+                        "max":{{stock.stock_max}},
+                        "sold":{{stock.stock_sold}}
+                      }'
+              >Buy</button>
+          </td>
+       </tr>
+    {% endfor %}
+  </table>
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if stocks.has_previous %}
+    <li class="page-item">
+      <a class="page-link" aria-label="Back10" href="?page={{stocks.number|add:"-10"}}">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Back_10</span>
+      </a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" aria-label="Previous" href="?page={{stocks.previous_page_number}}">
+        <span aria-hidden="true">&lt;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+      {% endif %}
+    </li>
+    {% for pg in page_range %}
+    {% if stocks.number == pg %}
+    <li class="page-item active"><a class="page-link" href="?page={{pg}}">{{pg}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{pg}}">{{pg}}</a></li>
+    {% endif %}
+
+    {% endfor %}
+
+    {% if stocks.has_next %}
+    <li class="page-item">
+      <a class="page-link" aria-label="Next" href="?page={{stocks.next_page_number}}">
+        <span aria-hidden="true">&gt;</span>
+        <span class="sr-only">Forward</span>
+      </a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" aria-label="Next10" href="?page={{stocks.number|add:"+10"}}">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Forward_10</span>
+      </a>
+      {% endif %}
+    </li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+
+  var price = 0
+
+  function updateTotal(){
+    var amount = $("#id_shares_amount").val()
+    if(amount >= 0){
+      var total = price * amount
+      $("#total").val("$"+ total.toFixed(2))
+    }
+  }
+
+
+  function clearFields(){
+    $('#id_shares_amount').attr({'placeholder': 1})
+    $('#id_shares_amount').val('1')
+    $('#id_shares_amount').end()
+    $("#total").val('$0.00')
+  }
+
+  clearFields();
+
+
+
+  $('#exampleModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+
+    //Get stock info from buy button
+    var name = button.data('whatever').name
+    price = button.data('whatever').price
+    var ticker = button.data('whatever').ticker
+
+    //calculate stock available
+    var max = button.data('whatever').max
+    var sold = button.data('whatever').sold
+    var available = max - sold
+
+    $('#id_shares_amount').attr({'max': available})
+
+    // Update the modal's content
+    var modal = $(this)
+
+    //Pass stock information to modal
+    modal.find('.form-group #stock_name').text(name)
+    modal.find('.form-group #stock_price').text('$'+price)
+    modal.find('#stock_ticker').val(ticker)
+    modal.find('.form-group #shares_available').text(max)
+    updateTotal()
+  })
+
+  $('#exampleModal').on('hide.bs.modal', function (event) {
+    clearFields()
+  })
+
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+
+
+
+</script>
+{% endblock %}

@@ -1,10 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Hurricane Exchange - Login form</h1>
-<form class="site-form" action="." method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Login">
-</form>
+<div class='container'>
+
+   <h1>Login to your account</h1>
+   <br>
+
+   <form class="site-form" action="." method="post">
+      {% csrf_token %}
+
+      <div class='form-group'>
+         <div class='row'>
+            <!--label field -->
+            <div class='col-sm'>
+               <label for="username">Username:</label>
+               <br><br>
+               <label for="password">Password:</label>
+            </div>
+
+            <br>
+
+            <!--input field -->
+            <div class='col-sm'>
+               <input type="text" placeholder="Username" name="username" />
+               <br><br>
+               <input type="password" placeholder="Password" name="password" />
+            </div>
+
+            <br>
+
+            <!--submit button field -->
+            <div class='container' align='center'>
+               <br>
+               <button class="btn btn-success" style=background-color:#008080; type="submit" value="Login">Login
+               </button>
+            </div>
+            
+         </div>
+   </form>
+</div>
 {% endblock %}

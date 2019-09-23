@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +25,7 @@ SECRET_KEY = 'f@=0&rhfsmkj=1r^*8ez8(!x%@hl@tzr6s%(xzx&as16q+8_8i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS =['hurricane-exchange-staging.herokuapp.com']
 
 
 # Application definition
@@ -41,9 +41,16 @@ INSTALLED_APPS = [
     # OWN Custom installed apps, go here
     'pages',
     'users',
+    'trading',
+    'stock',
+    'leaderboard',
+
+    #from Django-avatar
+    'avatar',
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'pages.context_processors.list_trading_accounts',
             ],
         },
     },
@@ -79,13 +87,24 @@ WSGI_APPLICATION = 'HurricaneExchange.wsgi.application'
 
 # Use sqlite3 for development.
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+# Use local PostgreSQL for development.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'hurricanes',
+        'USER': 'admin',
+        'PASSWORD': 'hurricanes123',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
-
 
 # This database setting utilisies gcloud proxy, which we may use later on
 
@@ -138,8 +157,27 @@ USE_L10N = True
 
 USE_TZ = True
 
+#Avatar settings
+AVATAR_CACHE_ENABLED = False
+AVATAR_GRAVATAR_DEFAULT = 'retro'
+
+
+MEDIA_URL = os.path.join(BASE_DIR,'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
+# https://docs.djangoproject.com/en/1.11/howto/static-files/
+PROJECT_ROOT   =   os.path.join(os.path.abspath(__file__))
+STATIC_ROOT  =   os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+# Extra lookup directories for collectstatic to find static files
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+#  Add configuration for static files storage using whitenoise
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())

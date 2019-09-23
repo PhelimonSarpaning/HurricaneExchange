@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Sell stock: {{ stock_name }}</h1>
+  Shares owned: {{num_shares}}
+
+<form method='POST'>{% csrf_token %}
+  Quantity (between 1 and {{num_shares}}):  {{form.shares_amount}} <br>
+  Total: (Not implemented) <br>
+  <button onclick="submit" class="btn btn-secondary btn-sm">Sell</button>
+</form>
+
+<script>
+    document.getElementById("id_shares_amount").max = {{num_shares}}
+</script>
+{% endblock %}
