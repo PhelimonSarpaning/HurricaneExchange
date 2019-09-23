@@ -14,7 +14,7 @@
         <option value="{{account.pk}}">{{account.trading_name}}</option>
       {% endfor %}
     </select> <br>
-    Total: (Not implemented) <br>
+    Total:<input type="text" id="total" value="$0.00" readonly> <br>
 <button onclick="submit" class="btn btn-secondary btn-sm">Buy</button>
 </form>
 
@@ -28,5 +28,42 @@
     {% endfor %}
 </ul>
 {% endif %}
+
+<div id="container" style="height: 400px; min-width: 310px"></div>
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+{{ historical|json_script:"historicalData"}}
+
+<script type="text/javascript">
+  // Create the chart
+  document.getElementById("id_shares_amount").max = {{stock_available}}
+
+  var value = JSON.parse(document.getElementById('historicalData').textContent);
+
+  Highcharts.stockChart('container', {
+        rangeSelector: {
+            selected: 1
+        },
+        title: {
+            text: "{{stock_ticker}}"
+        },
+      series:  [{
+            data: value,
+            tooltip: {
+                valueDecimals: 3
+            },
+            turboThreshold: 0
+        }],
+    });
+
+
+    function updateTotal(){
+      var amount = document.getElementById("id_shares_amount").value
+      if(amount >= 0){
+        document.getElementById("total").value = "$" + {{stock_price}} * amount;
+      }
+  }
+
+</script>
 
 {% endblock %}

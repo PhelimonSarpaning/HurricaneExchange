@@ -8,6 +8,13 @@ from django.contrib import messages
 from stock.models import Stock, Shares, Transaction_History
 from trading.models import Trading_Account
 from users.models import UserFund
+
+#for historical graph
+from yahoo_historical import Fetcher
+from datetime import datetime
+import json
+import pandas as pd
+import numpy as np
 # Create your views here.
 
 @login_required(login_url="/users")
@@ -38,7 +45,7 @@ def stock_detail_view(request, id, *args, **kwargs):
 
 @login_required(login_url="/users")
 def stock_list_view(request, *args, **kwargs):
-    stock_list = Stock.objects.all().filter(stock_hasValidInfo=True)
+    stock_list = Stock.objects.all().filter(stock_hasValidInfo=True).order_by('-stock_price')
 
     #Get user's trading accounts
     user= request.user
@@ -206,6 +213,16 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
         'form': form,
     }
     return render(request, 'stock/stock_buy.html', context)
+
+def get_historical(stock_ticker):
+    data = Fetcher(stock_ticker, [1990,1,1]).getHistorical()
+    data['Date'] = pd.to_datetime(data['Date'])
+    data = data.drop(columns=['Open', 'High', 'Low', 'Adj Close', 'Volume'])
+    data['Date']= pd.to_datetime(data['Date']).values.astype(np.int64) // 10**6
+    data = data.rename(columns={"Date": "x", "Close": "y"})
+    data = data.dropna()
+    data = data.to_dict('records')
+    return data
 
 @login_required(login_url="/users")
 def stock_sell(request, id, stock_ticker, *args, **kwargs):
