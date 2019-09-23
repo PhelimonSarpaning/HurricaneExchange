@@ -2,7 +2,7 @@
 
 {% block content %}
 <div>
-  <a class="link dropdown-toggle btn btn-primary" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Accounts</a>
+  <a class="link dropdown-toggle btn btn-sm btn-primary" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Accounts</a>
   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
   {% for instance in list_accounts %}
   <a class="dropdown-item" href="/trading/{{ instance.id }}"><i class="fa fa-users fa-fw"></i> {{ instance.trading_name }}</a>
@@ -10,7 +10,7 @@
   <div class="dropdown-divider"></div>
 	<a class="dropdown-item" href="/trading/create"><i class="fa fa-cog fa-fw"></i> Open a new trading account</a>
 </div>
-  <a class="btn btn-primary" href="/trading" role="button" aria-haspopup="true" aria-expanded="false">View All</a>
+  <a class="btn btn-sm btn-primary" href="/trading" role="button" aria-haspopup="true" aria-expanded="false">View All</a>
 
 <h1>Trading Account: {{ trading_account.trading_name }}</h1>
 <h2>Shares in your trading account </h2>
@@ -57,7 +57,7 @@
   </table>
 
 <form action="/stock/stocklist">
-    <button type="submit">Buy Shares</button>
+    <button class ="btn btn-secondary btn-sm" type="submit">Buy Shares</button>
 </form>
 
 <br>
@@ -66,14 +66,14 @@
 {% if trading_account.is_default != True %}
   <form action="." method='POST'>
     {% csrf_token %}
-    <button type="submit">Make this my default trading account</button>
+    <button class ="btn btn-secondary btn-sm" type="submit">Make this my default trading account</button>
   </form>
+  <br>
+
 {% endif %}
 
-<br>
-
 <form action="/trading/delete/{{ trading_account.id }}">
-    <button type="submit">Delete this trading account</button>
+    <button class ="btn btn-secondary btn-sm" type="submit">Delete this trading account</button>
 </form>
 
 {% endblock %}
