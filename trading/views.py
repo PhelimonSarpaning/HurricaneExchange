@@ -76,8 +76,7 @@ def trading_detail_view(request, id, *args, **kwargs):
                 share_list =[]
                 for shares in objShares:
                     share_dict = {}
-                    share_dict['shares'] = shares
-                    share_dict['shares_price'] = shares.shares_amount * shares.stockID.stock_price
+                    share_dict[shares.stockID] = shares.shares_amount * shares.stockID.stock_price
                     share_list.append(share_dict)
 
         except Trading_Account.DoesNotExist:
@@ -93,14 +92,14 @@ def trading_detail_view(request, id, *args, **kwargs):
 
                 for shares in objShares:
                     share_dict = {}
-                    share_dict['shares'] = shares
-                    share_dict['shares_price'] = shares.shares_amount * shares.stockID.stock_price
+                    share_dict[shares.stockID.stock_ticker] = shares.shares_amount * shares.stockID.stock_price
                     share_list.append(share_dict)
         except Trading_Account.DoesNotExist:
             raise Http404
     context = {
         'trading_account': obj,
-        'share_list': share_list,
+        'share_value': share_list,
+        'sharesObj': objShares,
         'no_Shares': no_Shares
     }
     return render(request, 'trading/trading_detail.html', context)

@@ -31,27 +31,28 @@
     </tr>
   </thead>
   <tr>
-    {% for shares in share_list %}
+    {% for shares in sharesObj %}
        <tr>
-         {% for key, value in shares.items %}
-          {% if key == 'shares' %}
-          <th> <a href="/stock/buy/{{ value.stockID.stock_ticker }}/">{{ value.stockID.stock_name }}</a> </th>
-          <th> {{value.shares_amount}} </th>
-          <th> {{value.stockID.stock_price}} </th>
+          <th> <a href="/stock/buy/{{ shares.stockID.stock_ticker }}/">{{ shares.stockID.stock_name }}</a> </th>
+          <th> {{shares.shares_amount}} </th>
+          <th> {{shares.stockID.stock_price}} </th>
           <th>{% if value.stockID.stock_dayChange > 0 %}
-              <div style="color:green">{{value.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
+              <div style="color:green">{{shares.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
           {% elif value.stockID.stock_dayChange < 0 %}
-              <div style="color:red">{{value.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
+              <div style="color:red">{{shares.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
           {% else %}
-              <div style="color:green">{{value.stockID.stock_dayChange}}</div>
+              <div style="color:green">{{shares.stockID.stock_dayChange}}</div>
           {% endif %}
           </th>
-            {% elif key == 'shares_price' %}
-              <th> ${{value}}  </th>
-            {% endif %}
+          {% for total in share_value %}
+            {% for key, value in total.items %}
+                {% if key == shares.stockID.stock_ticker %}
+                <th> {{value}}  </th>
+                {% endif %}
+              {% endfor %}
           {% endfor %}
-          <th> <button onclick="window.location.href='/stock/{{trading_account.id}}/sell/{{share.stockID.stock_ticker}}'" class= "btn-secondary btn-sm">Sell</button> </th>
           <td></td>
+           <th> <button onclick="window.location.href='/stock/{{trading_account.id}}/sell/{{shares.stockID.stock_ticker}}'" class= "btn-secondary btn-sm">Sell</button> </th>
        </tr>
     {% endfor %}
   </table>
@@ -61,7 +62,6 @@
 </form>
 
 <br>
-
 
 {% if trading_account.is_default != True %}
   <form action="." method='POST'>
