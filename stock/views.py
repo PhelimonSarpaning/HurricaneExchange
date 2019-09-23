@@ -44,7 +44,7 @@ def stock_list_view(request, *args, **kwargs):
     user= request.user
     trading_accounts = Trading_Account.objects.filter(user_id=user.id)
 
-    #set up form for buying shares
+    #call quick buy from modal
     form = SharesForm(request.POST or None)
     if request.method == 'POST':
         stock_quick_buy(request, form)
@@ -86,22 +86,29 @@ def stock_list_view(request, *args, **kwargs):
 @login_required(login_url="/users")
 def stock_quick_buy(request, form):
     if form.is_valid():
+        shares = form.save(commit=False)
         stock_ticker = request.POST.get('stock_ticker')
-        #stock_quick_buy(form, stock_ticker)
+        # Check stock exists
         try:
             stock = Stock.objects.get(stock_ticker=stock_ticker)
         except Stock.DoesNotExist:
             raise Http404
-        stock_available = stock.stock_max - stock.stock_sold
-        user= request.user
-        trading_accounts = Trading_Account.objects.filter(user_id=user.id)
         transaction_history = Transaction_History()
         tradingID = request.POST.get('selectedAccount')
-        shares = form.save(commit=False)
-        quantity = shares.shares_amount
+
+        # Check selected trading account exists for user
         if Trading_Account.objects.filter(pk=tradingID).exists():
+            user= request.user
+            trading_accounts = Trading_Account.objects.filter(user_id=user.id)
+
+            # Check there are enough shares for quantity
+            quantity = shares.shares_amount
+            stock_available = stock.stock_max - stock.stock_sold
             if 0 < quantity <= stock_available:
+
+                # Check user has enough funds
                 if (user.userfund.fund - stock.stock_price * quantity) >= 0:
+                    # Check if user already owns shares in stock
                     if stock_available - quantity >= 0:
                         if Shares.objects.filter(tradingID=tradingID, stockID=stock).exists():
                             shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
