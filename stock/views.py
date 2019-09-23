@@ -209,6 +209,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
         'stock_price' : stock.stock_price,
+        'stock_dayChange' : stock.stock_dayChange,
         'stock_available': stock_available,
         'trading_accounts': trading_accounts,
         'form': form,

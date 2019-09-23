@@ -68,7 +68,7 @@
   <tr>
     {% for stock in stocks %}
        <tr>
-            <th>  <a href="/stock/buy/{{stock.stock_ticker}}">{{stock.stock_name}}</a> </th>
+            <th>  <a href="/stock/buy/{{stock.stock_ticker}}" data-toggle="tooltip" data-placement="bottom" title="View more information">{{stock.stock_name}}</a> </th>
             <th> {{stock.stock_gics}} </th>
             <th> {{stock.stock_ticker}} </th>
             <th> {{stock.stock_price}} </th>
@@ -191,6 +191,10 @@
           //$('#exampleModal').modal('hide');
       });
     });
+
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
 
 
 

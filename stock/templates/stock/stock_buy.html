@@ -4,6 +4,13 @@
 <h1>Confirm purchase of stock: {{ stock_name}}</h1>
  Available shares: {{stock_available}}<br>
  Price (per share): {{stock_price}}<br>
+ Daily change: {% if stock_dayChange > 0 %}
+     <a style="color:green">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></a>
+ {% elif stock_dayChange < 0 %}
+     <a style="color:red">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></a>
+ {% else %}
+     <a style="color:green">{{stock_dayChange}}</a>
+ {% endif %}<br>
 
  <form method='POST'>{% csrf_token %}
 
