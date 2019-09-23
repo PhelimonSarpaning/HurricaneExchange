@@ -14,5 +14,5 @@ class SharesForm(ModelForm):
         model = Shares
         fields = ['shares_amount']
         widgets = {
-            'shares_amount': TextInput(attrs={'type': 'number', "onkeyup":'updateTotal()', 'min':"1", "onChange":'updateTotal()'}),
+            'shares_amount': TextInput(attrs={'type': 'number', "onkeyup":'updateTotal()', 'min':"1", "onChange":'updateTotal()', 'value': 1}),
         }

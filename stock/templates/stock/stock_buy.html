@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
+<button onclick="goBack()" class = 'btn-sm btn-secondary'>Go Back</button>
 <h1>Confirm purchase of stock: {{ stock_name}}</h1>
  Available shares: {{stock_available}}<br>
  Price (per share): {{stock_price}}<br>
 
  <form method='POST'>{% csrf_token %}
 
- Quantity (between 1 and {{stock_available}}):
+ Quantity to purchase (between 1 and {{stock_available}}):
  {{form.shares_amount}} <br>
  Select trading account:
     <select name = "selectedAccount">
@@ -15,7 +16,7 @@
       {% endfor %}
     </select> <br>
     Total:<input type="text" id="total" value="$0.00" readonly> <br>
-<button onclick="submit" class="btn btn-secondary btn-sm">Buy</button>
+<button onclick="submit" class="btn btn-primary btn">Buy</button>
 </form>
 
 {% if messages %}
@@ -62,6 +63,12 @@
       if(amount >= 0){
         document.getElementById("total").value = "$" + {{stock_price}} * amount;
       }
+  }
+
+  updateTotal();
+
+  function goBack() {
+    window.history.back()
   }
 
 </script>

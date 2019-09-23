@@ -204,6 +204,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                     messages.error(request, 'Quantity not in range')
             else:
                 messages.error(request, 'Please create a trading account')
+    data = get_historical(stock_ticker+".ax")
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
@@ -211,6 +212,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
         'stock_available': stock_available,
         'trading_accounts': trading_accounts,
         'form': form,
+        'historical': data
     }
     return render(request, 'stock/stock_buy.html', context)
 

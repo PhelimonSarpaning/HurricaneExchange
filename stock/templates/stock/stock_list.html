@@ -41,13 +41,13 @@
               {{ form.shares_amount }}
           </div>
           <div class="form-group">
-             Total: (Not implemented)
+             Total:<input type='text' id='total' value='$0.00' readonly/>
           </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary buy-submit">Confirm</button>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary buy-submit">Confirm</button>
       </div>
     </div>
   </div>
@@ -140,6 +140,17 @@
 
 {% block javascript %}
   <script>
+
+  function updateTotal(){
+    var amount = $("#id_shares_amount").val()
+    var price = $("#stock_price").text()
+    if(amount >= 0){
+      $("#total").val("$"+ price * amount)
+    }
+  }
+
+
+
   $('#exampleModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
 
@@ -153,6 +164,8 @@
     var sold = button.data('whatever').sold
     var available = max - sold
 
+    $('#id_shares_amount').attr({'max': available})
+
     // Update the modal's content
     var modal = $(this)
 
@@ -161,15 +174,25 @@
     modal.find('.form-group #stock_price').text(price)
     modal.find('#stock_ticker').val(ticker)
     modal.find('.form-group #shares_available').text(max)
+    updateTotal()
+  })
+
+  $('#exampleModal').on('hide.bs.modal', function (event) {
+    $('#id_shares_amount').attr({'placeholder': 1, 'class':'is-valid'})
+    $('#id_shares_amount').val('1')
+    $('#id_shares_amount').end()
+    $("#total").val('$0.00')
   })
 
     $(function () {
-    $('body').on('click', '.buy-submit', function (e) {
-      debugger
-        $('#buy_form').submit();
-        $('#exampleModal').modal('hide');
+      $('body').on('click', '.buy-submit', function (e) {
+        debugger
+          $('#buy_form').submit();
+          //$('#exampleModal').modal('hide');
+      });
     });
-});
+
+
 
 </script>
 {% endblock %}
