@@ -10,7 +10,7 @@ def leaderboard_view(request, *args, **kwargs):
     query = UserFund.objects.all()
     if (query.exists()):
         context = {
-            'fundlist': query,
+            'fundlist': query.order_by('-fund'),
             'noFundlist': False
         }
     else:
