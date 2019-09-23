@@ -44,13 +44,13 @@ def trading_create_view(request, *args, **kwargs):
 @login_required(login_url="/users")
 def trading_detail_view(request, id, *args, **kwargs):
     if request.method == 'POST':
-        try: 
+        try:
             currentDefault = Trading_Account.objects.get(user_id=request.user.id, is_default=True)
             currentDefault.is_default = False
             currentDefault.save()
         except Trading_Account.DoesNotExist:
             pass
-        try: 
+        try:
             obj = Trading_Account.objects.get(id=id)
             obj.is_default = True
             obj.save()
@@ -106,7 +106,7 @@ def trading_history_view(request, *args, **kwargs):
         if form.is_valid():
             startDate = form.cleaned_data['date']
             endDate = form.cleaned_data['date2']
-            try: 
+            try:
                 qs = Transaction_History.objects.filter(user_id=request.user.id, date_of_transaction__date__range=[startDate, endDate])
             except Transaction_History.DoesNotExist:
                 pass

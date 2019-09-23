@@ -4,7 +4,6 @@
 <h1>Trading Accounts</h1>
 <h2>Your trading accounts: </h2>
 <h3>{{ no_trading }}</h3>
-
 {% for instance in trading_accounts %}
     <p><a href="/trading/{{ instance.id }}/">{{ instance.trading_name }}</a></p>
 {% endfor %}
