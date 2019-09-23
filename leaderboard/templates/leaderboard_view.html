@@ -18,10 +18,10 @@
     </tr>
   </thead>
   <tr>
-    {% for user_id in object %}
+    {% for user in fundlist %}
        <tr>
-            <th> {{userfund.user_id}} </th>
-            <th> {{userfund.fund}} </th>
+            <th> {{user.user}} </th>
+            <th> {{user.fund}} </th>
        </tr>
     {% endfor %}
 
