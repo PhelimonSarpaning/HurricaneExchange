@@ -21,8 +21,8 @@
             <h5 id="stock_name"></h5>
           </div>
           <div class="form-group">
-            <label for="stock_price">Price: </label>
-            <h5 id="stock_price"></h5>
+            <label for="stock_price">Price </label>
+            <h5 id="stock_price">$</h5>
           </div>
           <div class="form-group">
             <label for="shares_available">Available: </label>
@@ -30,7 +30,7 @@
           </div>
           <div class="form-group">
             <label for="selectedAccount">Trading Account: </label>
-            <select name = "selectedAccount" id= "selectedAccount">
+            <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
               {%for account in trading_accounts%}
                 <option value="{{account.pk}}">{{account.trading_name}}</option>
               {% endfor %}
@@ -41,7 +41,7 @@
               {{ form.shares_amount }}
           </div>
           <div class="form-group">
-             Total:<input type='text' id='total' value='$0.00' readonly/>
+             Total:<input class ='form-control' type='text' id='total' value='$0.00' readonly/>
           </div>
           <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -141,13 +141,25 @@
 {% block javascript %}
   <script>
 
+  var price = 0
+
   function updateTotal(){
     var amount = $("#id_shares_amount").val()
-    var price = $("#stock_price").text()
     if(amount >= 0){
-      $("#total").val("$"+ price * amount)
+      var total = price * amount
+      $("#total").val("$"+ total.toFixed(2))
     }
   }
+
+
+  function clearFields(){
+    $('#id_shares_amount').attr({'placeholder': 1})
+    $('#id_shares_amount').val('1')
+    $('#id_shares_amount').end()
+    $("#total").val('$0.00')
+  }
+
+  clearFields();
 
 
 
@@ -156,7 +168,7 @@
 
     //Get stock info from buy button
     var name = button.data('whatever').name
-    var price = button.data('whatever').price
+    price = button.data('whatever').price
     var ticker = button.data('whatever').ticker
 
     //calculate stock available
@@ -171,26 +183,15 @@
 
     //Pass stock information to modal
     modal.find('.form-group #stock_name').text(name)
-    modal.find('.form-group #stock_price').text(price)
+    modal.find('.form-group #stock_price').text('$'+price)
     modal.find('#stock_ticker').val(ticker)
     modal.find('.form-group #shares_available').text(max)
     updateTotal()
   })
 
   $('#exampleModal').on('hide.bs.modal', function (event) {
-    $('#id_shares_amount').attr({'placeholder': 1, 'class':'is-valid'})
-    $('#id_shares_amount').val('1')
-    $('#id_shares_amount').end()
-    $("#total").val('$0.00')
+    clearFields()
   })
-
-    $(function () {
-      $('body').on('click', '.buy-submit', function (e) {
-        debugger
-          $('#buy_form').submit();
-          //$('#exampleModal').modal('hide');
-      });
-    });
 
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()

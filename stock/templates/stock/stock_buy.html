@@ -2,7 +2,8 @@
 {% block content %}
 <button onclick="goBack()" class = 'btn-sm btn-secondary'>Go Back</button>
 <h1>Confirm purchase of stock: {{ stock_name}}</h1>
- Available shares: {{stock_available}}<br>
+ <div class= 'col-md-4'>
+   Available shares: {{stock_available}}<br>
  Price (per share): {{stock_price}}<br>
  Daily change: {% if stock_dayChange > 0 %}
      <a style="color:green">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></a>
@@ -13,18 +14,16 @@
  {% endif %}<br>
 
  <form method='POST'>{% csrf_token %}
-
- Quantity to purchase (between 1 and {{stock_available}}):
- {{form.shares_amount}} <br>
- Select trading account:
-    <select name = "selectedAccount">
-      {%for account in trading_accounts%}
-        <option value="{{account.pk}}">{{account.trading_name}}</option>
-      {% endfor %}
-    </select> <br>
-    Total:<input type="text" id="total" value="$0.00" readonly> <br>
+   Select trading account:
+      <select class = 'custom-select' name = "selectedAccount">
+        {%for account in trading_accounts%}
+          <option value="{{account.pk}}">{{account.trading_name}}</option>
+        {% endfor %}
+      </select> <br>
+ Quantity to purchase (between 1 and {{stock_available}}):{{form.shares_amount}}
+ Total:<input class = 'form-control' type="text" id="total" value="$0.00" readonly> <br>
 <button onclick="submit" class="btn btn-primary btn">Buy</button>
-</form>
+</form></div>
 
 {% if messages %}
 <ul class="messages">
@@ -68,7 +67,8 @@
     function updateTotal(){
       var amount = document.getElementById("id_shares_amount").value
       if(amount >= 0){
-        document.getElementById("total").value = "$" + {{stock_price}} * amount;
+        var total = {{stock_price}} * amount
+        document.getElementById("total").value = "$" + total.toFixed(2);
       }
   }
 
