@@ -10,8 +10,10 @@
   <thead class="thead-dark">
     <tr>
       <th scope="col">Stock</th>
-      <th scope="col">Number of shares</th>
-      <th> Shares value</th>
+      <th scope="col">Number of Shares</th>
+      <th scope="col">Value (per share)</th>
+      <th scope="col">Daily Change</th>
+      <th> Total Value</th>
       <th scope="col"></th>
       <th></th>
 
@@ -23,10 +25,19 @@
          {% for key, value in shares.items %}
           {% if key == 'shares' %}
           <th> <a href="/stock/buy/{{ value.stockID.stock_ticker }}/">{{ value.stockID.stock_name }}</a> </th>
-          <th> {{value.shares_amount}}</th>
-          {% elif key == 'shares_price' %}
-            <th> ${{value}} </th>
+          <th> {{value.shares_amount}} </th>
+          <th> {{value.stockID.stock_price}} </th>
+          <th>{% if value.stockID.stock_dayChange > 0 %}
+              <div style="color:green">{{value.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
+          {% elif value.stockID.stock_dayChange < 0 %}
+              <div style="color:red">{{value.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
+          {% else %}
+              <div style="color:green">{{value.stockID.stock_dayChange}}</div>
           {% endif %}
+          </th>
+            {% elif key == 'shares_price' %}
+              <th> ${{value}}  </th>
+            {% endif %}
           {% endfor %}
           <th> <button onclick="window.location.href='/stock/{{trading_account.id}}/sell/{{share.stockID.stock_ticker}}'" class= "btn-secondary btn-sm">Sell</button> </th>
           <td></td>
