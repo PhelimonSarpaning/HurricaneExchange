@@ -191,21 +191,6 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
                     transaction_history.transaction = 'S'
                     transaction_history.save()
 
-<<<<<<< HEAD
-                # Add to trading history
-                transaction_history.user = user
-                transaction_history.stock_name = stock.stock_name
-                transaction_history.stock_gics = stock.stock_gics
-                transaction_history.stock_price = stock.stock_price
-                transaction_history.no_of_shares = quantity
-                transaction_history.transaction = 'S'
-                transaction_history.save()
-
-                if shares.shares_amount == 0:
-                    shares.delete()
-                    return redirect('/trading/')
-            form = SharesForm()
-=======
                     if shares.shares_amount == 0:
                         shares.delete()
                         return redirect('/trading/')
@@ -214,7 +199,6 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
                 form = SharesForm()
             else:
                 messages.error(request, 'Quantity not in range')
->>>>>>> 296dc1ca2d9557cacb64c845146dd113c5008ace
     context = {
     'stock_name': stock.stock_name,
     'num_shares': shares.shares_amount,
