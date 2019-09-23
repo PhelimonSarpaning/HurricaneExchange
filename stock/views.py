@@ -134,7 +134,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     return render(request, 'stock/stock_buy.html', context)
 
 def get_historical(stock_ticker):
-    data = Fetcher(stock_ticker, [2014,1,1]).getHistorical()
+    data = Fetcher(stock_ticker, [1990,1,1]).getHistorical()
     data['Date'] = pd.to_datetime(data['Date'])
     data = data.drop(columns=['Open', 'High', 'Low', 'Adj Close', 'Volume'])
     data['Date']= pd.to_datetime(data['Date']).values.astype(np.int64) // 10**6
