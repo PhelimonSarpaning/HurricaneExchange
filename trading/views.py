@@ -18,7 +18,7 @@ def trading_list_view(request, *args, **kwargs):
         defaultShares = Shares.objects.filter(tradingID=currentDefault.id)
         defaultValue = 0
         for share in defaultShares:
-            defaultValue += share.defaultShares_amount * share.stockID.stock_price
+            defaultValue += share.shares_amount * share.stockID.stock_price
     except Trading_Account.DoesNotExist:
         currentDefault = None
         defaultStockAmount = None
