@@ -18,18 +18,28 @@
     </tr>
   </thead>
 
+    {% if default_trading %}
+      <tr>
+        <th><a href="/trading/{{ default_trading.id }}">{{ default_trading.trading_name }}</th>
+        <th>{{ defaultStockAmount }}</th>
+        <th>${{ defaultValue }}</th>
+        
+      </tr>
+    {% endif %}
     {% for account in trading_accounts %}
-       <tr>
-         {% for key, value in account.items %}
+      <tr>
+      {% if account.id != default_trading.id %}
+        {% for key, value in account.items %}
           {% if key == 'trading_account' %}
-          <th> <a href="/trading/{{ value.id }}/">{{ value.trading_name }}</a> </th>
+            <th> <a href="/trading/{{ value.id }}/">{{ value.trading_name }}</a> </th>
           {% elif key == 'stock_amount' %}
             <th> {{value}} </th>
-            {% elif key == 'value' %}
-              <th> ${{value}} </th>
+          {% elif key == 'value' %}
+            <th> ${{value}} </th>
           {% endif %}
-          {% endfor %}
-       </tr>
+        {% endfor %}
+      {% endif %}
+      </tr>
     {% endfor %}
   </table>
 
