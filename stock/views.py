@@ -130,9 +130,13 @@ def stock_quick_buy(request, form):
                         stock.save()
                         user.userfund.save()
                         form = SharesForm()
-
+                        try:
+                            getName = Trading_Account.objects.get(pk=tradingID)
+                        except Trading_Account.DoesNotExist:
+                            return Http404
                         # Add to trading history
                         transaction_history.user = user
+                        transaction_history.trading_name = getName.trading_name
                         transaction_history.stock_name = stock.stock_name
                         transaction_history.stock_gics = stock.stock_gics
                         transaction_history.stock_price = stock.stock_price
@@ -184,9 +188,13 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                             stock.save()
                             user.userfund.save()
                             form = SharesForm()
-
+                            try:
+                                getName = Trading_Account.objects.get(pk=tradingID)
+                            except Trading_Account.DoesNotExist:
+                                return Http404
                             # Add to trading history
                             transaction_history.user = user
+                            transaction_history.trading_name = getName.trading_name
                             transaction_history.stock_name = stock.stock_name
                             transaction_history.stock_gics = stock.stock_gics
                             transaction_history.stock_price = stock.stock_price
@@ -255,9 +263,9 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
                     stock.save()
                     shares.save()
                     user.userfund.save()
-
                     # Add to trading history
                     transaction_history.user = user
+                    transaction_history.trading_name = tradingID.trading_name
                     transaction_history.stock_name = stock.stock_name
                     transaction_history.stock_gics = stock.stock_gics
                     transaction_history.stock_price = stock.stock_price
