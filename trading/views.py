@@ -66,6 +66,7 @@ def trading_detail_view(request, id, *args, **kwargs):
             obj = Trading_Account.objects.get(id=id)
             obj.is_default = True
             obj.save()
+            currentDefault = obj
 
             objShares = Shares.objects.filter(tradingID=obj.id)
             no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
@@ -96,11 +97,17 @@ def trading_detail_view(request, id, *args, **kwargs):
                     share_list.append(share_dict)
         except Trading_Account.DoesNotExist:
             raise Http404
+        try:
+            currentDefault = Trading_Account.objects.get(user_id=request.user.id, is_default=True)
+        except Trading_Account.DoesNotExist:
+            currentDefault = None
+
     context = {
         'trading_account': obj,
         'share_value': share_list,
         'sharesObj': objShares,
-        'no_Shares': no_Shares
+        'no_Shares': no_Shares,
+        'defaultAccount': currentDefault
     }
     return render(request, 'trading/trading_detail.html', context)
 
