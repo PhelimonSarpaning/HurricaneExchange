@@ -22,7 +22,7 @@
       <tr>
         <th><a href="/trading/{{ default_trading.id }}">{{ default_trading.trading_name }}</th>
         <th>{{ defaultStockAmount }}</th>
-        <th>${{ defaultValue }}</th>
+        <th>${{ defaultValue|floatformat:2 }}</th>
         
       </tr>
     {% endif %}
@@ -35,7 +35,7 @@
           {% elif key == 'stock_amount' %}
             <th> {{value}} </th>
           {% elif key == 'value' %}
-            <th> ${{value}} </th>
+            <th> ${{value|floatformat:2}} </th>
           {% endif %}
         {% endfor %}
       {% endif %}
