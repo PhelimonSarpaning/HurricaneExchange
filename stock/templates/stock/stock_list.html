@@ -31,9 +31,14 @@
           <div class="form-group">
             <label for="selectedAccount">Trading Account: </label>
             <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
-              {%for account in trading_accounts%}
+            {% if default_trading %}
+              <option value="{{default_trading.pk}}">{{default_trading.trading_name}}</option>
+            {% endif %}
+            {% for account in trading_accounts %}
+              {% if account.pk != default_trading.pk %}
                 <option value="{{account.pk}}">{{account.trading_name}}</option>
-              {% endfor %}
+              {% endif %}
+            {% endfor %}
             </select>
           </div>
           <div class="form-group">
