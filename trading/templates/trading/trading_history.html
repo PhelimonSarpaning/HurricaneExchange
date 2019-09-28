@@ -92,7 +92,7 @@
           </td>
           <td>
             <div style="color:red">
-              - ${{ history.funds }}
+              - ${{ history.funds|floatformat:2 }}
             </div>
           </td>
         {% else %}
@@ -103,7 +103,7 @@
           </td>
           <td>
             <div style="color:green">
-              + ${{history.funds}}
+              + ${{history.funds|floatformat:2}}
             </div>
           </td>
         {% endif %}
