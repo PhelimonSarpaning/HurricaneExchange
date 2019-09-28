@@ -52,7 +52,7 @@
           {% for total in share_value %}
             {% for key, value in total.items %}
                 {% if key == shares.stockID.stock_ticker %}
-                <th> {{value}}  </th>
+                <th> {{value|floatformat:2}}  </th>
                 {% endif %}
               {% endfor %}
           {% endfor %}
