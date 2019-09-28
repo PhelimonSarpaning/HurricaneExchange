@@ -16,8 +16,13 @@
  <form method='POST'>{% csrf_token %}
    Select trading account:
       <select class = 'custom-select' name = "selectedAccount">
-        {%for account in trading_accounts%}
-          <option value="{{account.pk}}">{{account.trading_name}}</option>
+        {% if default_trading %}
+          <option value="{{default_trading.pk}}">{{default_trading.trading_name}}</option>
+        {% endif %}
+        {% for account in trading_accounts %}
+          {% if account.pk != default_trading.pk %}
+            <option value="{{account.pk}}">{{account.trading_name}}</option>
+          {% endif %}
         {% endfor %}
       </select> <br>
  Quantity to purchase (between 1 and {{stock_available}}):{{form.shares_amount}}

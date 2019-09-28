@@ -163,6 +163,10 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
         raise Http404
     stock_available = stock.stock_max - stock.stock_sold
     user= request.user
+    try:
+        default_trading = Trading_Account.objects.get(user_id=user.id, is_default=True)
+    except Trading_Account.DoesNotExist:
+        default_trading = None
     trading_accounts = Trading_Account.objects.filter(user_id=user.id)
     transaction_history = Transaction_History()
     form = SharesForm(request.POST or None)
@@ -220,6 +224,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
         'stock_dayChange' : stock.stock_dayChange,
         'stock_available': stock_available,
         'trading_accounts': trading_accounts,
+        'default_trading': default_trading,
         'form': form,
         'historical': data
     }
