@@ -41,9 +41,9 @@
           <th> <a href="/stock/buy/{{ shares.stockID.stock_ticker }}/">{{ shares.stockID.stock_name }}</a> </th>
           <th> {{shares.shares_amount}} </th>
           <th> {{shares.stockID.stock_price}} </th>
-          <th>{% if value.stockID.stock_dayChange > 0 %}
+          <th>{% if shares.stockID.stock_dayChange > 0 %}
               <div style="color:green">{{shares.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
-          {% elif value.stockID.stock_dayChange < 0 %}
+          {% elif shares.stockID.stock_dayChange < 0 %}
               <div style="color:red">{{shares.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
           {% else %}
               <div style="color:green">{{shares.stockID.stock_dayChange}}</div>
