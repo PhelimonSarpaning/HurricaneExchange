@@ -3,27 +3,70 @@
 {% block content %}
 
 {% if noHistory %}
-  <br>
-  <h3>It appears there are no users in database. </h3>
+<br>
+<h3>It appears there are no users in database. </h3>
 
 {% else %}
-<h1>Fund Leaderboard:</h1>
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Username</th>
-      <th scope="col">Funds Owned</th>
-      <th></th>
+<div class="container float-left" style="width:49%">
+  <h1>Fund Leaderboard:</h1>
+  <table id="leaderboard_funds" class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Username</th>
+        <th scope="col">Funds Owned</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        {% for user in fundlist %}
+        <TD> {{user.user}} </TD>
+        <TD> {{user.fund}} </TD>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <div class="container float-right" style="width:49%" >
+      <h1>Something Leaderboard:</h1>
+      <table id="leaderboard_something" class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Funds Owned</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            {% for user in fundlist %}
+            <TD> {{user.user}} </TD>
+            <TD> {{user.fund}} </TD>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  {% endif %}
+  {% endblock %}
+  {% block javascript %}
 
-    </tr>
-  </thead>
-  <tr>
-    {% for user in fundlist %}
-       <tr>
-            <th> {{user.user}} </th>
-            <th> {{user.fund}} </th>
-       </tr>
-    {% endfor %}
-
-{% endif %}
+  <script>
+    $(document).ready(function () {
+      $('#leaderboard_funds').DataTable({
+        "columns": [
+        {"data": "user"},
+        {"data": "fund"},
+        ]
+      }
+      );
+      $('#leaderboard_something').DataTable({
+        "columns": [
+        {"data": "user"},
+        {"data": "fund"},
+        ]
+      }
+      );
+    });
+  </script>
+</div>
 {% endblock %}
