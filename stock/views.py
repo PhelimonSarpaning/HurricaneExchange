@@ -290,6 +290,7 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
     context = {
     'stock_name': stock.stock_name,
     'num_shares': shares.shares_amount,
+    'price': stock.stock_price,
     'form': form,
     }
     return render(request, 'stock/stock_sell.html', context)
