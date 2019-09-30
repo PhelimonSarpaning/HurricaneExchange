@@ -10,6 +10,7 @@ class InlineUserFund(admin.TabularInline):
 
 class InlineTrading(admin.TabularInline):
     model = Trading_Account
+    show_change_link = True
 
 
 class CustomUserAdmin(UserAdmin):
