@@ -47,6 +47,37 @@
   </div>
   </div>
 
+
+<div class="modal fade" id="transferShareslModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="transferShareslModalLabel">Transfer shares to another trading account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id='transfer_all_form' method = 'POST'>
+            {% csrf_token %}
+          <div class="form-group">
+          <label for="selectedAccount">Transfer to: </label>
+            <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
+            {% for account in trading_accounts %}
+                <option value="{{account.pk}}">{{account.trading_name}}</option>
+            {% endfor %}
+            </select>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button class ="btn btn-primary" type="submit" name ="transfer-all-button">Confirm</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <table class="table table-striped" id='shareTable'>
   <thead class="thead-dark">
     <tr>
@@ -90,22 +121,27 @@
 <form action="/stock/stocklist">
     <button class ="btn btn-secondary btn-sm" type="submit" value="Buy">Buy Shares</button>
 </form>
-<br>
 
 {% if shares_exist == True %}
-  <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#sellAllModal">Sell all shares</button> <br>
+  <br>
+  <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#sellAllModal">Sell all shares</button>
+  <br>
+
+  <br>
+  <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#transferShareslModal">Transfer all shares</button>
+  <br>
 {% endif%}
 
 {% if trading_account.is_default != True %}
+  <br>
   <form action="." method='POST'>
     {% csrf_token %}
     <button class ="btn btn-secondary btn-sm" type="submit">Make this my default trading account</button>
   </form>
 {% endif %}
 
-<br>
-
   <form action="/trading/delete/{{ trading_account.id }}">
+      <br>
       <button class ="btn btn-secondary btn-sm" type="submit">Delete this trading account</button>
   </form>
 

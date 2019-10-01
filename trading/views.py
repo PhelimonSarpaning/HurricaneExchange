@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import TradingForm, DateForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from .models import Trading_Account
 from stock.models import Shares, Transaction_History
@@ -123,16 +124,23 @@ def trading_detail_view(request, id, *args, **kwargs):
         except Trading_Account.DoesNotExist:
             currentDefault = None
 
+    trading_accounts = Trading_Account.objects.filter(~Q(id=id), user_id=request.user.id)
+
+    #sells all shares on sell all button click and refreshes page
     if request.method == 'POST' and 'sell-all-button' in request.POST:
-        for shares in objShares:
-            user = request.user
-            stock = shares.stockID
-            user.userfund.fund -= stock.stock_price * shares.shares_amount
-            stock.stock_sold -= shares.shares_amount
-            stock.save()
-            shares.delete()
-            user.userfund.save()
-            return redirect('/trading/'+str(id))
+        sell_all_shares(request, objShares)
+        return redirect('/trading/'+str(id))
+
+    #transfers all current trading account shares to selected account
+    if request.method == 'POST' and 'transfer-all-button' in request.POST:
+        tradingID = request.POST.get('selectedAccount')
+        # Check selected trading account exists for user
+        tradingAccount = Trading_Account.objects.filter(pk=tradingID)
+        if tradingAccount.exists():
+            user= request.user
+            shares.tradingID= tradingAccount[0]
+            shares.save()
+        return redirect('/trading/'+str(id))
 
     context = {
         'trading_account': obj,
@@ -140,21 +148,30 @@ def trading_detail_view(request, id, *args, **kwargs):
         'sharesObj': objShares,
         'no_Shares': no_Shares,
         'defaultAccount': currentDefault,
+        'trading_accounts': trading_accounts,
         'shares_exist': shares_exist
     }
     return render(request, 'trading/trading_detail.html', context)
+
+#method to sell all shares in trading account
+@login_required(login_url="/users")
+def sell_all_shares(request, objShares):
+    for shares in objShares:
+        user = request.user
+        stock = shares.stockID
+        user.userfund.fund -= stock.stock_price * shares.shares_amount
+        stock.stock_sold -= shares.shares_amount
+        stock.save()
+        shares.delete()
+        user.userfund.save()
 
 @login_required(login_url="/users")
 def trading_delete_view(request, id, *args, **kwargs):
     if request.method == 'POST':
         try:
             tradingObject = Trading_Account.objects.get(id=id)
-            shares = Shares.objects.filter(tradingID=tradingObject.id)
-            for share in shares:
-                stock = share.stockID
-                stock.stock_sold -= share.shares_amount
-                stock.save()
-                share.delete()
+            objShares = Shares.objects.filter(tradingID=tradingObject.id)
+            sell_all_shares(request, objShares)
             tradingObject.delete()
         except Trading_Account.DoesNotExist:
             pass
