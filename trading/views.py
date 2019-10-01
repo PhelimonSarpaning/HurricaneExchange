@@ -93,7 +93,6 @@ def trading_detail_view(request, id, *args, **kwargs):
                 no_Shares = ''
                 shares_exist = True
 
-                share_list =[]
                 for shares in objShares:
                     share_dict = {}
                     share_dict[shares.stockID] = shares.shares_amount * shares.stockID.stock_price
