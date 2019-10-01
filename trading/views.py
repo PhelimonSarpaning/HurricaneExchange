@@ -86,9 +86,11 @@ def trading_detail_view(request, id, *args, **kwargs):
 
             objShares = Shares.objects.filter(tradingID=obj.id)
             no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
+            shares_exist = False
             share_list =[]
             if objShares.exists():
                 no_Shares = ''
+                shares_exist = True
 
                 share_list =[]
                 for shares in objShares:
@@ -98,14 +100,17 @@ def trading_detail_view(request, id, *args, **kwargs):
 
         except Trading_Account.DoesNotExist:
             return Http404
+
     else:
         try:
             obj = Trading_Account.objects.get(id=id)
             objShares = Shares.objects.filter(tradingID=obj.id)
             no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
+            shares_exist = False
             share_list =[]
             if objShares.exists():
                 no_Shares = ''
+                shares_exist = True
 
                 for shares in objShares:
                     share_dict = {}
@@ -118,12 +123,24 @@ def trading_detail_view(request, id, *args, **kwargs):
         except Trading_Account.DoesNotExist:
             currentDefault = None
 
+    if request.method == 'POST' and 'sell-all-button' in request.POST:
+        for shares in objShares:
+            user = request.user
+            stock = shares.stockID
+            user.userfund.fund -= stock.stock_price * shares.shares_amount
+            stock.stock_sold -= shares.shares_amount
+            stock.save()
+            shares.delete()
+            user.userfund.save()
+            return redirect('/trading/'+str(id))
+
     context = {
         'trading_account': obj,
         'share_value': share_list,
         'sharesObj': objShares,
         'no_Shares': no_Shares,
-        'defaultAccount': currentDefault
+        'defaultAccount': currentDefault,
+        'shares_exist': shares_exist
     }
     return render(request, 'trading/trading_detail.html', context)
 

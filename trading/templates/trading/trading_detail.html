@@ -22,7 +22,32 @@
 <!-- View Trading Accounts -->
 <h3>{{ no_stock }}</h3>
 
-<table class="table table-striped">
+<div class="modal fade" id="sellAllModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Sell all shares?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+             Are you sure you went to sell all shares? (This can not be reversed!)
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form id='sell_all_form' method = 'POST'>
+              {% csrf_token %}
+              <button class ="btn btn-primary" type="submit" name ="sell-all-button">Confirm</button>
+          </form>
+      </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<table class="table table-striped" id='shareTable'>
   <thead class="thead-dark">
     <tr>
       <th scope="col">Stock</th>
@@ -63,22 +88,25 @@
   </table>
 
 <form action="/stock/stocklist">
-    <button class ="btn btn-secondary btn-sm" type="submit">Buy Shares</button>
+    <button class ="btn btn-secondary btn-sm" type="submit" value="Buy">Buy Shares</button>
 </form>
-
 <br>
+
+{% if shares_exist == True %}
+  <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#sellAllModal">Sell all shares</button> <br>
+{% endif%}
 
 {% if trading_account.is_default != True %}
   <form action="." method='POST'>
     {% csrf_token %}
     <button class ="btn btn-secondary btn-sm" type="submit">Make this my default trading account</button>
   </form>
-  <br>
-
 {% endif %}
 
-<form action="/trading/delete/{{ trading_account.id }}">
-    <button class ="btn btn-secondary btn-sm" type="submit">Delete this trading account</button>
-</form>
+<br>
+
+  <form action="/trading/delete/{{ trading_account.id }}">
+      <button class ="btn btn-secondary btn-sm" type="submit">Delete this trading account</button>
+  </form>
 
 {% endblock %}
