@@ -1,7 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if firstTime %}
+    <h3>Setup Progress</h3>
+    <div class="progress" style="height: 40px;">
+        <div class="progress-bar" role="progressbar" style="width: 85%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">85%</div>
+    </div>
+    <br>
+    {% endif %}
+  
 <h1>List of stocks to purchase shares in:</h1>
+    {% if firstTime %}
+        <div class="text-center">
+            <h3>There are 2 ways of buying shares</h3>
+            <h3>You can select the blue buy button, which is a quick way to purchase shares</h3>
+            <h3>Or, you can click any share name to view more information before purchasing</h3>
+            <h3>Go ahead and click any share name</h3>
+        </div>
+    {% endif %}
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

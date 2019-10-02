@@ -7,7 +7,7 @@ from django.contrib import messages
 
 from stock.models import Stock, Shares, Transaction_History
 from trading.models import Trading_Account
-from users.models import UserFund
+from users.models import UserFund, FirstTime
 
 #for historical graph
 from yahoo_historical import Fetcher
@@ -171,6 +171,12 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     transaction_history = Transaction_History()
     form = SharesForm(request.POST or None)
     if request.method == 'POST':
+        try:
+            firstTime = FirstTime.objects.get(user=request.user.id, isFirstTime=True)
+            firstTime.isFirstTime = False
+            firstTime.save()
+        except FirstTime.DoesNotExist:
+            firstTime = None
         if form.is_valid():
             tradingID = request.POST.get('selectedAccount')
             shares = form.save(commit=False)

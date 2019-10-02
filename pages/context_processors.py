@@ -1,6 +1,6 @@
 from trading.models import Trading_Account
 from stock.models import Shares
-from users.models import UserFund
+from users.models import UserFund, FirstTime
 
 def list_trading_accounts(request):
     try:
@@ -20,10 +20,20 @@ def list_trading_accounts(request):
         leaderObj = leaderQuery.order_by('-fund')
     except UserFund.DoesNotExist:
         leaderObj = None
+    try:
+        firstTime = FirstTime.objects.filter(user=request.user.id, isFirstTime=True)
+    except FirstTime.DoesNotExist:
+        firstTime = False
+    if firstTime.exists():
+        firstTime = True
+    context = {
+        'firstTime': firstTime
+    }
     context = {
         'list_accounts': queryset,
         'default_trading': defaultTrading,
         'sharesObj': sharesObj,
-        'leaderObj': leaderObj
+        'leaderObj': leaderObj,
+        'firstTime': firstTime
     }
     return context

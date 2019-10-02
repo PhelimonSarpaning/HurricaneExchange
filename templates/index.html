@@ -1,21 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if firstTime %}
+    <h3>Setup Progress</h3>
+    <div class="progress" style="height: 40px;">
+        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
+    </div>
+    {% endif %}
     <h1>Hurricanes Exchange - HomePage</h1>
     {% if user.is_authenticated %}
         <h2> Welcome {{ user.username }}!</h2>
         <h3>Funds available ${{ user.userfund.fund }}</h3>
-            {% if firstTime %}
-                <br>
-                <div class="text-center">
-                    <h3>Welcome {{ user.username }} to Hurricane Exchange!</h3>
-                    <h3>To get started, you will need to setup your trading account</h3>
-                    <h3>Press the button below to open a trading account and begin buying shares</h3>
-                    <form action="/trading/create">
-                        <button type="submit">Open a trading account</button>
-                    </form>
-                </div>
-            {% endif %}
+        {% if firstTime %}
+            <br>
+            <div class="text-center">
+                <h3>Welcome {{ user.username }} to Hurricane Exchange!</h3>
+                <h3>To get started, you will need to setup your trading account</h3>
+                <h3>Press the button below to open a trading account and begin buying shares</h3>
+                <form action="/trading/create">
+                    <button type="submit">Open a trading account</button>
+                </form>
+            </div>
+        {% else %}
         <!-- Bootstrap div cards -->
         <div class='container'>
             <div class='row'>
@@ -89,9 +95,7 @@
                 </div>
             </div>
         <div>
-
-    
-    
+        {% endif %}
     {% else %}
         <h2> Welcome to Hurricanes Exchange, please login </h2>
     {% endif %}

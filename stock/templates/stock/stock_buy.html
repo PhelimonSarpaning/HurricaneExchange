@@ -1,7 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
+    {% if firstTime %}
+    <h3>Setup Progress</h3>
+    <div class="progress" style="height: 40px;">
+        <div class="progress-bar" role="progressbar" style="width: 95%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">95%</div>
+    </div>
+    <br>
+    {% endif %}
+
 <button onclick="goBack()" class = 'btn-sm btn-secondary'>Go Back</button>
+    {% if firstTime %}
+        <div class="text-center">
+          <h3>Here, you can view stock information</h3>
+          <h3>Enter any quantity for shares and select buy</h3>
+          <h3>Congratulations, you have finished setting up your account!</h3>
+        </div>
+    {% endif %}
 <h1>Confirm purchase of stock: {{ stock_name}}</h1>
+
  <div class= 'col-md-4'>
    Available shares: {{stock_available}}<br>
  Price (per share): {{stock_price}}<br>
