@@ -2,10 +2,10 @@
 
 {% block content %}
     {% if firstTime %}
-    <h3>Setup Progress</h3>
-    <div class="progress" style="height: 40px;">
-        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
-    </div>
+        <h3>Setup Progress</h3>
+        <div class="progress" style="height: 40px;">
+            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
+        </div>
     {% endif %}
     <h1>Hurricanes Exchange - HomePage</h1>
     {% if user.is_authenticated %}
@@ -86,10 +86,10 @@
                             {% for leader in leaderObj %}
                                 <ul class='list-group list-group-flush'>
                                     <li class='list-group-item'>{{ leader.user }} {{ leader.fund }}</li>
+                            {% endfor %}
                                 <hr>
                                 <a href='/leaderboard' class='btn btn-primary'>View leaderboard</a>                                
                                 </ul>
-                            {% endfor %}
                         </div>
                     </div>
                 </div>
