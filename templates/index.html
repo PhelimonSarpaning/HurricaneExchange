@@ -23,7 +23,19 @@
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Trading Accounts</h5>
-                            
+                            <h6 class='card-subtitle mb-2 text-muted'>Your trading accounts</h6>
+                            <ul class='list-group list-group-flush'>
+                                {% if default_trading %}
+                                    <li class='list-group-item'><a href="trading/{{ default_trading.id }}">{{ default_trading.trading_name }}</a></li>
+                                {% endif %}
+                                {% for accounts in list_accounts %}
+                                    {% if accounts.id != default_trading.id %}
+                                        <li class='list-group-item'><a href="trading/{{ accounts.id }}">{{ accounts.trading_name }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                <hr>
+                                <a href='/trading' class='btn btn-primary'>View trading account information</a>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -31,6 +43,7 @@
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Stock</h5>
+                            
                         </div>
                     </div>
                 </div>
