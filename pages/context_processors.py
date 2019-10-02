@@ -1,4 +1,5 @@
 from trading.models import Trading_Account
+from stock.models import Shares
 
 def list_trading_accounts(request):
     try:
@@ -9,8 +10,13 @@ def list_trading_accounts(request):
         defaultTrading = Trading_Account.objects.get(user_id=request.user.id, is_default=True)
     except Trading_Account.DoesNotExist:
         defaultTrading = None
+    try:
+        sharesObj = Shares.objects.all()
+    except Shares.DoesNotExist:
+        sharesObj = None
     context = {
         'list_accounts': queryset,
-        'default_trading': defaultTrading
+        'default_trading': defaultTrading,
+        'sharesObj': sharesObj
     }
     return context

@@ -43,7 +43,28 @@
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Stock</h5>
-                            
+                            <h6 class='card-subtitle mb-2 text-muted'>Keep track of stock changes</h6>
+                            <ul class='list-group list-group-flush'>
+                                {% for shares in sharesObj %}
+                                    {% if shares.stockID.stock_dayChange > 0 %}
+                                        <li class='list-group-item'>{{ shares.tradingID.trading_name }} {{ shares.stockID.stock_name }}
+                                        <div class='text-right' style="color:green">
+                                            {{ shares.stockID.stock_dayChange }}
+                                            <i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i>
+                                        </div>
+                                    {% endif %}
+                                    {% if shares.stockID.stock_dayChange < 0 %}
+                                        <li class='list-group-item'>{{ shares.tradingID.trading_name }} {{ shares.stockID.stock_name }}
+                                        <div class='text-right' style="color:red">
+                                            {{ shares.stockID.stock_dayChange }}
+                                        <i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i>
+                                        </div>
+                                    {% endif %}
+                                    </li>
+                                {% endfor %}
+                                <hr>  
+                                <a href='/stock/stocklist' class='btn btn-primary'>View all stock</a>                    
+                            </ul>
                         </div>
                     </div>
                 </div>
