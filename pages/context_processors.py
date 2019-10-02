@@ -1,5 +1,6 @@
 from trading.models import Trading_Account
 from stock.models import Shares
+from users.models import UserFund
 
 def list_trading_accounts(request):
     try:
@@ -14,9 +15,15 @@ def list_trading_accounts(request):
         sharesObj = Shares.objects.all()
     except Shares.DoesNotExist:
         sharesObj = None
+    try:
+        leaderQuery = UserFund.objects.all()
+        leaderObj = leaderQuery.order_by('-fund')
+    except UserFund.DoesNotExist:
+        leaderObj = None
     context = {
         'list_accounts': queryset,
         'default_trading': defaultTrading,
-        'sharesObj': sharesObj
+        'sharesObj': sharesObj,
+        'leaderObj': leaderObj
     }
     return context

@@ -19,6 +19,7 @@
         <!-- Bootstrap div cards -->
         <div class='container'>
             <div class='row'>
+                <!-- Trading account card -->
                 <div class='col-sm'>
                     <div class='card'>
                         <div class='card-body'>
@@ -39,28 +40,30 @@
                         </div>
                     </div>
                 </div>
+                <!-- Stocks card -->
                 <div class='col-sm'>
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Stock</h5>
-                            <h6 class='card-subtitle mb-2 text-muted'>Keep track of stock changes</h6>
+                            <h6 class='card-subtitle mb-2 text-muted'>Keep track of owned stock changes</h6>
                             <ul class='list-group list-group-flush'>
                                 {% for shares in sharesObj %}
                                     {% if shares.stockID.stock_dayChange > 0 %}
-                                        <li class='list-group-item'>{{ shares.tradingID.trading_name }} {{ shares.stockID.stock_name }}
+                                        <li class='list-group-item'>{{ shares.stockID.stock_name }}
                                         <div class='text-right' style="color:green">
                                             {{ shares.stockID.stock_dayChange }}
                                             <i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i>
                                         </div>
+                                        </li>
                                     {% endif %}
                                     {% if shares.stockID.stock_dayChange < 0 %}
-                                        <li class='list-group-item'>{{ shares.tradingID.trading_name }} {{ shares.stockID.stock_name }}
+                                        <li class='list-group-item'>{{ shares.stockID.stock_name }}
                                         <div class='text-right' style="color:red">
                                             {{ shares.stockID.stock_dayChange }}
                                         <i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i>
                                         </div>
+                                        </li>
                                     {% endif %}
-                                    </li>
                                 {% endfor %}
                                 <hr>  
                                 <a href='/stock/stocklist' class='btn btn-primary'>View all stock</a>                    
@@ -68,15 +71,25 @@
                         </div>
                     </div>
                 </div>
+                <!-- Leaderboard card-->
                 <div class='col-sm'>
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Leaderboard</h5>
+                            <h6 class='card-subtitle mb-2 text-muted'>Leaderboard status</h6>
+                            {% for leader in leaderObj %}
+                                <ul class='list-group list-group-flush'>
+                                    <li class='list-group-item'>{{ leader.user }} {{ leader.fund }}</li>
+                                <hr>
+                                <a href='/leaderboard' class='btn btn-primary'>View leaderboard</a>                                
+                                </ul>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
         <div>
+
     
     
     {% else %}
