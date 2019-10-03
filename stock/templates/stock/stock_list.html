@@ -79,11 +79,11 @@
             <th> {{stock.stock_price}} </th>
             <th><div>
               {% if stock.stock_dayChange > 0 %}
-                  <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
+                  <div style="color:green">{{stock.stock_dayChange}} ({{stock.stock_dayChangePercent}})<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
               {% elif stock.stock_dayChange < 0 %}
-                  <div style="color:red">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
+                  <div style="color:red">{{stock.stock_dayChange}} ({{stock.stock_dayChangePercent}})<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
               {% else %}
-                  <div style="color:green">{{stock.stock_dayChange}}</div>
+                  <div style="color:green">{{stock.stock_dayChange}} ({{stock.stock_dayChangePercent}})</div>
               {% endif %}
             </th>
             <td>

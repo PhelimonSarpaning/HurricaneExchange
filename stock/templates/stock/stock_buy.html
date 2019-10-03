@@ -9,15 +9,16 @@
    <div class= 'col-3'>
      <h4>
        Available shares: {{stock_available}}<br>
-       Price: ${{stock_price}} <sub>AUD</sub> {% if stock_dayChange > 0 %}
-       <a style="color:green">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></a>
+       Price: ${{stock_price}} <sub>AUD</sub><br>
+       Day Change:{% if stock_dayChange > 0 %}
+       <a style="color:green">{{stock_dayChange}} ({{stock_dayChangePercent}})<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></a>
    {% elif stock_dayChange < 0 %}
-       <a style="color:red">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></a>
+       <a style="color:red">{{stock_dayChange}} ({{stock_dayChangePercent}})<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></a>
    {% else %}
-       <a style="color:green">{{stock_dayChange}}</a>
+       <a style="color:green">{{stock_dayChange}} ({{stock_dayChangePercent}})</a>
    {% endif %}</h4>
   </div>
-  <div class ='col-9'>
+  <div class ='col-8'>
     <div id="container"></div>
   </div>
 </div>
