@@ -26,6 +26,7 @@ class Command(BaseCommand):
                 print(currStockInfo["primary_share"]["last_price"])
                 currStock.stock_price= float(currStockInfo["primary_share"]["last_price"])
                 currStock.stock_dayChange = float(currStockInfo["primary_share"]["day_change_price"])
+                currStock.stock_dayChange = float(currStockInfo["primary_share"]["day_change_percent"])
                 currStock.stock_hasValidInfo = True;
                 currStock.stock_max =int( STOCKAMOUNT_DIVISOR/currStock.stock_price)
                 currStock.save();

@@ -16,6 +16,7 @@ class Stock(models.Model):
     stock_gics = models.CharField(max_length=255, default="NULL")
     stock_price = models.FloatField(default=200.0)
     stock_dayChange = models.FloatField(default=10.0)
+    stock_dayChangePercent = models.CharField(max_length=20, default='10.0')
     stock_max = models.BigIntegerField(default=1000.0)
     stock_sold = models.BigIntegerField(default=0)
     stock_hasValidInfo = models.BooleanField(default=False)

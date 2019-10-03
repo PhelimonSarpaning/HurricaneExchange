@@ -1,35 +1,45 @@
 {% extends 'base.html' %}
 {% block content %}
-<button onclick="goBack()" class = 'btn-sm btn-secondary'>Go Back</button>
-<h1>Confirm purchase of stock: {{ stock_name}}</h1>
- <div class= 'col-md-4'>
-   Available shares: {{stock_available}}<br>
- Price (per share): {{stock_price}}<br>
- Daily change: {% if stock_dayChange > 0 %}
-     <a style="color:green">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></a>
- {% elif stock_dayChange < 0 %}
-     <a style="color:red">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></a>
- {% else %}
-     <a style="color:green">{{stock_dayChange}}</a>
- {% endif %}<br>
+  <button onclick="goBack()" class = 'btn-sm btn-secondary'>Go Back</button>
+<div class ='card'>
+<div class='card-body'>
+  <h1 class='card-title'>{{ stock_name}}</h1>
+  <hr>
+<div class='row'>
+   <div class= 'col-3'>
+     <h4>
+       Available shares: {{stock_available}}<br>
+       Price: ${{stock_price}} <sub>AUD</sub> {% if stock_dayChange > 0 %}
+       <a style="color:green">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></a>
+   {% elif stock_dayChange < 0 %}
+       <a style="color:red">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></a>
+   {% else %}
+       <a style="color:green">{{stock_dayChange}}</a>
+   {% endif %}</h4>
+  </div>
+  <div class ='col-9'>
+    <div id="container"></div>
+  </div>
+</div>
+</div>
+</div>
 
- <form method='POST'>{% csrf_token %}
-   Select trading account:
-      <select class = 'custom-select' name = "selectedAccount">
-        {% if default_trading %}
-          <option value="{{default_trading.pk}}">{{default_trading.trading_name}}</option>
-        {% endif %}
-        {% for account in trading_accounts %}
-          {% if account.pk != default_trading.pk %}
-            <option value="{{account.pk}}">{{account.trading_name}}</option>
-          {% endif %}
-        {% endfor %}
-      </select> <br>
- Quantity to purchase (between 1 and {{stock_available}}):{{form.shares_amount}}
- Total:<input class = 'form-control' type="text" id="total" value="$0.00" readonly> <br>
+<form method='POST'>{% csrf_token %}
+  Select trading account:
+     <select class = 'custom-select' name = "selectedAccount">
+       {% if default_trading %}
+         <option value="{{default_trading.pk}}">{{default_trading.trading_name}}</option>
+       {% endif %}
+       {% for account in trading_accounts %}
+         {% if account.pk != default_trading.pk %}
+           <option value="{{account.pk}}">{{account.trading_name}}</option>
+         {% endif %}
+       {% endfor %}
+     </select> <br>
+Quantity to purchase (between 1 and {{stock_available}}):{{form.shares_amount}}
+Total:<input class = 'form-control' type="text" id="total" value="$0.00" readonly> <br>
 <button onclick="submit" class="btn btn-primary btn">Buy</button>
-</form></div>
-
+</form>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -40,8 +50,6 @@
     {% endfor %}
 </ul>
 {% endif %}
-
-<div id="container" style="height: 400px; min-width: 310px"></div>
 
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 {{ historical|json_script:"historicalData"}}
@@ -57,7 +65,7 @@
             selected: 1
         },
         title: {
-            text: "{{stock_ticker}}"
+            text: ""
         },
       series:  [{
             data: value,
