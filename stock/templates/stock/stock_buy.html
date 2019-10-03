@@ -1,47 +1,121 @@
 {% extends 'base.html' %}
 {% block content %}
-<button onclick="goBack()" class = 'btn-sm btn-secondary'>Go Back</button>
-<h1>Confirm purchase of stock: {{ stock_name}}</h1>
- <div class= 'col-md-4'>
-   Available shares: {{stock_available}}<br>
- Price (per share): {{stock_price}}<br>
- Daily change: {% if stock_dayChange > 0 %}
-     <a style="color:green">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></a>
- {% elif stock_dayChange < 0 %}
-     <a style="color:red">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></a>
- {% else %}
-     <a style="color:green">{{stock_dayChange}}</a>
- {% endif %}<br>
-
- <form method='POST'>{% csrf_token %}
-   Select trading account:
-      <select class = 'custom-select' name = "selectedAccount">
-        {% if default_trading %}
-          <option value="{{default_trading.pk}}">{{default_trading.trading_name}}</option>
-        {% endif %}
-        {% for account in trading_accounts %}
-          {% if account.pk != default_trading.pk %}
-            <option value="{{account.pk}}">{{account.trading_name}}</option>
-          {% endif %}
-        {% endfor %}
-      </select> <br>
- Quantity to purchase (between 1 and {{stock_available}}):{{form.shares_amount}}
- Total:<input class = 'form-control' type="text" id="total" value="$0.00" readonly> <br>
-<button onclick="submit" class="btn btn-primary btn">Buy</button>
-</form></div>
-
 {% if messages %}
-<ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} Sorry! {% endif %}
-        {{ message }}
-    </li>
+    <div class="modal" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+              <div class="modal-body">
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+              <h5> Success!!</h5>
+              <h6> You can view your purchase in Transaction History <h6>
+              {% endif %}
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}<h5> Sorry! There was an error with this Purchse!!</h5>{% endif %}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+        </div>
+      </div>
+    </div>
     {% endfor %}
-</ul>
 {% endif %}
+<div class ='mb-2'>
+<button onclick="goBack()" class = 'btn-sm btn-secondary'>Go Back</button>
+</div>
+<div class ='card'>
+<div class='card-body'>
+  <span class ='card-title display-4'>{{stock_name}} <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+          data-whatever='{
+            "name":"{{stock_name}}",
+            "price":{{stock_price}},
+            "ticker":"{{stock_ticker}}",
+            "max":{{stock_max}},
+            "sold":{{stock_sold}}
+          }'
+  >Buy</button></span>
+  <hr>
+   <!-- <div class= 'col-3' style='min-width: 380px;'> -->
+     <h5>
+       Available shares: {{stock_available}}<br>
+       Price: ${{stock_price}} <sub>AUD</sub><br>
+       Day Change:{% if stock_dayChange > 0 %}
+       <a style="color:green">{{stock_dayChange}} ({{stock_dayChangePercent}})<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></a>
+   {% elif stock_dayChange < 0 %}
+       <a style="color:red">{{stock_dayChange}} ({{stock_dayChangePercent}})<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></a>
+   {% else %}
+       <a style="color:green">{{stock_dayChange}} ({{stock_dayChangePercent}})</a>
+   {% endif %}</h5>
 
-<div id="container" style="height: 400px; min-width: 310px"></div>
+
+  <!-- <div class= 'col'style='min-width: 380px;'> -->
+    <div id="container"></div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Purchase shares</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id='buy_form' method='POST'>{% csrf_token %}
+          <input type="hidden" name='stock_ticker' id="stock_ticker"></input>
+          <div class="form-group">
+            <label for="selectedAccount">Trading Account: </label>
+            <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
+            {% if default_trading %}
+              <option value="{{default_trading.pk}}">{{default_trading.trading_name}}</option>
+            {% endif %}
+            {% for account in trading_accounts %}
+              {% if account.pk != default_trading.pk %}
+                <option value="{{account.pk}}">{{account.trading_name}}</option>
+              {% endif %}
+            {% endfor %}
+            </select>
+          </div>
+          <div class='row'>
+          <div class="col form-group">
+            <label for="stock_name">Stock: </label>
+            <h5 id="stock_name"></h5>
+          </div>
+          <div class="col form-group">
+            <label for="stock_price">Price </label>
+            <h5 id="stock_price">$</h5>
+          </div>
+          <div class="col form-group">
+            <label for="shares_available">Available: </label>
+            <h5 id="shares_available"></h5>
+          </div>
+          </div>
+          <div class='row'>
+          <div class="col form-group">
+            <label for="{{ shares_amount.id_for_label }}">Quantity: </label>
+              {{ form.shares_amount }}
+          </div>
+          <div class="col form-group">
+               <label for="total">Total: </label>
+               <input class ='form-control' type='text' id='total' value='$0.00' readonly/>
+          </div>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button onclick="submit" class="btn btn-primary buy-submit">Confirm</button>
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% load static %}
+<script type="text/javascript" src="{% static 'stock/js/purchasePopup.js' %}"></script>
 
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 {{ historical|json_script:"historicalData"}}
@@ -57,7 +131,7 @@
             selected: 1
         },
         title: {
-            text: "{{stock_ticker}}"
+            text: ""
         },
       series:  [{
             data: value,

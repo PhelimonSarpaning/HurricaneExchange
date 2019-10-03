@@ -1,8 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>List of stocks to purchase shares in:</h1>
-
+<h1>Stocks Available:</h1>
+{% if messages %}
+    {% for message in messages %}
+    <div class="modal" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+              <div class="modal-body">
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+              <h5> Success!!</h5>
+              <h6> You can view your purchase in Transaction History <h6>
+              {% endif %}
+              {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}<h5> Sorry! There was an error with this Purchse!!</h5>{% endif %}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+{% endif %}
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -17,18 +36,6 @@
         <form id='buy_form' method='POST'>{% csrf_token %}
           <input type="hidden" name='stock_ticker' id="stock_ticker"></input>
           <div class="form-group">
-            <label for="stock_name">Stock: </label>
-            <h5 id="stock_name"></h5>
-          </div>
-          <div class="form-group">
-            <label for="stock_price">Price </label>
-            <h5 id="stock_price">$</h5>
-          </div>
-          <div class="form-group">
-            <label for="shares_available">Available: </label>
-            <h5 id="shares_available"></h5>
-          </div>
-          <div class="form-group">
             <label for="selectedAccount">Trading Account: </label>
             <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
             {% if default_trading %}
@@ -41,12 +48,29 @@
             {% endfor %}
             </select>
           </div>
-          <div class="form-group">
+          <div class='row'>
+          <div class="col form-group">
+            <label for="stock_name">Stock: </label>
+            <h5 id="stock_name"></h5>
+          </div>
+          <div class="col form-group">
+            <label for="stock_price">Price </label>
+            <h5 id="stock_price">$</h5>
+          </div>
+          <div class="col form-group">
+            <label for="shares_available">Available: </label>
+            <h5 id="shares_available"></h5>
+          </div>
+          </div>
+          <div class='row'>
+          <div class="col form-group">
             <label for="{{ shares_amount.id_for_label }}">Quantity: </label>
               {{ form.shares_amount }}
           </div>
-          <div class="form-group">
-             Total:<input class ='form-control' type='text' id='total' value='$0.00' readonly/>
+          <div class="col form-group">
+               <label for="total">Total: </label>
+               <input class ='form-control' type='text' id='total' value='$0.00' readonly/>
+          </div>
           </div>
           <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -79,11 +103,11 @@
             <th> {{stock.stock_price}} </th>
             <th><div>
               {% if stock.stock_dayChange > 0 %}
-                  <div style="color:green">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
+                  <div style="color:green">{{stock.stock_dayChange}} ({{stock.stock_dayChangePercent}})<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
               {% elif stock.stock_dayChange < 0 %}
-                  <div style="color:red">{{stock.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
+                  <div style="color:red">{{stock.stock_dayChange}} ({{stock.stock_dayChangePercent}})<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
               {% else %}
-                  <div style="color:green">{{stock.stock_dayChange}}</div>
+                  <div style="color:green">{{stock.stock_dayChange}} ({{stock.stock_dayChangePercent}})</div>
               {% endif %}
             </th>
             <td>
@@ -144,8 +168,9 @@
 {% endblock %}
 
 {% block javascript %}
+  {% load static %}
+  <script type="text/javascript" src="{% static 'stock/js/purchasePopup.js' %}"></script>
   <script>
-
   var price = 0
 
   function updateTotal(){
@@ -155,54 +180,8 @@
       $("#total").val("$"+ total.toFixed(2))
     }
   }
-
-
-  function clearFields(){
-    $('#id_shares_amount').attr({'placeholder': 1})
-    $('#id_shares_amount').val('1')
-    $('#id_shares_amount').end()
-    $("#total").val('$0.00')
-  }
-
-  clearFields();
-
-
-
-  $('#exampleModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-
-    //Get stock info from buy button
-    var name = button.data('whatever').name
-    price = button.data('whatever').price
-    var ticker = button.data('whatever').ticker
-
-    //calculate stock available
-    var max = button.data('whatever').max
-    var sold = button.data('whatever').sold
-    var available = max - sold
-
-    $('#id_shares_amount').attr({'max': available})
-
-    // Update the modal's content
-    var modal = $(this)
-
-    //Pass stock information to modal
-    modal.find('.form-group #stock_name').text(name)
-    modal.find('.form-group #stock_price').text('$'+price)
-    modal.find('#stock_ticker').val(ticker)
-    modal.find('.form-group #shares_available').text(max)
-    updateTotal()
-  })
-
-  $('#exampleModal').on('hide.bs.modal', function (event) {
-    clearFields()
-  })
-
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
     })
-
-
-
 </script>
 {% endblock %}
