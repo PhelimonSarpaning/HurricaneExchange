@@ -29,6 +29,7 @@ class Market(models.Model):
     market_sold = models.FloatField()
 
 class Shares(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     tradingID = models.ForeignKey(Trading_Account, on_delete=models.CASCADE)
     stockID = models.ForeignKey(Stock, on_delete=models.CASCADE)
     shares_amount = models.FloatField()

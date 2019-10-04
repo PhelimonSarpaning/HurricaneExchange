@@ -194,6 +194,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                                 shares.stockID = stock
                             stock.stock_sold += quantity
                             user.userfund.fund-= stock.stock_price * quantity
+                            shares.user = user
                             shares.save()
                             stock.save()
                             user.userfund.save()
