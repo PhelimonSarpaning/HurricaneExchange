@@ -21,7 +21,7 @@ class userSignupForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
 
 class FirstTimeForm(forms.ModelForm):
-    firstTime = forms.BooleanField(widget=forms.HiddenInput(), initial=True)
+    firstTime = forms.BooleanField(required=False, widget=forms.HiddenInput(), initial=True)
     class Meta:
         model = FirstTime
         fields = [
