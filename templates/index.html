@@ -64,7 +64,7 @@
                                 <h6 class='card-subtitle mb-2 text-muted'>Stock going up</h6>
                                 {% for shares in sharesObj %}
                                     {% if shares.stockID.stock_dayChange > 0 %}
-                                        <li class='list-group-item'>{{ shares.stockID.stock_name }}
+                                        <h6><li class='list-group-item'>{{ shares.stockID.stock_name }}</h6>
                                             <div class='text-right' style="color:green">
                                                 {{ shares.stockID.stock_dayChange }}
                                                 <i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i>
@@ -77,7 +77,7 @@
                                 <h6 class='card-subtitle mb-2 text-muted'>Stock going down</h6> 
                                 {% for shares in sharesObj %}
                                     {% if shares.stockID.stock_dayChange < 0 %}
-                                        <li class='list-group-item'>{{ shares.stockID.stock_name }}
+                                        <h6><li class='list-group-item'>{{ shares.stockID.stock_name }}</h6>
                                             <div class='text-right' style="color:red">
                                                 {{ shares.stockID.stock_dayChange }}
                                                 <i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i>
@@ -102,16 +102,18 @@
                             <hr>
                             <div class='row'>
                                 <div class='col-sm-6 text-left'>
+                                <h6 class='card-subtitle mb-2 text-muted'>User</h6>
                                     {% for leader in leaderObj %}
                                         <ul class='list-group list-group-flush'>
-                                            <li class='list-group-item'>{{ leader.user }}</li>
+                                            <h6><li class='list-group-item'>{{ leader.user }}</li></h6>
                                         </ul>
                                     {% endfor %}
                                 </div>
                                 <div class='col-sm-6 text-right'>
+                                <h6 class='card-subtitle mb-2 text-muted text-left'>Funds</h6>
                                     {% for leader in leaderObj %}
                                         <ul class='list-group list-group-flush'>
-                                            <li class='list-group-item'>{{ leader.fund }}</li>
+                                            <h6><li class='list-group-item'>${{ leader.fund }}</li></h6>
                                         </ul>
                                     {% endfor %}
                                 </div>
