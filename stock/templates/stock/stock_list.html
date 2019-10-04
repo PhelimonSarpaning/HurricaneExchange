@@ -11,11 +11,18 @@
   
 <h1>List of stocks to purchase shares in:</h1>
     {% if firstTime %}
-        <div class="text-center">
-            <h3>There are 2 ways of buying shares</h3>
-            <h3>You can select the blue buy button, which is a quick way to purchase shares</h3>
-            <h3>Or, you can click any share name to view more information before purchasing</h3>
-            <h3>Go ahead and click any share name</h3>
+        <div class='row text-center justify-content-md-center'>
+            <div class'col-sm-12'>
+                <div class='card'>
+                    <div class='card-body'>
+                        <h3 class='card-title'>Buying shares from stock list</h3>
+                        <h5>There are 2 ways of buying shares</h5>
+                        <h5>You can select the blue buy button, which is a quick way to purchase shares</h5>
+                        <h5>Or, you can click any share name to view more information before purchasing</h5>
+                        <h5>Go ahead and click any share name</h5>
+                    </div>
+                </div>
+            </div>
         </div>
     {% endif %}
 
@@ -89,7 +96,11 @@
   <tr>
     {% for stock in stocks %}
        <tr>
+        {% if firstTime %}
+            <th>  <a class='text-danger' href="/stock/buy/{{stock.stock_ticker}}" data-toggle="tooltip" data-placement="bottom" title="View more information">{{stock.stock_name}}</a> </th>
+        {% else %}
             <th>  <a href="/stock/buy/{{stock.stock_ticker}}" data-toggle="tooltip" data-placement="bottom" title="View more information">{{stock.stock_name}}</a> </th>
+        {% endif %}
             <th> {{stock.stock_gics}} </th>
             <th> {{stock.stock_ticker}} </th>
             <th> {{stock.stock_price}} </th>
