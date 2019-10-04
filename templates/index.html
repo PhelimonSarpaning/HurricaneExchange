@@ -33,7 +33,7 @@
         <div class='container'>
             <div class='row'>
                 <!-- Trading account card -->
-                <div class='col-sm'>
+                <div class='col-sm-4'>
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Trading Accounts</h5>
@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <!-- Stocks card -->
-                <div class='col-sm'>
+                <div class='col-sm-4'>
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Stock</h5>
@@ -94,18 +94,31 @@
                     </div>
                 </div>
                 <!-- Leaderboard card-->
-                <div class='col-sm'>
+                <div class='col-sm-4'>
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Leaderboard</h5>
                             <h6 class='card-subtitle mb-2 text-muted'>Leaderboard status</h6>
-                            {% for leader in leaderObj %}
-                                <ul class='list-group list-group-flush'>
-                                    <li class='list-group-item'>{{ leader.user }} {{ leader.fund }}</li>
-                            {% endfor %}
-                                <hr>
-                                <a href='/leaderboard' class='btn btn-primary'>View leaderboard</a>                                
-                                </ul>
+                            <hr>
+                            <div class='row'>
+                                <div class='col-sm-6 text-left'>
+                                    {% for leader in leaderObj %}
+                                        <ul class='list-group list-group-flush'>
+                                            <li class='list-group-item'>{{ leader.user }}</li>
+                                        </ul>
+                                    {% endfor %}
+                                </div>
+                                <div class='col-sm-6 text-right'>
+                                    {% for leader in leaderObj %}
+                                        <ul class='list-group list-group-flush'>
+                                            <li class='list-group-item'>{{ leader.fund }}</li>
+                                        </ul>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class='row justify-content-md-center'>
+                                <a href='/leaderboard' class='btn btn-primary'>View leaderboard</a>
+                            </div>
                         </div>
                     </div>
                 </div>
