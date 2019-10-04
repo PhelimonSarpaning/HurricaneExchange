@@ -7,15 +7,29 @@
         <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">50%</div>
     </div>
     {% endif %}
-<h1>Trading Accounts</h1>
-<h2>Your trading accounts: </h2>
+    <br>
     {% if firstTime %}
-        <div class="text-center">
-            <h3>Now you have created your first trading account!</h3>
-            <h3>Your first trading account is your default account</h3>
-            <h3>Click on your trading account name to access your trading account information</h3>
+        <div class='row text-center justify-content-md-center'>
+            <div class'col-sm-12'>
+                <div class='card'>
+                    <div class='card-body'>
+                        <h3 class='card-title'>View trading account information</h3>
+                        <h5>Now you have created your first trading account!</h5>
+                        <h5>Your first trading account is your default account</h5>
+                        <h5>Click on your trading account name to access your trading account information</h5>
+                    </div>
+                </div>
+            </div>
         </div>
     {% endif %}
+  <div class='row text-center justify-content-md-center'>
+    <div class='col-sm-12'>
+      <h1>Trading Accounts</h1>
+      <h2>Your trading accounts: </h2>
+    </div>
+  </div>
+
+
 <h3>{{ no_trading }}</h3>
 {% for instance in trading_accounts %}
     <p><a href="/trading/{{ instance.id }}/">{{ instance.trading_name }}</a></p>
@@ -33,7 +47,11 @@
 
     {% if default_trading %}
       <tr>
-        <th><a href="/trading/{{ default_trading.id }}">{{ default_trading.trading_name }}</th>
+        {% if firstTime %}
+          <th><a class='text-danger' href="/trading/{{ default_trading.id }}">{{ default_trading.trading_name }}</th>        
+        {% else %}
+          <th><a href="/trading/{{ default_trading.id }}">{{ default_trading.trading_name }}</th>
+        {% endif %}
         <th>{{ defaultStockAmount }}</th>
         <th>${{ defaultValue|floatformat:2 }}</th>
         
@@ -44,7 +62,11 @@
       {% if account.id != default_trading.id %}
         {% for key, value in account.items %}
           {% if key == 'trading_account' %}
-            <th> <a href="/trading/{{ value.id }}/">{{ value.trading_name }}</a> </th>
+            {% if firstTime %}
+              <th> <a class='text-danger' href="/trading/{{ value.id }}/">{{ value.trading_name }}</a> </th>
+            {% else %}
+              <th> <a href="/trading/{{ value.id }}/">{{ value.trading_name }}</a> </th>
+            {% endif %}
           {% elif key == 'stock_amount' %}
             <th> {{value}} </th>
           {% elif key == 'value' %}
@@ -57,7 +79,7 @@
   </table>
 
 <form action="/trading/create">
-    <button type="submit">Open a trading account</button>
+    <button class='btn btn-primary' type="submit">Open a trading account</button>
 </form>
 
 {% endblock %}
