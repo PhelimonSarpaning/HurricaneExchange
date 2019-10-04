@@ -126,6 +126,7 @@ def stock_quick_buy(request, form):
                             shares.stockID = stock
                         stock.stock_sold += quantity
                         user.userfund.fund-= stock.stock_price * quantity
+                        shares.user = user
                         shares.save()
                         stock.save()
                         user.userfund.save()
@@ -273,6 +274,7 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
                     shares.shares_amount -= quantity
                     user.userfund.fund += stock.stock_price * quantity
                     stock.save()
+                    shares.user = user
                     shares.save()
                     user.userfund.save()
                     # Add to trading history
