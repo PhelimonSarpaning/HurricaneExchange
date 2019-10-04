@@ -13,13 +13,20 @@
         <h3>Funds available ${{ user.userfund.fund }}</h3>
         {% if firstTime %}
             <br>
-            <div class="text-center">
-                <h3>Welcome {{ user.username }} to Hurricane Exchange!</h3>
-                <h3>To get started, you will need to setup your trading account</h3>
-                <h3>Press the button below to open a trading account and begin buying shares</h3>
-                <form action="/trading/create">
-                    <button type="submit">Open a trading account</button>
-                </form>
+            <div class='row text-center justify-content-md-center'>
+                <div class'col-sm-12'>
+                    <div class='card'>
+                        <div class='card-body'>
+                            <h3 class='card-title'>Open a trading account</h3>
+                            <h5>Welcome {{ user.username }} to Hurricane Exchange!</h5>
+                            <h5>To get started, you will need to setup your trading account</h5>
+                            <h5>Press the button below to open a trading account and begin buying shares</h5>
+                            <form action="/trading/create">
+                                <button class='btn btn-danger' type="submit">Open a trading account</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         {% else %}
         <!-- Bootstrap div cards -->
