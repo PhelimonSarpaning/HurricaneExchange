@@ -12,7 +12,8 @@ def index_view(request, *args, **kwargs):
     leaderObj = None
     if request.user.is_authenticated:
         try:
-            sharesObj = Shares.objects.filter(user=request.user)
+            tradingAccs = Trading_Account.objects.filter(user_id= request.user)
+            sharesObj = Shares.objects.filter(tradingID__in = tradingAccs)
         except Shares.DoesNotExist:
             sharesObj = None
         try:
