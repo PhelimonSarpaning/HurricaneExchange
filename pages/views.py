@@ -2,16 +2,26 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from trading.models import Trading_Account
 from django.views.decorators.cache import cache_control
+from users.models import UserFund
+from stock.models import Shares
 
 # Create your views here.
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index_view(request, *args, **kwargs):
-    queryset = Trading_Account.objects.filter(user_id=request.user.id)
-    # no_trading = 'It appears you have no trading accounts. Please add a trading account'
-    firstTime = True
-    if queryset.exists():
-        firstTime = False
+    sharesObj = None
+    leaderObj = None
+    if request.user.is_authenticated:
+        try:
+            sharesObj = Shares.objects.filter(user=request.user)
+        except Shares.DoesNotExist:
+            sharesObj = None
+        try:
+            leaderQuery = UserFund.objects.all()
+            leaderObj = leaderQuery.order_by('-fund')
+        except UserFund.DoesNotExist:
+            leaderObj = None
     context = {
-        'firstTime': firstTime
+        'sharesObj': sharesObj,
+        'leaderObj': leaderObj
     }
     return render(request, 'index.html', context)
