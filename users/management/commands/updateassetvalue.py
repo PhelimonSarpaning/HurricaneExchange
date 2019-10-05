@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
-from users.models import UserFund
+from users.models import UserFund, UserAssetValue
 from trading.models import Trading_Account
 from stock.models import Shares, Stock
+from django.contrib.auth.models import User
 
 
 class Command(BaseCommand):
@@ -19,5 +20,11 @@ class Command(BaseCommand):
                     stock = share.stockID
                     assetVal+= share.shares_amount * stock.stock_price
             fund.totalAssetValue = assetVal + fund.fund
-            print(fund.totalAssetValue)
             fund.save()
+
+            
+            #create object for historivalGraph
+            newUserAssetVal = UserAssetValue()
+            newUserAssetVal.user_id = User.objects.get(id=user)
+            newUserAssetVal.totalAssetValue = fund.totalAssetValue
+            newUserAssetVal.save()

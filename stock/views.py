@@ -145,7 +145,7 @@ def stock_quick_buy(request, form):
                         transaction_history.funds = stock.stock_price * quantity
                         transaction_history.transaction = 'P'
                         transaction_history.save()
-
+                        messages.success(request, 'Not enough shares available')
                     else:
                         messages.error(request, 'Not enough shares available')
                 else:
@@ -214,8 +214,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                             transaction_history.funds = stock.stock_price * quantity
                             transaction_history.transaction = 'P'
                             transaction_history.save()
-
-                            return redirect('/stock/buy/'+stock_ticker)
+                            return redirect('/stock/buy/'+stock_ticker+'?status=successful')
                         else:
                             messages.error(request, 'Not enough shares available')
                     else:
@@ -224,12 +223,18 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                     messages.error(request, 'Quantity not in range')
             else:
                 messages.error(request, 'Please create a trading account')
+    status = request.GET.get('status')
+    if status == 'successful':
+        messages.success(request, 'Success!, you can view your transaction in transaction history.')
     data = get_historical(stock_ticker+".ax")
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
         'stock_price' : stock.stock_price,
         'stock_dayChange' : stock.stock_dayChange,
+        'stock_dayChangePercent' : stock.stock_dayChangePercent,
+        'stock_max': stock.stock_max,
+        "stock_sold":  stock.stock_sold,
         'stock_available': stock_available,
         'trading_accounts': trading_accounts,
         'default_trading': default_trading,
