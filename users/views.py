@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.views.decorators.cache import cache_control
+from .models import UserAssetValue
+import datetime
 
 
 from .forms import UserFundForm, userSignupForm, FirstTimeForm
@@ -29,6 +31,11 @@ def users_signup_view(request, *args, **kwargs):
                 firstTime.user = user
                 firstTime.isFirstTime = True
                 firstTime.save()
+
+                assetVal = UserAssetValue()
+                assetVal.user_id = user
+                assetVal.totalAssetValue = fund.fund
+                assetVal.save()
 
                 login(request, user)
                 return redirect('index')

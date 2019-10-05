@@ -7,10 +7,9 @@
             <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
         </div>
     {% endif %}
-    <h1>Hurricanes Exchange - HomePage</h1>
     {% if user.is_authenticated %}
         <h2> Welcome {{ user.username }}!</h2>
-        <h3>Funds available ${{ user.userfund.fund }}</h3>
+        <hr>
         {% if firstTime %}
             <br>
             <div class='row text-center justify-content-md-center'>
@@ -30,10 +29,69 @@
             </div>
         {% else %}
         <!-- Bootstrap div cards -->
-        <div class='container'>
             <div class='row'>
+              <!-- User account value graph card -->
+              <div class='col-sm-4'>
+                  <div class='card'>
+                      <div class='card-body'>
+                          <h5 class='card-title'>Account Value</h5>
+                          <h6 class='card-subtitle mb-2 text-muted'>History of your accounts asset value</h6>
+                          <div id="userAsset_container"></div>
+                      </div>
+                  </div>
+              </div>
+              <!-- Stocks card -->
+              <div class='col-sm-3'>
+                  <div class='card scroll'>
+                      <div class='card-body'>
+                          <h5 class='card-title'>Stock</h5>
+                          <h6 class='card-subtitle mb-2 text-muted'>Keep track of owned stock day changes</h6>
+                          <ul class='list-group list-group-flush'>
+                          <div class='card-body'>
+                              <h6 class='card-subtitle mb-2 text-muted'>Stock going up</h6>
+                              {% for shares in sharesObj %}
+                                  {% if shares.stockID.stock_dayChange > 0 %}
+                                      <li class='list-group-item'>
+                                        <div class = 'row'>
+                                          <div class = 'col'>
+                                            <a href="/stock/buy/{{shares.stockID.stock_ticker}}">{{ shares.stockID.stock_name }}</a>
+                                          </div>
+                                          <div class='col-5 text-right' style="color:green">
+                                              {{ shares.stockID.stock_dayChange }}
+                                              <i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i>
+                                          </div>
+                                        </div>
+                                      </li>
+                                  {% endif %}
+                              {% endfor %}
+                          </div>
+                          <div class='card-body'>
+                              <h6 class='card-subtitle mb-2 text-muted'>Stock going down</h6>
+                              {% for shares in sharesObj %}
+                                  {% if shares.stockID.stock_dayChange < 0 %}
+                                      <li class='list-group-item'>
+                                        <div class = 'row'>
+                                          <div class = 'col'>
+                                            <a href="/stock/buy/{{shares.stockID.stock_ticker}}">{{ shares.stockID.stock_name }}</a>
+                                          </div>
+                                          <div class='col-5 text-right' style="color:red">
+                                              {{ shares.stockID.stock_dayChange }}
+                                              <i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i>
+                                          </div>
+                                        </div>
+                                      </li>
+                                  {% endif %}
+                              {% endfor %}
+                          </div>
+
+                              <hr>
+                              <a href='/stock/stocklist' class='btn btn-primary'>View all stock</a>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
                 <!-- Trading account card -->
-                <div class='col-sm-4'>
+                <div class='col-sm-2'>
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Trading Accounts</h5>
@@ -53,55 +111,15 @@
                         </div>
                     </div>
                 </div>
-                <!-- Stocks card -->
-                <div class='col-sm-4'>
-                    <div class='card'>
-                        <div class='card-body'>
-                            <h5 class='card-title'>Stock</h5>
-                            <h6 class='card-subtitle mb-2 text-muted'>Keep track of owned stock day changes</h6>
-                            <ul class='list-group list-group-flush'>
-                            <div class='card-body'>
-                                <h6 class='card-subtitle mb-2 text-muted'>Stock going up</h6>
-                                {% for shares in sharesObj %}
-                                    {% if shares.stockID.stock_dayChange > 0 %}
-                                        <h6><li class='list-group-item'>{{ shares.stockID.stock_name }}</h6>
-                                            <div class='text-right' style="color:green">
-                                                {{ shares.stockID.stock_dayChange }}
-                                                <i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i>
-                                            </div>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                            <div class='card-body'>
-                                <h6 class='card-subtitle mb-2 text-muted'>Stock going down</h6> 
-                                {% for shares in sharesObj %}
-                                    {% if shares.stockID.stock_dayChange < 0 %}
-                                        <h6><li class='list-group-item'>{{ shares.stockID.stock_name }}</h6>
-                                            <div class='text-right' style="color:red">
-                                                {{ shares.stockID.stock_dayChange }}
-                                                <i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i>
-                                            </div>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-
-                                <hr>  
-                                <a href='/stock/stocklist' class='btn btn-primary'>View all stock</a>                    
-                            </ul>
-                        </div>
-                    </div>
-                </div>
                 <!-- Leaderboard card-->
                 <div class='col-sm-4'>
                     <div class='card'>
                         <div class='card-body'>
                             <h5 class='card-title'>Leaderboard</h5>
-                            <h6 class='card-subtitle mb-2 text-muted'>Leaderboard status</h6>
+                            <h6 class='card-subtitle mb-2 text-muted'>Top 5 Users</h6>
                             <hr>
                             <div class='row'>
-                                <div class='col-sm-6 text-left'>
+                                <div class='col-sm-5 text-left'>
                                 <h6 class='card-subtitle mb-2 text-muted'>User</h6>
                                     {% for leader in leaderObj %}
                                         <ul class='list-group list-group-flush'>
@@ -109,11 +127,11 @@
                                         </ul>
                                     {% endfor %}
                                 </div>
-                                <div class='col-sm-6 text-right'>
+                                <div class='col-sm-7 text-right'>
                                 <h6 class='card-subtitle mb-2 text-muted text-left'>Funds</h6>
                                     {% for leader in leaderObj %}
                                         <ul class='list-group list-group-flush'>
-                                            <h6><li class='list-group-item'>${{ leader.fund }}</li></h6>
+                                            <h6><li class='list-group-item'>${{ leader.totalAssetValue }}</li></h6>
                                         </ul>
                                     {% endfor %}
                                 </div>
@@ -131,4 +149,32 @@
         <h2> Welcome to Hurricanes Exchange, please login </h2>
     {% endif %}
 
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+{{ userHistorical|json_script:"historicalData"}}
+
+<script type="text/javascript">
+  // Create the chart
+  document.getElementById("id_shares_amount").max = {{stock_available}}
+
+  //var value = JSON.parse(document.getElementById('historicalData').textContent);
+
+  Highcharts.stockChart('userAsset_container', {
+        rangeSelector: {
+            selected: 1
+        },
+        title: {
+            text: ""
+        },
+      series:  [{
+            data:  JSON.parse(document.getElementById('historicalData').textContent),
+            tooltip: {
+                valueDecimals: 3
+            },
+            turboThreshold: 0
+        }],
+    });
+</script>
 {% endblock %}
