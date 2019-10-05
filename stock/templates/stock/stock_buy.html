@@ -8,15 +8,14 @@
     <br>
     {% endif %}
 
-<button onclick="goBack()" class = 'btn-sm btn-secondary'>Go Back</button>
     {% if firstTime %}
         <div class='row text-center justify-content-md-center'>
             <div class'col-sm-12'>
                 <div class='card'>
                     <div class='card-body'>
                         <h3 class='card-title'>Confirm your first purchase!</h3>
-                        <h5>Enter any quantity for shares and select buy</h5>
-                        <h5>Once purchased, you have finished setting up your account!</h5>
+                        <h5>Select the buy button, then enter your quantity</h5>
+                        <h5>Once confirmed, you have finished setting up your account!</h5>
                     </div>
                 </div>
             </div>
@@ -26,33 +25,8 @@
 <div class='row'>
   <div class='col-sm-12'>
     <h1>Confirm purchase of stock: {{ stock_name}}</h1>
-    <h5>Available shares: {{stock_available}}</h5>
-    <h5>Price (per share): {{stock_price}}</h5>
-    <h5>Daily change: {% if stock_dayChange > 0 %}</h5>
-    <a style="color:green">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></a>
-    {% elif stock_dayChange < 0 %}
-    <a style="color:red">{{stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></a>
-    {% else %}
-    <a style="color:green">{{stock_dayChange}}</a>
-    {% endif %}
+
     <div class='col-md-4'>
-      <form method='POST'>{% csrf_token %}
-        <br>
-        <h5>Select trading account:</h5>
-        <select class = 'custom-select' name = "selectedAccount">
-        {% if default_trading %}
-        <option value="{{default_trading.pk}}">{{default_trading.trading_name}}</option>
-        {% endif %}
-        {% for account in trading_accounts %}
-        {% if account.pk != default_trading.pk %}
-        <option value="{{account.pk}}">{{account.trading_name}}</option>
-        {% endif %}
-        {% endfor %}
-        </select> <br>
-        <h5>Quantity to purchase (between 1 and {{stock_available}}):{{form.shares_amount}}</h5>
-        <h5>Total:<input class = 'form-control' type="text" id="total" value="$0.00" readonly></h5> <br>
-        <button onclick="submit" class="btn btn-primary btn">Buy</button>
-      </form>
     </div>
   </div>
 </div>
