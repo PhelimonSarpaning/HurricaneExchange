@@ -11,3 +11,8 @@ class UserFund(models.Model):
 class FirstTime(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     isFirstTime = models.BooleanField(default=True)
+
+class UserAssetValue(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    totalAssetValue = models.FloatField(default=1000000)
+    date_tracked = models.DateTimeField(auto_now_add=True)
