@@ -88,7 +88,8 @@
 						 {% avatar user 46 class="rounded-circle ml-3" id="user_avatar" %}
 						 <div class="mt-1 ml-3">
 							 <span><strong>{{request.user.username}} </strong><br>
-							<span>Funds: <strong>${{request.user.userfund.fund}}</strong></span><br>
+							<span>Funds<i class="fa fa-question-circle-o fa-fw text-muted" data-toggle="tooltip" data-placement="top" title="Funds available to use in buying shares" ></i>: <strong>${{request.user.userfund.fund}}</strong></span><br>
+							<span>Total Value<i class="fa fa-question-circle-o fa-fw text-muted" data-toggle="tooltip" data-placement="top" title="Total Value of all purchased stocks and available funds" ></i>: <strong>${{request.user.userfund.totalAssetValue}}</strong></span><br>
 						</div>
 				 </div>
 				{% if default_trading %}
