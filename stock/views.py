@@ -215,7 +215,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                             transaction_history.transaction = 'P'
                             transaction_history.save()
 
-                            return redirect('/trading/'+tradingID)
+                            return redirect('/stock/buy/'+stock_ticker)
                         else:
                             messages.error(request, 'Not enough shares available')
                     else:
