@@ -1,12 +1,19 @@
 language: python
 python:
-  - "3.6.7"      # current default Python on Travis CI
+  - "3.6.7"
 services:
   - postgresql
 env:
-  - DJANGO=2.2 DB=postgresql
+  - DJANGO=2.2
+before_install:
+  - export DJANGO_SETTINGS_MODULE=HurricaneExchange.settings
+  - export PYTHONPATH=$HOME/builds/rmit-s3603315-benjamin-randall/HurricaneExchange
+  - export PIP_USE_MIRRORS=true
 install:
   - pip install -r requirements.txt
+before_script:
+- psql -c "CREATE DATABASE mydb;" -U postgres
 # command to run tests
 script:
+  - python manage.py migrate
   - python manage.py test
