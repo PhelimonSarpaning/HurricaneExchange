@@ -56,3 +56,13 @@ body {
     padding-top: 48px; /* Space for fixed navbar */
   }
 }
+
+main {
+  font-size: .775rem;
+}
+
+
+.scroll {
+    max-height: 350px;
+    overflow-y: auto;
+}
