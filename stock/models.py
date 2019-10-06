@@ -16,9 +16,13 @@ class Stock(models.Model):
     stock_gics = models.CharField(max_length=255, default="NULL")
     stock_price = models.FloatField(default=200.0)
     stock_dayChange = models.FloatField(default=10.0)
+    stock_dayChangePercent = models.CharField(max_length=20, default='10.0')
     stock_max = models.BigIntegerField(default=1000.0)
     stock_sold = models.BigIntegerField(default=0)
     stock_hasValidInfo = models.BooleanField(default=False)
+
+    def __str__(self):  # __unicode__ for py2
+        return self.stock_name
 
 class Market(models.Model):
     stockID = models.ForeignKey(Stock, on_delete=models.CASCADE)
@@ -29,6 +33,15 @@ class Shares(models.Model):
     tradingID = models.ForeignKey(Trading_Account, on_delete=models.CASCADE)
     stockID = models.ForeignKey(Stock, on_delete=models.CASCADE)
     shares_amount = models.FloatField()
+
+    def getUser(self):
+        return self.tradingID.user_id
+    def getTradingName(self):
+        return self.tradingID.trading_name
+    def getStockName(self):
+        return self.stockID.stock_name
+
+
 
 class Transaction_History(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

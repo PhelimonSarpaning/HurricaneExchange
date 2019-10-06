@@ -7,7 +7,7 @@ from django.contrib import messages
 
 from stock.models import Stock, Shares, Transaction_History
 from trading.models import Trading_Account
-from users.models import UserFund
+from users.models import UserFund, FirstTime
 
 #for historical graph
 from yahoo_historical import Fetcher
@@ -45,7 +45,7 @@ def stock_detail_view(request, id, *args, **kwargs):
 
 @login_required(login_url="/users")
 def stock_list_view(request, *args, **kwargs):
-    stock_list = Stock.objects.all().filter(stock_hasValidInfo=True).order_by('-stock_price')
+    stock_list = Stock.objects.all().filter(stock_hasValidInfo=True).order_by('stock_dayChange')
 
     #Get user's trading accounts
     user= request.user
@@ -126,6 +126,7 @@ def stock_quick_buy(request, form):
                             shares.stockID = stock
                         stock.stock_sold += quantity
                         user.userfund.fund-= stock.stock_price * quantity
+                        shares.user = user
                         shares.save()
                         stock.save()
                         user.userfund.save()
@@ -144,7 +145,7 @@ def stock_quick_buy(request, form):
                         transaction_history.funds = stock.stock_price * quantity
                         transaction_history.transaction = 'P'
                         transaction_history.save()
-
+                        messages.success(request, 'Not enough shares available')
                     else:
                         messages.error(request, 'Not enough shares available')
                 else:
@@ -171,6 +172,12 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
     transaction_history = Transaction_History()
     form = SharesForm(request.POST or None)
     if request.method == 'POST':
+        try:
+            firstTime = FirstTime.objects.get(user=request.user.id, isFirstTime=True)
+            firstTime.isFirstTime = False
+            firstTime.save()
+        except FirstTime.DoesNotExist:
+            firstTime = None
         if form.is_valid():
             tradingID = request.POST.get('selectedAccount')
             shares = form.save(commit=False)
@@ -188,6 +195,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                                 shares.stockID = stock
                             stock.stock_sold += quantity
                             user.userfund.fund-= stock.stock_price * quantity
+                            shares.user = user
                             shares.save()
                             stock.save()
                             user.userfund.save()
@@ -206,8 +214,7 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                             transaction_history.funds = stock.stock_price * quantity
                             transaction_history.transaction = 'P'
                             transaction_history.save()
-
-                            return redirect('/stock/buy/'+stock_ticker)
+                            return redirect('/stock/buy/'+stock_ticker+'?status=successful')
                         else:
                             messages.error(request, 'Not enough shares available')
                     else:
@@ -216,12 +223,18 @@ def stock_buy(request, stock_ticker, *args, **kwargs):
                     messages.error(request, 'Quantity not in range')
             else:
                 messages.error(request, 'Please create a trading account')
+    status = request.GET.get('status')
+    if status == 'successful':
+        messages.success(request, 'Success!, you can view your transaction in transaction history.')
     data = get_historical(stock_ticker+".ax")
     context = {
         'stock_ticker': stock_ticker,
         'stock_name': stock.stock_name,
         'stock_price' : stock.stock_price,
         'stock_dayChange' : stock.stock_dayChange,
+        'stock_dayChangePercent' : stock.stock_dayChangePercent,
+        'stock_max': stock.stock_max,
+        "stock_sold":  stock.stock_sold,
         'stock_available': stock_available,
         'trading_accounts': trading_accounts,
         'default_trading': default_trading,
@@ -266,6 +279,7 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
                     shares.shares_amount -= quantity
                     user.userfund.fund += stock.stock_price * quantity
                     stock.save()
+                    shares.user = user
                     shares.save()
                     user.userfund.save()
                     # Add to trading history
@@ -290,6 +304,7 @@ def stock_sell(request, id, stock_ticker, *args, **kwargs):
     context = {
     'stock_name': stock.stock_name,
     'num_shares': shares.shares_amount,
+    'price': stock.stock_price,
     'form': form,
     }
     return render(request, 'stock/stock_sell.html', context)

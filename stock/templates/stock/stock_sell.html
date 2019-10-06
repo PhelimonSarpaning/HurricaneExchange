@@ -2,15 +2,30 @@
 
 {% block content %}
 <h1>Sell stock: {{ stock_name }}</h1>
-  Shares owned: {{num_shares}}
+  Shares owned: {{num_shares}}<br>
+  Stock Value:  ${{price}}
 
 <form method='POST'>{% csrf_token %}
   Quantity (between 1 and {{num_shares}}):  {{form.shares_amount}} <br>
-  Total: (Not implemented) <br>
+  Total:<input class ='form-control' type='text' id='total' value='$0.00' readonly/><br>
   <button onclick="submit" class="btn btn-secondary btn-sm">Sell</button>
 </form>
 
 <script>
     document.getElementById("id_shares_amount").max = {{num_shares}}
+</script>
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+  var price = {{price}}
+  function updateTotal(){
+    var amount = $("#id_shares_amount").val()
+    if(amount >= 0){
+      var total = price * amount
+      $("#total").val("$"+ total.toFixed(2))
+    }
+  }
 </script>
 {% endblock %}
