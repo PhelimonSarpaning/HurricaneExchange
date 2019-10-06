@@ -182,13 +182,14 @@
               {% endfor %}
           {% endfor %}
           <td></td>
-           <th> <button onclick="window.location.href='/stock/{{trading_account.id}}/sell/{{shares.stockID.stock_ticker}}'" class= "btn-secondary btn-sm">Sell</button>
-                <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#sellSharesModal" data-whatever='{
+           <th>
+                <button type="button" class="btn-secondary btn-sm" data-toggle="modal" data-target="#sellSharesModal" data-whatever='{
                   "name":"{{shares.stockID.stock_name}}",
                   "price":{{shares.stockID.stock_price}},
                   "ticker":"{{shares.stockID.stock_ticker}}",
                   "max":{{shares.shares_amount}}
-                }'>Sell popup</button></th>
+                }'>Sell</button>
+            </th>
        </tr>
     {% endfor %}
   </table>
