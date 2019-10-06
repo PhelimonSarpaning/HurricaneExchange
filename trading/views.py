@@ -6,6 +6,7 @@ from django.db.models import Q
 
 from .models import Trading_Account
 from stock.models import Shares, Transaction_History
+from stock.forms import SharesForm
 # Create your views here.
 
 @login_required(login_url="/users")
@@ -123,6 +124,7 @@ def trading_detail_view(request, id, *args, **kwargs):
         except Trading_Account.DoesNotExist:
             currentDefault = None
 
+    form = SharesForm(request.POST or None)
     trading_accounts = Trading_Account.objects.filter(~Q(id=id), user_id=request.user.id)
 
     #sells all shares on sell all button click and refreshes page
@@ -148,7 +150,8 @@ def trading_detail_view(request, id, *args, **kwargs):
         'no_Shares': no_Shares,
         'defaultAccount': currentDefault,
         'trading_accounts': trading_accounts,
-        'shares_exist': shares_exist
+        'shares_exist': shares_exist,
+        'form': form,
     }
     return render(request, 'trading/trading_detail.html', context)
 
