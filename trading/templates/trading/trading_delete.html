@@ -2,29 +2,56 @@
 
 {% block content %}
 <h1>Trading Account: {{ trading_account.trading_name }}</h1>
-<<<<<<< HEAD
-<h2><b>Are you sure you wish to delete this trading account? All remaining shares will be sold</b></h2>
-=======
 <h2><b>Are you sure you wish to close this trading account?</b></h2>
->>>>>>> 2c67bb7efcf7d6966b3393183b5ad85e68d39627
 <h2><b>This action is irreversable!</b></h2>
 
 <br>
 
-<form action="/trading/{{ trading_account.id }}">
-    <button class='btn btn-primary' type="submit">Go Back</button>
-</form>
-<br>
 <form action="/trading/delete/{{ trading_account.id }}/" method="POST">
     {% csrf_token %}
+    <p>Select what will happen to your shares:</p>
+
+    <div>
+      <input type="radio" id="transfer" name="accountAction" value='transfer'
+             checked>
+      <label for="transfer">Transfer shares</label>
+    </div>
+
+    <div>
+      <input type="radio" id="sell" name="accountAction" value='sell'>
+      <label for="sell">Sell all shares</label>
+    </div>
+
+    <div id='transferAccountSelect'>
+      <label for="selectedAccount">Transfer to: </label>
+      <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
+      {% for account in trading_accounts %}
+          <option value="{{account.pk}}">{{account.trading_name}}</option>
+      {% endfor %}
+      </select>
+    </div>
+
+    <br>
+    
     <button class='btn btn-danger' type="submit">Confirm Closure</button>
 </form>
 
-<<<<<<< HEAD
 <form action="/trading/{{ trading_account.id }}">
     <button type="submit">Go Back</button>
 </form>
 {% endblock %}
-=======
+
+{% block javascript %}
+<script type="text/javascript">
+
+  $('input:radio[name="accountAction"]').change(
+    function(){
+        if ($(this).is(':checked') && $(this).val() == 'transfer') {
+            document.getElementById('transferAccountSelect').style.display='block';
+        }
+        else if ($(this).is(':checked') && $(this).val() == 'sell') {
+            document.getElementById('transferAccountSelect').style.display='none';
+        }
+    });
+</script>
 {% endblock %}
->>>>>>> 2c67bb7efcf7d6966b3393183b5ad85e68d39627
