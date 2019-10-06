@@ -7,16 +7,13 @@
 
 <br>
 
-<form action="/trading/{{ trading_account.id }}">
-    <button class='btn btn-primary' type="submit">Go Back</button>
-</form>
-<br>
 <form action="/trading/delete/{{ trading_account.id }}/" method="POST">
     {% csrf_token %}
     <button class='btn btn-danger' type="submit">Confirm Closure</button>
 </form>
 
+<br>
 <form action="/trading/{{ trading_account.id }}">
-    <button type="submit">Go Back</button>
+    <button class='btn btn-primary' type="submit">Go Back</button>
 </form>
 {% endblock %}
