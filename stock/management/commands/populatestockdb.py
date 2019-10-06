@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand, CommandError
 from stock.models import Stock
 import pyasx.data.companies
 
-STOCKAMOUNT_DIVISOR = 10000000
+STOCKAMOUNT_DIVISOR = 10000000000
 
 class Command(BaseCommand):
     help = "refresh stock information on the database"
