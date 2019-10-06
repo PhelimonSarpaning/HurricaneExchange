@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserFund
+from .models import UserFund, FirstTime
 from trading.models import Trading_Account
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
@@ -26,3 +26,4 @@ class UserFundAdmin(admin.ModelAdmin):
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(UserFund, UserFundAdmin)
+admin.site.register(FirstTime)

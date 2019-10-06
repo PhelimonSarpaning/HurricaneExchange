@@ -2,17 +2,29 @@
 
 {% block content %}
 <h1>Trading Account: {{ trading_account.trading_name }}</h1>
+<<<<<<< HEAD
 <h2><b>Are you sure you wish to delete this trading account? All remaining shares will be sold</b></h2>
+=======
+<h2><b>Are you sure you wish to close this trading account?</b></h2>
+>>>>>>> 2c67bb7efcf7d6966b3393183b5ad85e68d39627
 <h2><b>This action is irreversable!</b></h2>
 
 <br>
 
+<form action="/trading/{{ trading_account.id }}">
+    <button class='btn btn-primary' type="submit">Go Back</button>
+</form>
+<br>
 <form action="/trading/delete/{{ trading_account.id }}/" method="POST">
     {% csrf_token %}
-    <button type="submit">Confirm Deletion</button>
+    <button class='btn btn-danger' type="submit">Confirm Closure</button>
 </form>
 
+<<<<<<< HEAD
 <form action="/trading/{{ trading_account.id }}">
     <button type="submit">Go Back</button>
 </form>
 {% endblock %}
+=======
+{% endblock %}
+>>>>>>> 2c67bb7efcf7d6966b3393183b5ad85e68d39627

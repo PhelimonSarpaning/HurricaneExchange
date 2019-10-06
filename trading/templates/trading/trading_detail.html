@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if firstTime %}
+    <h3>Setup Progress</h3>
+    <div class="progress" style="height: 40px;">
+        <div class="progress-bar" role="progressbar" style="width: 70%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">70%</div>
+    </div>
+    <br>
+    {% endif %}
 <div>
   <a class="link dropdown-toggle btn btn-sm btn-primary" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Accounts</a>
   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -16,9 +23,28 @@
 	<a class="dropdown-item" href="/trading/create"><i class="fa fa-cog fa-fw"></i> Open a new trading account</a>
 </div>
   <a class="btn btn-sm btn-primary" href="/trading" role="button" aria-haspopup="true" aria-expanded="false">View All</a>
+    {% if firstTime %}
+        <div class='row text-center justify-content-md-center'>
+            <div class'col-sm-12'>
+                <div class='card'>
+                    <div class='card-body'>
+                        <h3 class='card-title'>Purchase your first share</h3>
+                        <h5>This is where you can view your account information</h5>
+                        <h5>From here, we can purchase your first shares</h5>
+                        <h5>Click the buy shares button to begin buying shares</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+<div class='row text-center'>
+  <div class='col-sm-12'>
+    <h1>Trading Account: {{ trading_account.trading_name }}</h1>
+    <h2>Shares in your trading account </h2>
+  </div>
+</div>
 
-<h1>Trading Account: {{ trading_account.trading_name }}</h1>
-<h2>Shares in your trading account </h2>
+
 <!-- View Trading Accounts -->
 <h3>{{ no_stock }}</h3>
 
@@ -119,7 +145,15 @@
   </table>
 
 <form action="/stock/stocklist">
+<<<<<<< HEAD
     <button class ="btn btn-secondary btn-sm" type="submit" value="Buy">Buy Shares</button>
+=======
+  {% if firstTime %}
+    <button class ="btn btn-danger" type="submit">Buy Shares</button>
+  {% else %}
+    <button class ="btn btn-secondary btn-sm" type="submit">Buy Shares</button>
+  {% endif %}
+>>>>>>> 2c67bb7efcf7d6966b3393183b5ad85e68d39627
 </form>
 
 {% if shares_exist == True %}
@@ -140,9 +174,15 @@
   </form>
 {% endif %}
 
+<<<<<<< HEAD
   <form action="/trading/delete/{{ trading_account.id }}">
       <br>
       <button class ="btn btn-secondary btn-sm" type="submit">Delete this trading account</button>
   </form>
+=======
+<form action="/trading/delete/{{ trading_account.id }}">
+    <button class ="btn btn-secondary btn-sm" type="submit">Close this trading account</button>
+</form>
+>>>>>>> 2c67bb7efcf7d6966b3393183b5ad85e68d39627
 
 {% endblock %}
