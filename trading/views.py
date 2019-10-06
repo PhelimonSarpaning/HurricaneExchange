@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 from .models import Trading_Account
-from stock.models import Shares, Transaction_History
+from stock.models import Shares, Stock, Transaction_History
 from stock.forms import SharesForm
 # Create your views here.
 
@@ -126,6 +126,57 @@ def trading_detail_view(request, id, *args, **kwargs):
 
     form = SharesForm(request.POST or None)
     trading_accounts = Trading_Account.objects.filter(~Q(id=id), user_id=request.user.id)
+
+
+    #sells selected shares click and refreshes page
+    if request.method == 'POST' and 'sell-submit' in request.POST:
+        stock_ticker = request.POST.get('stock_ticker')
+        try:
+            stock = Stock.objects.get(stock_ticker=stock_ticker)
+        except Stock.DoesNotExist:
+            raise Http404
+
+        tradingID  = Trading_Account.objects.get(id=id)
+        transaction_history = Transaction_History()
+
+        try:
+            shares = Shares.objects.get(tradingID=tradingID, stockID=stock)
+        except Shares.DoesNotExist:
+            raise Http404
+
+        user= request.user
+
+        if form.is_valid():
+            quantity = form.cleaned_data['shares_amount']
+            if 0 < quantity <= shares.shares_amount:
+                if (shares.shares_amount - quantity) >= 0:
+                    stock.stock_sold -= quantity
+                    shares.shares_amount -= quantity
+                    user.userfund.fund += stock.stock_price * quantity
+                    stock.save()
+                    shares.user = user
+                    shares.save()
+                    user.userfund.save()
+                    # Add to trading history
+                    transaction_history.user = user
+                    transaction_history.trading_name = tradingID.trading_name
+                    transaction_history.stock_name = stock.stock_name
+                    transaction_history.stock_gics = stock.stock_gics
+                    transaction_history.stock_price = stock.stock_price
+                    transaction_history.no_of_shares = quantity
+                    transaction_history.funds = stock.stock_price * quantity
+                    transaction_history.transaction = 'S'
+                    transaction_history.save()
+
+                    if shares.shares_amount == 0:
+                        shares.delete()
+                        return redirect('/trading/'+str(id))
+                else:
+                    messages.error(request, 'You do not own that many shares ')
+                form = SharesForm()
+            else:
+                messages.error(request, 'Quantity not in range')
+        return redirect('/trading/'+str(id))
 
     #sells all shares on sell all button click and refreshes page
     if request.method == 'POST' and 'sell-all-button' in request.POST:
