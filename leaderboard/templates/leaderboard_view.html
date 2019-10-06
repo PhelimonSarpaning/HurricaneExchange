@@ -29,19 +29,19 @@
   </table>
 </div>
 <div class="container float-right" style="width:49%">
-  <h1>Something Leaderboard:</h1>
-  <table id="leaderboard_something" class="table table-striped">
+  <h1>Asset Value Leaderboard:</h1>
+  <table id="leaderboard_asset" class="table table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="col">Username</th>
-        <th scope="col">Funds Owned</th>
+        <th scope="col">User ID</th>
+        <th scope="col">Asset Value</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        {% for user in fundlist %}
-        <TD> {{user.user}} </TD>
-        <TD> {{user.fund}} </TD>
+        {% for user_id in assetval %}
+        <TD> {{user.user_id}} </TD>
+        <TD> {{user.totalAssetValue}} </TD>
       </tr>
       {% endfor %}
     </tbody>
@@ -66,7 +66,8 @@
         });
       }).draw();
 
-      $('#leaderboard_something').DataTable({
+      $('#leaderboard_asset').DataTable({
+        "order": [[ 1, "desc" ]],
       }
       );
     });
