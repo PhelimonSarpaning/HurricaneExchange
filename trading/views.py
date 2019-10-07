@@ -229,22 +229,28 @@ def trading_delete_view(request, id, *args, **kwargs):
     tradingObject = Trading_Account.objects.get(id=id)
     objShares = Shares.objects.filter(tradingID=tradingObject.id)
     shares_exist = False
+    accounts_exist= False
     if objShares.exists():
         shares_exist = True
+        if trading_accounts.exists():
+            accounts_exist= True
 
     if request.method == 'POST':
         try:
-            if (request.POST['accountAction'] == 'sell'):
+            if (shares_exist and accounts_exist):
+                if (request.POST['accountAction'] == 'sell'):
+                    sell_all_shares(request, objShares)
+                elif (request.POST['accountAction'] == 'transfer'):
+                    tradingID = request.POST.get('selectedAccount')
+                    # Check selected trading account exists for user
+                    tradingAccount = Trading_Account.objects.filter(pk=tradingID)
+                    if tradingAccount.exists():
+                        user= request.user
+                        for shares in objShares:
+                            shares.tradingID= tradingAccount[0]
+                            shares.save()
+            elif (shares_exist):
                 sell_all_shares(request, objShares)
-            elif (request.POST['accountAction'] == 'transfer'):
-                tradingID = request.POST.get('selectedAccount')
-                # Check selected trading account exists for user
-                tradingAccount = Trading_Account.objects.filter(pk=tradingID)
-                if tradingAccount.exists():
-                    user= request.user
-                    for shares in objShares:
-                        shares.tradingID= tradingAccount[0]
-                        shares.save()
             tradingObject.delete()
         except Trading_Account.DoesNotExist:
             pass
@@ -252,7 +258,8 @@ def trading_delete_view(request, id, *args, **kwargs):
         context = {
             'trading_account': tradingObject,
             'trading_accounts': trading_accounts,
-            'shares_exist': shares_exist
+            'shares_exist': shares_exist,
+            'accounts_exist': accounts_exist
         }
     else:
         try:
@@ -262,7 +269,8 @@ def trading_delete_view(request, id, *args, **kwargs):
         context = {
             'trading_account': tradingObject,
             'trading_accounts': trading_accounts,
-            'shares_exist': shares_exist
+            'shares_exist': shares_exist,
+            'accounts_exist': accounts_exist
         }
 
     return render(request, 'trading/trading_delete.html', context)
