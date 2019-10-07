@@ -20,6 +20,7 @@ class Stock(models.Model):
     stock_max = models.BigIntegerField(default=1000.0)
     stock_sold = models.BigIntegerField(default=0)
     stock_hasValidInfo = models.BooleanField(default=False)
+    stock_rating = models.FloatField(default=0.0)
 
     def __str__(self):  # __unicode__ for py2
         return self.stock_name
