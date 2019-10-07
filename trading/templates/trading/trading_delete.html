@@ -48,10 +48,10 @@
   $('input:radio[name="accountAction"]').change(
     function(){
         if ($(this).is(':checked') && $(this).val() == 'transfer') {
-            document.getElementById('transferAccountSelect').style.display='block';
+            $('#transferAccountSelect').css("display","block");
         }
         else if ($(this).is(':checked') && $(this).val() == 'sell') {
-            document.getElementById('transferAccountSelect').style.display='none';
+            $('#transferAccountSelect').css("display","none");
         }
     });
 </script>
