@@ -32,6 +32,7 @@ $('#sellSharesModal').on('show.bs.modal', function (event) {
   modal.find('.form-group #stock_price').text('$'+price)
   modal.find('#stock_ticker').val(ticker)
   modal.find('.form-group #shares_available').text(max)
+  updateTotal()
 })
 
 $('#sellSharesModal').on('hide.bs.modal', function (event) {

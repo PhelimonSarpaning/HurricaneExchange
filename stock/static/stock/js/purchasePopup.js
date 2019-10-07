@@ -13,7 +13,7 @@ clearFields();
 
 
 
-$('#exampleModal').on('show.bs.modal', function (event) {
+$('#buySharesModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
 
   //Get stock info from buy button
@@ -39,6 +39,6 @@ $('#exampleModal').on('show.bs.modal', function (event) {
   updateTotal()
 })
 
-$('#exampleModal').on('hide.bs.modal', function (event) {
+$('#buySharesModal').on('hide.bs.modal', function (event) {
   clearFields()
 })
