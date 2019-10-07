@@ -45,7 +45,7 @@ def stock_detail_view(request, id, *args, **kwargs):
 
 @login_required(login_url="/users")
 def stock_list_view(request, *args, **kwargs):
-    stock_list = Stock.objects.all().filter(stock_hasValidInfo=True).order_by('stock_dayChange')
+    stock_list = Stock.objects.all().filter(stock_hasValidInfo=True).order_by('-stock_price')
 
     #Get user's trading accounts
     user= request.user
