@@ -14,30 +14,36 @@
       {% if accounts_exist %}
         <p>Select what will happen to your shares:</p>
 
-        <div>
+        <div class="form-group">
           <input type="radio" id="transfer" name="accountAction" value='transfer'
                  checked>
           <label for="transfer">Transfer shares</label>
         </div>
 
-        <div>
+          <div class="form-group">
           <input type="radio" id="sell" name="accountAction" value='sell'>
           <label for="sell">Sell all shares</label>
         </div>
 
-        <div id='transferAccountSelect'>
+        <div id='transferAccountSelect'  class='form-group'>
           <label for="selectedAccount">Transfer to: </label>
-          <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
-          {% for account in trading_accounts %}
-              <option value="{{account.pk}}">{{account.trading_name}}</option>
-          {% endfor %}
-          </select>
+          <div>
+            <select class='custom-select col-2' name = "selectedAccount" id= "selectedAccount">
+            {% for account in trading_accounts %}
+                <option value="{{account.pk}}">{{account.trading_name}}</option>
+            {% endfor %}
+            </select>
+          </div>
         </div>
         {% else %}
+          <div class="form-group">
           <h4>All shares will be sold!</h4>
+          </div>
         {% endif %}
     {% else %}
-    <h4>You have no shares on this account</h4>
+      <div class="form-group">
+        <h4>You have no shares on this account</h4>
+    </div>
     {% endif %}
 
     <br>
