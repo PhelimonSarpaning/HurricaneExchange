@@ -194,41 +194,40 @@
     {% endfor %}
   </table>
 
-<form action="/stock/stocklist">
-  {% if firstTime %}
-    <button class ="btn btn-danger" type="submit">Buy Shares</button>
-  {% else %}
-    <button class ="btn btn-secondary btn-sm" type="submit">Buy Shares</button>
-  {% endif %}
-</form>
-<br>
+
+<div class='btn-group'>
+  <form class = form-inline action="/stock/stocklist">
+    {% if firstTime %}
+      <button class ="btn btn-danger" type="submit">Buy Shares</button>
+    {% else %}
+      <button class ="btn btn-secondary btn-sm" type="submit">Buy Shares</button>
+    {% endif %}
+  </form>
 
 {% if shares_exist %}
-  <br>
   <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#sellAllModal">Sell all shares</button>
-  <br>
-
   {% if accounts_exist %}
-  <br>
+
   <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#transferShareslModal">Transfer all shares</button>
-  <br>
-  <br>
+
   {% endif %}
 {% endif%}
 
 {% if trading_account.is_default != True %}
-  <br>
-  <form action="." method='POST'>
+
+  <form class = 'form-inline' action="." method='POST'>
     {% csrf_token %}
     <button class ="btn btn-secondary btn-sm" type="submit">Make this my default trading account</button>
   </form>
+
 {% endif %}
 
-<form action="/trading/delete/{{ trading_account.id }}">
-    <button class ="btn btn-secondary btn-sm" type="submit">Close this trading account</button>
-</form>
+  <form class ='form-inline' action="/trading/delete/{{ trading_account.id }}">
+      <button class ="btn btn-secondary btn-sm" type="submit">Close this trading account</button>
+  </form>
 
 {% endblock %}
+</div>
 
 {% block javascript %}
 {% load static %}
