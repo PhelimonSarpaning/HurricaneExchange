@@ -61,6 +61,10 @@ main {
   font-size: .775rem;
 }
 
+.wrapper {
+  min-width:1300px
+}
+
 
 .scroll {
     max-height: 350px;
