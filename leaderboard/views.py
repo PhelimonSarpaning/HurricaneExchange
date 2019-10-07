@@ -3,14 +3,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
-from users.models import UserFund
+from users.models import UserFund, UserAssetValue
 
 @login_required(login_url="/users")
 def leaderboard_view(request, *args, **kwargs):
     query = UserFund.objects.all()
+    assetval = UserAssetValue.objects.all()
     if (query.exists()):
         context = {
-            'fundlist': query.order_by('-fund'),
+            'fundlist': query,
+            'assetval': assetval,
             'noFundlist': False
         }
     else:
