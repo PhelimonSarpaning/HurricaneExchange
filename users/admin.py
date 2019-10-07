@@ -16,7 +16,7 @@ class InlineTrading(admin.TabularInline):
 class CustomUserAdmin(UserAdmin):
     def user_funds (self, instance):
         return instance.userfund.fund
-    list_display = ('email', 'username', 'date_joined', 'is_staff', 'user_funds')
+    list_display = ('username', 'email', 'date_joined', 'is_staff', 'user_funds')
     inlines = [InlineUserFund, InlineTrading]
 
 
