@@ -9,6 +9,35 @@
 
 <form action="/trading/delete/{{ trading_account.id }}/" method="POST">
     {% csrf_token %}
+
+    {% if shares_exist %}
+    <p>Select what will happen to your shares:</p>
+
+    <div>
+      <input type="radio" id="transfer" name="accountAction" value='transfer'
+             checked>
+      <label for="transfer">Transfer shares</label>
+    </div>
+
+    <div>
+      <input type="radio" id="sell" name="accountAction" value='sell'>
+      <label for="sell">Sell all shares</label>
+    </div>
+
+    <div id='transferAccountSelect'>
+      <label for="selectedAccount">Transfer to: </label>
+      <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
+      {% for account in trading_accounts %}
+          <option value="{{account.pk}}">{{account.trading_name}}</option>
+      {% endfor %}
+      </select>
+    </div>
+    {% else %}
+    <h4>You have no shares on this account</h4>
+    {% endif %}
+
+    <br>
+
     <button class='btn btn-danger' type="submit">Confirm Closure</button>
 </form>
 
@@ -17,3 +46,21 @@
     <button class='btn btn-primary' type="submit">Go Back</button>
 </form>
 {% endblock %}
+<<<<<<< HEAD
+=======
+
+{% block javascript %}
+<script type="text/javascript">
+
+  $('input:radio[name="accountAction"]').change(
+    function(){
+        if ($(this).is(':checked') && $(this).val() == 'transfer') {
+            $('#transferAccountSelect').css("display","block");
+        }
+        else if ($(this).is(':checked') && $(this).val() == 'sell') {
+            $('#transferAccountSelect').css("display","none");
+        }
+    });
+</script>
+{% endblock %}
+>>>>>>> 5158e50c3b23434be64488350e19e5e477d1fea7

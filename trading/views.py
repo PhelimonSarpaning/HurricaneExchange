@@ -190,8 +190,9 @@ def trading_detail_view(request, id, *args, **kwargs):
         tradingAccount = Trading_Account.objects.filter(pk=tradingID)
         if tradingAccount.exists():
             user= request.user
-            shares.tradingID= tradingAccount[0]
-            shares.save()
+            for shares in objShares:
+                shares.tradingID= tradingAccount[0]
+                shares.save()
         return redirect('/trading/'+str(id))
 
     context = {
@@ -220,17 +221,38 @@ def sell_all_shares(request, objShares):
 
 @login_required(login_url="/users")
 def trading_delete_view(request, id, *args, **kwargs):
+
+    #get users other trading accounts for dropdown
+    trading_accounts = Trading_Account.objects.filter(~Q(id=id), user_id=request.user.id)
+
+    #set account action options to display if account has shares
+    tradingObject = Trading_Account.objects.get(id=id)
+    objShares = Shares.objects.filter(tradingID=tradingObject.id)
+    shares_exist = False
+    if objShares.exists():
+        shares_exist = True
+
     if request.method == 'POST':
         try:
-            tradingObject = Trading_Account.objects.get(id=id)
-            objShares = Shares.objects.filter(tradingID=tradingObject.id)
-            sell_all_shares(request, objShares)
+            if (request.POST['accountAction'] == 'sell'):
+                sell_all_shares(request, objShares)
+            elif (request.POST['accountAction'] == 'transfer'):
+                tradingID = request.POST.get('selectedAccount')
+                # Check selected trading account exists for user
+                tradingAccount = Trading_Account.objects.filter(pk=tradingID)
+                if tradingAccount.exists():
+                    user= request.user
+                    for shares in objShares:
+                        shares.tradingID= tradingAccount[0]
+                        shares.save()
             tradingObject.delete()
         except Trading_Account.DoesNotExist:
             pass
         return redirect('trading:list')
         context = {
-            'trading_account': tradingObject
+            'trading_account': tradingObject,
+            'trading_accounts': trading_accounts,
+            'shares_exist': shares_exist
         }
     else:
         try:
@@ -238,8 +260,11 @@ def trading_delete_view(request, id, *args, **kwargs):
         except Trading_Account.DoesNotExist:
             raise Http404
         context = {
-            'trading_account': tradingObject
+            'trading_account': tradingObject,
+            'trading_accounts': trading_accounts,
+            'shares_exist': shares_exist
         }
+
     return render(request, 'trading/trading_delete.html', context)
 
 @login_required(login_url="/users")
