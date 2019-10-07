@@ -45,7 +45,7 @@ def stock_detail_view(request, id, *args, **kwargs):
 
 @login_required(login_url="/users")
 def stock_list_view(request, *args, **kwargs):
-    stock_list = Stock.objects.all().filter(stock_hasValidInfo=True).order_by('-stock_price')
+    stock_list = Stock.objects.all().filter(stock_hasValidInfo=True)
 
     #Get user's trading accounts
     user= request.user
@@ -56,36 +56,9 @@ def stock_list_view(request, *args, **kwargs):
     if request.method == 'POST':
         stock_quick_buy(request, form)
 
-    paginator = Paginator(stock_list, 10)
-    page = request.GET.get('page')
-    try:
 
-        if(int(page) < 0):
-            page=1
-        if(int(page)>paginator.num_pages):
-            page=paginator.num_pages
-        stocks = paginator.get_page(page)
-    except:
-        stocks = paginator.get_page(page)
-
-    #index of the current page
-    index = stocks.number - 1
-    #maximum index of pages
-    max_index = len(paginator.page_range)
-    #set range of index to 7
-    start_index = index - 3 if index > 3 else 0
-    #end_index = index + 3 if index <= max_index - 3 else max_index
-    if index <= max_index:
-        if index <= 3:
-            end_index = 7
-        else:
-            end_index = index+4
-    else:
-        end_index = max_index
-    page_range = list(paginator.page_range)[start_index:end_index]
     return render(request, 'stock/stock_list.html', {
-    'stocks': stocks,
-    'page_range':page_range,
+    'stocks': stock_list,
     'trading_accounts': trading_accounts,
     'form': form,
     })
