@@ -85,6 +85,8 @@ def trading_detail_view(request, id, *args, **kwargs):
             pass
         try:
             obj = Trading_Account.objects.get(id=id)
+            if (obj.user_id != request.user):
+                return redirect('/trading/')
             obj.is_default = True
             obj.save()
             currentDefault = obj
@@ -111,6 +113,8 @@ def trading_detail_view(request, id, *args, **kwargs):
     else:
         try:
             obj = Trading_Account.objects.get(id=id)
+            if (obj.user_id != request.user):
+                return redirect('/trading/')
             objShares = Shares.objects.filter(tradingID=obj.id)
             no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
             shares_exist = False
