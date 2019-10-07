@@ -201,17 +201,17 @@
 <div class='btn-group'>
   <form class = form-inline action="/stock/stocklist">
     {% if firstTime %}
-      <button class ="btn btn-danger" type="submit">Buy Shares</button>
+      <button class ="btn btn-danger mr-3" type="submit">Buy Shares</button>
     {% else %}
-      <button class ="btn btn-secondary btn-sm" type="submit">Buy Shares</button>
+      <button class ="btn btn-secondary btn-sm mr-3" type="submit">Buy Shares</button>
     {% endif %}
   </form>
 
 {% if shares_exist %}
-  <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#sellAllModal">Sell all shares</button>
+  <button type="button" class="btn btn-secondary btn-sm mr-3" data-toggle="modal" data-target="#sellAllModal">Sell all shares</button>
   {% if accounts_exist %}
 
-  <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#transferShareslModal">Transfer all shares</button>
+  <button type="button" class="btn btn-secondary btn-sm mr-3" data-toggle="modal" data-target="#transferShareslModal">Transfer all shares</button>
 
   {% endif %}
 {% endif%}
@@ -220,13 +220,13 @@
 
   <form class = 'form-inline' action="." method='POST'>
     {% csrf_token %}
-    <button class ="btn btn-secondary btn-sm" type="submit">Make this my default trading account</button>
+    <button class ="btn btn-secondary btn-sm mr-3" type="submit">Make this my default trading account</button>
   </form>
 
 {% endif %}
 
   <form class ='form-inline' action="/trading/delete/{{ trading_account.id }}">
-      <button class ="btn btn-secondary btn-sm" type="submit">Close this trading account</button>
+      <button class ="btn btn-secondary btn-sm mr-3" type="submit">Close this trading account</button>
   </form>
 
 {% endblock %}
