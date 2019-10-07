@@ -73,6 +73,9 @@ def trading_create_view(request, *args, **kwargs):
 
 @login_required(login_url="/users")
 def trading_detail_view(request, id, *args, **kwargs):
+
+    trading_accounts = Trading_Account.objects.filter(~Q(id=id), user_id=request.user.id)
+
     if request.method == 'POST':
         try:
             currentDefault = Trading_Account.objects.get(user_id=request.user.id, is_default=True)
@@ -89,10 +92,13 @@ def trading_detail_view(request, id, *args, **kwargs):
             objShares = Shares.objects.filter(tradingID=obj.id)
             no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
             shares_exist = False
+            accounts_exist = False
             share_list =[]
             if objShares.exists():
                 no_Shares = ''
                 shares_exist = True
+                if trading_accounts.exists():
+                    accounts_exist= True
 
                 for shares in objShares:
                     share_dict = {}
@@ -108,10 +114,13 @@ def trading_detail_view(request, id, *args, **kwargs):
             objShares = Shares.objects.filter(tradingID=obj.id)
             no_Shares = 'It appears you have no Shares for this trading account. Please add Shares'
             shares_exist = False
+            accounts_exist = False
             share_list =[]
             if objShares.exists():
                 no_Shares = ''
                 shares_exist = True
+                if trading_accounts.exists():
+                    accounts_exist= True
 
                 for shares in objShares:
                     share_dict = {}
@@ -125,7 +134,6 @@ def trading_detail_view(request, id, *args, **kwargs):
             currentDefault = None
 
     form = SharesForm(request.POST or None)
-    trading_accounts = Trading_Account.objects.filter(~Q(id=id), user_id=request.user.id)
 
 
     #sells selected shares click and refreshes page
@@ -203,7 +211,8 @@ def trading_detail_view(request, id, *args, **kwargs):
         'defaultAccount': currentDefault,
         'trading_accounts': trading_accounts,
         'shares_exist': shares_exist,
-        'form': form,
+        'accounts_exist': accounts_exist,
+        'form': form
     }
     return render(request, 'trading/trading_detail.html', context)
 
