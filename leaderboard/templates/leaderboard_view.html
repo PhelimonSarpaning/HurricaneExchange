@@ -33,14 +33,14 @@
   <table id="leaderboard_asset" class="table table-striped">
     <thead class="thead-dark">
       <tr>
-        <th scope="col">User ID</th>
+        <th scope="col">User</th>
         <th scope="col">Asset Value</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         {% for user in fundlist %}
-        <TD> {{user.user_id}} </TD>
+        <TD> {{user.user}} </TD>
         <TD> {{user.totalAssetValue}} </TD>
       </tr>
       {% endfor %}
@@ -68,6 +68,11 @@
 
       $('#leaderboard_asset').DataTable({
         "order": [[ 1, "desc" ]],
+        "columnDefs": [{
+          "searchable": true,
+          "orderable": false,
+          "targets": [0,1],
+        }],
       }
       );
     });
