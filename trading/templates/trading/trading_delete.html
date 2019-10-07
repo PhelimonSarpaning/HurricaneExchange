@@ -48,13 +48,14 @@
 
     <br>
 
-    <button class='btn btn-danger' type="submit">Confirm Closure</button>
+    <div class ="row">
+    <button class='btn btn-danger mr-3' type="submit">Confirm Closure</button>
 </form>
 
-<br>
 <form action="/trading/{{ trading_account.id }}">
     <button class='btn btn-primary' type="submit">Go Back</button>
 </form>
+  </div>
 {% endblock %}
 
 {% block javascript %}
