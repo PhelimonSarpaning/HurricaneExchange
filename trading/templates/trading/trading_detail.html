@@ -52,34 +52,37 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="sellodalLabel">Sell shares</h5>
+        <h5 class="modal-title" id="sellModalLabel">Sell shares</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form id='buy_form' method='POST'>{% csrf_token %}
+        <form id='sell_form' method='POST'>{% csrf_token %}
           <input type="hidden" name='stock_ticker' id="stock_ticker"></input>
-          <div class="form-group">
+          <div class='row'>
+          <div class="col form-group">
             <label for="stock_name">Stock: </label>
             <h5 id="stock_name"></h5>
           </div>
-          <div class="form-group">
+          <div class="col form-group">
             <label for="stock_price">Price </label>
             <h5 id="stock_price">$</h5>
           </div>
-          <div class="form-group">
+          <div class="col form-group">
             <label for="shares_available">Available: </label>
             <h5 id="shares_available"></h5>
           </div>
-          <div class="form-group">
           </div>
-          <div class="form-group">
+          <div class='row'>
+          <div class="col form-group">
             <label for="{{ shares_amount.id_for_label }}">Quantity: </label>
               {{ form.shares_amount }}
           </div>
-          <div class="form-group">
-             Total:<input class ='form-control' type='text' id='total' value='$0.00' readonly/>
+          <div class="col form-group">
+               <label for="total">Total: </label>
+               <input class ='form-control' type='text' id='total' value='$0.00' readonly/>
+          </div>
           </div>
           <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -95,7 +98,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Sell all shares?</h5>
+        <h5 class="modal-title" id="sellModalLabel">Sell all shares?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
