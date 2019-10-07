@@ -8,7 +8,7 @@
     </div>
     <br>
     {% endif %}
-  
+
     {% if firstTime %}
         <div class='row text-center justify-content-md-center'>
             <div class'col-sm-12'>
@@ -47,11 +47,11 @@
     {% endfor %}
 {% endif %}
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="buySharesModal" tabindex="-1" role="dialog" aria-labelledby="buySharesModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Purchase shares</h5>
+        <h5 class="modal-title" id="buySharesModalLabel">Purchase shares</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -139,7 +139,7 @@
               {% endif %}
             </th>
             <td>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#buySharesModal"
                       data-whatever='{
                         "name":"{{stock.stock_name}}",
                         "price":{{stock.stock_price}},
