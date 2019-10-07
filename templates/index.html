@@ -32,7 +32,7 @@
         <div class="container-fluid content-row">
             <div class='row'>
               <!-- User account value graph card -->
-              <div class='col'>
+              <div class='col-3'>
                   <div class='card'>
                       <div class='card-body flex-fill'>
                           <h5 class='card-title'>Account Value</h5>
@@ -42,12 +42,11 @@
                   </div>
               </div>
               <!-- Stocks card -->
-              <div class='col flex'>
+              <div class='col-3'>
                   <div class='card'>
                       <div class='card-body flex-fill'>
                           <h5 class='card-title'>Your Shares</h5>
                           <h6 class='card-subtitle mb-2 text-muted'>Keep track of your shares</h6>
-                          <ul class='list-group list-group-flush'>
                           <div class='card-body scroll'>
                               <h6 class='card-subtitle mb-2 text-muted'>Stock going up</h6>
                               {% for shares in sharesObj %}
@@ -83,7 +82,6 @@
                                   {% endif %}
                               {% endfor %}
                           </div>
-                          </ul>
                           <a href='/stock/stocklist' class='btn btn-primary'>View all stock</a>
                       </div>
                   </div>
@@ -95,7 +93,6 @@
                             <h5 class='card-title'>Trading Accounts</h5>
                             <h6 class='card-subtitle mb-2 text-muted'>Your trading accounts</h6>
                             <div class='card-body scroll'>
-                            <ul class='list-group list-group-flush'>
                                 {% if default_trading %}
                                     <li class='list-group-item'><a href="trading/{{ default_trading.id }}">{{ default_trading.trading_name }}</a></li>
                                 {% endif %}
@@ -104,21 +101,42 @@
                                         <li class='list-group-item'><a href="trading/{{ accounts.id }}">{{ accounts.trading_name }}</a></li>
                                     {% endif %}
                                 {% endfor %}
-                                <hr>
-                            </ul>
                         </div>
                           <a href='/trading' class='btn btn-primary'>View accounts</a>
                         </div>
                     </div>
                 </div>
                 <!-- Reccomendation account card -->
-                <div class='col'>
+                <div class='col-4'>
                     <div class='card'>
                           <div class= 'card-body'>
-                            <h5 class='card-title'>Reccomendations</h5>
-                            <h6 class='card-subtitle mb-2 text-muted'>Selected Reccomendation based on sell volume and the day change</h6>
+                            <h5 class='card-title'>Reccomendations<i style='color:red' class="fa fa-exclamation-triangle fa-fw text-muted" data-toggle="tooltip" data-placement="top" title="BEWARE: THIS IS HIGHLY EXPERIMENTAL AND MAY BE INNACCURATE"></i></h5>
+                            <h6 class='card-subtitle mb-2 text-muted'>Reccomendations based on sell volume</h6>
                             <div class='card-body scroll'>
-                            COMING SOON!
+                              {% for share in topShares %}
+                                      <li class='list-group-item'>
+                                        <div class = 'row'>
+                                          <div class = 'col'>
+                                            <a href="/stock/buy/{{share.stock_ticker}}">{{ share.stock_name }}</a>
+                                          </div>
+                                          {% if share.stock_dayChange > 0 %}
+                                          <div class='col-5 text-right' style="color:green">
+                                              {{ share.stock_dayChange }}
+                                              <i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i>
+                                          </div>
+                                          {% elif share.stock_dayChange < 0 %}
+                                          <div class='col-5 text-right' style="color:red">
+                                              {{ share.stock_dayChange }}
+                                              <i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i>
+                                          </div>
+                                          {% else %}
+                                          <div class='col-5 text-right' style="color:green">
+                                              {{ share.stock_dayChange }}
+                                          </div>
+                                          {% endif %}
+                                        </div>
+                                      </li>
+                              {% endfor %}
                         </div>
                     </div>
                 </div>

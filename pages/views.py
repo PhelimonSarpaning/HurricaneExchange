@@ -5,7 +5,7 @@ from django.views.decorators.cache import cache_control
 import pandas as pd
 import numpy as np
 from users.models import UserFund, UserAssetValue
-from stock.models import Shares
+from stock.models import Shares, Stock
 
 # Create your views here.
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -13,6 +13,7 @@ def index_view(request, *args, **kwargs):
     sharesObj = None
     leaderObj = None
     data= None
+    topShares = None
     if request.user.is_authenticated:
         try:
             tradingAccs = Trading_Account.objects.filter(user_id= request.user)
@@ -24,6 +25,12 @@ def index_view(request, *args, **kwargs):
             leaderObj = leaderQuery.order_by('-totalAssetValue')[:5]
         except UserFund.DoesNotExist:
             leaderObj = None
+
+        try:
+            topShares = Stock.objects.all()
+            topShares = topShares.order_by('-stock_rating')[:5]
+        except Stock.DoesNotExist:
+            topShares = None
         try:
             data = get_user_historical(request.user)
         except KeyError:
@@ -31,6 +38,7 @@ def index_view(request, *args, **kwargs):
     context = {
         'sharesObj': sharesObj,
         'leaderObj': leaderObj,
+        'topShares': topShares,
         'userHistorical': data,
     }
     return render(request, 'index.html', context)
