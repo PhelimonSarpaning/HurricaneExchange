@@ -9,6 +9,8 @@
 
 <form action="/trading/delete/{{ trading_account.id }}/" method="POST">
     {% csrf_token %}
+
+    {% if shares_exist %}
     <p>Select what will happen to your shares:</p>
 
     <div>
@@ -30,6 +32,9 @@
       {% endfor %}
       </select>
     </div>
+    {% else %}
+    <h4>You have no shares on this account</h4>
+    {% endif %}
 
     <br>
 

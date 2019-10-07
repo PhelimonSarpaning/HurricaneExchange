@@ -221,11 +221,19 @@ def sell_all_shares(request, objShares):
 
 @login_required(login_url="/users")
 def trading_delete_view(request, id, *args, **kwargs):
+
+    #get users other trading accounts for dropdown
     trading_accounts = Trading_Account.objects.filter(~Q(id=id), user_id=request.user.id)
+
+    #set account action options to display if account has shares
+    tradingObject = Trading_Account.objects.get(id=id)
+    objShares = Shares.objects.filter(tradingID=tradingObject.id)
+    shares_exist = False
+    if objShares.exists():
+        shares_exist = True
+
     if request.method == 'POST':
         try:
-            tradingObject = Trading_Account.objects.get(id=id)
-            objShares = Shares.objects.filter(tradingID=tradingObject.id)
             if (request.POST['accountAction'] == 'sell'):
                 sell_all_shares(request, objShares)
             elif (request.POST['accountAction'] == 'transfer'):
@@ -243,7 +251,8 @@ def trading_delete_view(request, id, *args, **kwargs):
         return redirect('trading:list')
         context = {
             'trading_account': tradingObject,
-            'trading_accounts': trading_accounts
+            'trading_accounts': trading_accounts,
+            'shares_exist': shares_exist
         }
     else:
         try:
@@ -252,7 +261,8 @@ def trading_delete_view(request, id, *args, **kwargs):
             raise Http404
         context = {
             'trading_account': tradingObject,
-            'trading_accounts': trading_accounts
+            'trading_accounts': trading_accounts,
+            'shares_exist': shares_exist
         }
 
     return render(request, 'trading/trading_delete.html', context)
