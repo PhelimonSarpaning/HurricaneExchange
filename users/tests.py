@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth import SESSION_KEY
 from django.test import TestCase, override_settings
-from users.forms import userEmailForm
+from users.forms import userSignupForm
 @override_settings(STATICFILES_STORAGE='django.contrib.staticfiles.storage.StaticFilesStorage')
 
 
@@ -22,6 +22,5 @@ class MyTestCase(TestCase):
 class userTests(MyTestCase):
 
     def test_RegistrationForm(self):
-        form = userEmailForm(data=self.form_data)
+        form = userSignupForm(data=self.form_data)
         self.assertTrue(form.is_valid())
-    

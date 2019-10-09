@@ -2,17 +2,73 @@
 
 {% block content %}
 <h1>Trading Account: {{ trading_account.trading_name }}</h1>
-<h2><b>Are you sure you wish to delete this trading account?</b></h2>
+<h2><b>Are you sure you wish to close this trading account?</b></h2>
 <h2><b>This action is irreversable!</b></h2>
 
 <br>
 
 <form action="/trading/delete/{{ trading_account.id }}/" method="POST">
     {% csrf_token %}
-    <button type="submit">Confirm Deletion</button>
+
+    {% if shares_exist %}
+      {% if accounts_exist %}
+        <p>Select what will happen to your shares:</p>
+
+        <div class="form-group">
+          <input type="radio" id="transfer" name="accountAction" value='transfer'
+                 checked>
+          <label for="transfer">Transfer shares</label>
+        </div>
+
+          <div class="form-group">
+          <input type="radio" id="sell" name="accountAction" value='sell'>
+          <label for="sell">Sell all shares</label>
+        </div>
+
+        <div id='transferAccountSelect'  class='form-group'>
+          <label for="selectedAccount">Transfer to: </label>
+          <div>
+            <select class='custom-select col-2' name = "selectedAccount" id= "selectedAccount">
+            {% for account in trading_accounts %}
+                <option value="{{account.pk}}">{{account.trading_name}}</option>
+            {% endfor %}
+            </select>
+          </div>
+        </div>
+        {% else %}
+          <div class="form-group">
+          <h4>All shares will be sold!</h4>
+          </div>
+        {% endif %}
+    {% else %}
+      <div class="form-group">
+        <h4>You have no shares on this account</h4>
+    </div>
+    {% endif %}
+
+    <br>
+
+    <div class ="row">
+    <button class='btn btn-danger mr-3' type="submit">Confirm Closure</button>
 </form>
 
 <form action="/trading/{{ trading_account.id }}">
-    <button type="submit">Go Back</button>
+    <button class='btn btn-primary' type="submit">Go Back</button>
 </form>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+
+  $('input:radio[name="accountAction"]').change(
+    function(){
+        if ($(this).is(':checked') && $(this).val() == 'transfer') {
+            $('#transferAccountSelect').css("display","block");
+        }
+        else if ($(this).is(':checked') && $(this).val() == 'sell') {
+            $('#transferAccountSelect').css("display","none");
+        }
+    });
+</script>
 {% endblock %}

@@ -2,7 +2,6 @@
 
 {% block content %}
 <h1>Transaction history</h1>
-<h2>Your transaction history: </h2>
 <form method='POST' action='.' id='daterange'>
   {% csrf_token %}
   {% comment %} {{ form.as_p }} {% endcomment %}
@@ -68,6 +67,7 @@
 <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
+      <th scope="col">Trading Account</th>
       <th scope="col">Stock</th>
       <th scope="col">GICS</th>
       <th scope="col">Price</th>
@@ -80,6 +80,7 @@
   <tbody>
     {% for history in object %}
       <tr>
+        <td>{{ history.trading_name }}</td>
         <td>{{ history.stock_name}}</td>
         <td>{{ history.stock_gics }}</td>
         <td>${{ history.stock_price }}</td>
@@ -91,7 +92,7 @@
           </td>
           <td>
             <div style="color:red">
-              - ${{ history.funds }}
+              - ${{ history.funds|floatformat:2 }}
             </div>
           </td>
         {% else %}
@@ -102,7 +103,7 @@
           </td>
           <td>
             <div style="color:green">
-              + ${{history.funds}}
+              + ${{history.funds|floatformat:2}}
             </div>
           </td>
         {% endif %}

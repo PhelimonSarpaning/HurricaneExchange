@@ -1,7 +1,7 @@
 {% load static from staticfiles %}
 <!DOCTYPE HTML>
 <!-- This HTML file is used as a base template for all other HTML files,
-    every HTML file created MUST extend from this file. -->
+		every HTML file created MUST extend from this file. -->
 <html>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,6 +22,10 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+	<!-- Datatables -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" />
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 	<style>
 	html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 	</style>
@@ -47,10 +51,15 @@
           Trading
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/trading"><i class="fa fa-users fa-fw"></i>  Trading Accounts</a>
-					<div class="dropdown-divider"></div>
-		  		<a class="dropdown-item" href="/trading/history"><i class="fa fa-bank fa-fw"></i>  Transaction History</a>
-          <div class="dropdown-divider"></div>
+		  {% if default_trading %}
+          <a class="dropdown-item" href="/trading/{{ default_trading.id }}"><i class="fa fa-users fa-fw"></i>  Trading Accounts</a>
+				<div class="dropdown-divider"></div>
+          {% else %}
+		  	<a class="dropdown-item" href="/trading"><i class="fa fa-users fa-fw"></i>  Trading Accounts</a>
+			  	<div class="dropdown-divider"></div>
+		  {% endif %}
+		<a class="dropdown-item" href="/trading/history"><i class="fa fa-bank fa-fw"></i>  Transaction History</a>
+		  <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="/stock/stocklist"><i class="fa fa-diamond fa-fw"></i>  Stock Shares</a>
         </div>
       </li>
@@ -83,10 +92,15 @@
 						 {% avatar user 46 class="rounded-circle ml-3" id="user_avatar" %}
 						 <div class="mt-1 ml-3">
 							 <span><strong>{{request.user.username}} </strong><br>
-							<span>Funds: <strong>${{request.user.userfund.fund}}</strong></span><br>
+							<span>Funds<i class="fa fa-question-circle-o fa-fw text-muted" data-toggle="tooltip" data-placement="top" title="Funds available to use in buying shares" ></i>: <strong>${{request.user.userfund.fund}}</strong></span><br>
+							<span>Total Value<i class="fa fa-question-circle-o fa-fw text-muted" data-toggle="tooltip" data-placement="top" title="Total Value of all purchased stocks and available funds" ></i>: <strong>${{request.user.userfund.totalAssetValue}}</strong></span><br>
 						</div>
 				 </div>
-			    <a href='/trading/{{default_trading.id}}' class="nav-link"><i class="fa fa-users fa-fw"></i>  Trading Accounts</a>
+				{% if default_trading %}
+			    	<a href='/trading/{{default_trading.id}}' class="nav-link"><i class="fa fa-users fa-fw"></i>  Trading Accounts</a>
+				{% else %}
+			    	<a href='/trading/' class="nav-link"><i class="fa fa-users fa-fw"></i>  Trading Accounts</a>
+				{% endif %}
 			    <a href="/trading/history" class="nav-link"><i class="fa fa-bank fa-fw"></i>  Transaction History</a>
 					<a href="/stock/stocklist" class="nav-link"><i class="fa fa-diamond fa-fw"></i>  Stock Shares</a>
 					<a href="/leaderboard" class="nav-link"><i class="fa fa-bar-chart fa-fw"></i> Leaderboard</a>

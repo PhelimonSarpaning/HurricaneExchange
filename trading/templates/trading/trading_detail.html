@@ -1,23 +1,156 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if firstTime %}
+    <h3>Setup Progress</h3>
+    <div class="progress" style="height: 40px;">
+        <div class="progress-bar" role="progressbar" style="width: 70%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">70%</div>
+    </div>
+    <br>
+    {% endif %}
 <div>
   <a class="link dropdown-toggle btn btn-sm btn-primary" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Accounts</a>
   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+  {% if defaultAccount %}
+    <a class="dropdown-item" href="/trading/{{ defaultAccount.id }}"><i class="fa fa-users fa-fw"></i> {{ defaultAccount.trading_name }}</a>
+  {% endif %}
   {% for instance in list_accounts %}
-  <a class="dropdown-item" href="/trading/{{ instance.id }}"><i class="fa fa-users fa-fw"></i> {{ instance.trading_name }}</a>
-{% endfor %}
+    {% if instance.id != defaultAccount.id %}
+      <a class="dropdown-item" href="/trading/{{ instance.id }}"><i class="fa fa-users fa-fw"></i> {{ instance.trading_name }}</a>
+    {% endif %}
+  {% endfor %}
   <div class="dropdown-divider"></div>
 	<a class="dropdown-item" href="/trading/create"><i class="fa fa-cog fa-fw"></i> Open a new trading account</a>
 </div>
   <a class="btn btn-sm btn-primary" href="/trading" role="button" aria-haspopup="true" aria-expanded="false">View All</a>
+    {% if firstTime %}
+        <div class='row text-center justify-content-md-center'>
+            <div class'col-sm-12'>
+                <div class='card'>
+                    <div class='card-body'>
+                        <h3 class='card-title'>Purchase your first share</h3>
+                        <h5>This is where you can view your account information</h5>
+                        <h5>From here, we can purchase your first shares</h5>
+                        <h5>Click the buy shares button to begin buying shares</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+<div class='row text-center'>
+  <div class='col-sm-12'>
+    <h1>Trading Account: {{ trading_account.trading_name }}</h1>
+    <h2>Shares in your trading account </h2>
+  </div>
+</div>
 
-<h1>Trading Account: {{ trading_account.trading_name }}</h1>
-<h2>Shares in your trading account </h2>
+
 <!-- View Trading Accounts -->
 <h3>{{ no_stock }}</h3>
 
-<table class="table table-striped">
+<div class="modal fade" id="sellSharesModal" tabindex="-1" role="dialog" aria-labelledby="sellSharesModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sellModalLabel">Sell shares</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id='sell_form' method='POST'>{% csrf_token %}
+          <input type="hidden" name='stock_ticker' id="stock_ticker"></input>
+          <div class='row'>
+          <div class="col form-group">
+            <label for="stock_name">Stock: </label>
+            <h5 id="stock_name"></h5>
+          </div>
+          <div class="col form-group">
+            <label for="stock_price">Price </label>
+            <h5 id="stock_price">$</h5>
+          </div>
+          <div class="col form-group">
+            <label for="shares_available">Available: </label>
+            <h5 id="shares_available"></h5>
+          </div>
+          </div>
+          <div class='row'>
+          <div class="col form-group">
+            <label for="{{ shares_amount.id_for_label }}">Quantity: </label>
+              {{ form.shares_amount }}
+          </div>
+          <div class="col form-group">
+               <label for="total">Total: </label>
+               <input class ='form-control' type='text' id='total' value='$0.00' readonly/>
+          </div>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button onclick="submit" class="btn btn-primary" name="sell-submit">Confirm</button>
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+<div class="modal fade" id="sellAllModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sellModalLabel">Sell all shares?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <div class="form-group">
+             Are you sure you went to sell all shares? (This can not be reversed!)
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form id='sell_all_form' method = 'POST'>
+              {% csrf_token %}
+              <button class ="btn btn-primary" type="submit" name ="sell-all-button">Confirm</button>
+          </form>
+      </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+<div class="modal fade" id="transferShareslModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="transferShareslModalLabel">Transfer shares to another trading account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id='transfer_all_form' method = 'POST'>
+            {% csrf_token %}
+          <div class="form-group">
+          <label for="selectedAccount">Transfer to: </label>
+            <select class='custom-select' name = "selectedAccount" id= "selectedAccount">
+            {% for account in trading_accounts %}
+                <option value="{{account.pk}}">{{account.trading_name}}</option>
+            {% endfor %}
+            </select>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button class ="btn btn-primary" type="submit" name ="transfer-all-button">Confirm</button>
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<table class="table table-striped" id='shareTable'>
   <thead class="thead-dark">
     <tr>
       <th scope="col">Stock</th>
@@ -36,9 +169,9 @@
           <th> <a href="/stock/buy/{{ shares.stockID.stock_ticker }}/">{{ shares.stockID.stock_name }}</a> </th>
           <th> {{shares.shares_amount}} </th>
           <th> {{shares.stockID.stock_price}} </th>
-          <th>{% if value.stockID.stock_dayChange > 0 %}
+          <th>{% if shares.stockID.stock_dayChange > 0 %}
               <div style="color:green">{{shares.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i></div>
-          {% elif value.stockID.stock_dayChange < 0 %}
+          {% elif shares.stockID.stock_dayChange < 0 %}
               <div style="color:red">{{shares.stockID.stock_dayChange}}<i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i></div>
           {% else %}
               <div style="color:green">{{shares.stockID.stock_dayChange}}</div>
@@ -47,33 +180,74 @@
           {% for total in share_value %}
             {% for key, value in total.items %}
                 {% if key == shares.stockID.stock_ticker %}
-                <th> {{value}}  </th>
+                <th> {{value|floatformat:2}}  </th>
                 {% endif %}
               {% endfor %}
           {% endfor %}
           <td></td>
-           <th> <button onclick="window.location.href='/stock/{{trading_account.id}}/sell/{{shares.stockID.stock_ticker}}'" class= "btn-secondary btn-sm">Sell</button> </th>
+           <th>
+                <button type="button" class="btn-secondary btn-sm" data-toggle="modal" data-target="#sellSharesModal" data-whatever='{
+                  "name":"{{shares.stockID.stock_name}}",
+                  "price":{{shares.stockID.stock_price}},
+                  "ticker":"{{shares.stockID.stock_ticker}}",
+                  "max":{{shares.shares_amount}}
+                }'>Sell</button>
+            </th>
        </tr>
     {% endfor %}
   </table>
 
-<form action="/stock/stocklist">
-    <button class ="btn btn-secondary btn-sm" type="submit">Buy Shares</button>
-</form>
 
-<br>
+<div class='btn-group'>
+  <form class = form-inline action="/stock/stocklist">
+    {% if firstTime %}
+      <button class ="btn btn-danger mr-3" type="submit">Buy Shares</button>
+    {% else %}
+      <button class ="btn btn-secondary btn-sm mr-3" type="submit">Buy Shares</button>
+    {% endif %}
+  </form>
+
+{% if shares_exist %}
+  <button type="button" class="btn btn-secondary btn-sm mr-3" data-toggle="modal" data-target="#sellAllModal">Sell all shares</button>
+  {% if accounts_exist %}
+
+  <button type="button" class="btn btn-secondary btn-sm mr-3" data-toggle="modal" data-target="#transferShareslModal">Transfer all shares</button>
+
+  {% endif %}
+{% endif%}
 
 {% if trading_account.is_default != True %}
-  <form action="." method='POST'>
+
+  <form class = 'form-inline' action="." method='POST'>
     {% csrf_token %}
-    <button class ="btn btn-secondary btn-sm" type="submit">Make this my default trading account</button>
+    <button class ="btn btn-secondary btn-sm mr-3" type="submit">Make this my default trading account</button>
   </form>
-  <br>
 
 {% endif %}
 
-<form action="/trading/delete/{{ trading_account.id }}">
-    <button class ="btn btn-secondary btn-sm" type="submit">Delete this trading account</button>
-</form>
+  <form class ='form-inline' action="/trading/delete/{{ trading_account.id }}">
+      <button class ="btn btn-secondary btn-sm mr-3" type="submit">Close this trading account</button>
+  </form>
+
+{% endblock %}
+</div>
+
+{% block javascript %}
+{% load static %}
+<script type="text/javascript" src="{% static 'trading/js/sellPopup.js' %}"></script>
+<script>
+  var price = 0
+
+  function updateTotal(){
+    var amount = $("#id_shares_amount").val()
+    if(amount >= 0){
+      var total = price * amount
+      $("#total").val("$"+ total.toFixed(2))
+    }
+  }
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 
 {% endblock %}

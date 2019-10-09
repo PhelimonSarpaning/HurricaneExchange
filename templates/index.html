@@ -1,23 +1,212 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Hurricanes Exchange - HomePage</h1>
+    {% if firstTime %}
+        <h3>Setup Progress</h3>
+        <div class="progress" style="height: 40px;">
+            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">0%</div>
+        </div>
+    {% endif %}
     {% if user.is_authenticated %}
         <h2> Welcome {{ user.username }}!</h2>
-        <h3>Funds available ${{ user.userfund.fund }}</h3>
-            {% if firstTime %}
+        <hr>
+        {% if firstTime %}
             <br>
-            <div class="text-center">
-                <h3>Welcome {{ user.username }} to Hurricane Exchange!</h3>
-                <h3>To get started, you will need to setup your trading account</h3>
-                <h3>Press the button below to open a trading account and begin buying shares</h3>
-                <form action="/trading/create">
-                    <button type="submit">Open a trading account</button>
-                </form>
+            <div class='row text-center justify-content-md-center'>
+                <div class'col-sm-12'>
+                    <div class='card'>
+                        <div class='card-body'>
+                            <h3 class='card-title'>Open a trading account</h3>
+                            <h5>Welcome {{ user.username }} to Hurricane Exchange!</h5>
+                            <h5>To get started, you will need to setup your trading account</h5>
+                            <h5>Press the button below to open a trading account and begin buying shares</h5>
+                            <form action="/trading/create">
+                                <button class='btn btn-danger' type="submit">Open a trading account</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% endif %}
+        {% else %}
+        <!-- Bootstrap div cards -->
+        <div class="container-fluid content-row wrapper">
+            <div class='row'>
+              <!-- User account value graph card -->
+              <div class='col-4'>
+                  <div class='card'>
+                      <div class='card-body flex-fill'>
+                          <h5 class='card-title'>Account Value</h5>
+                          <h6 class='card-subtitle mb-2 text-muted'>History of your accounts asset value</h6>
+                          <div id="userAsset_container"></div>
+                      </div>
+                  </div>
+              </div>
+              <!-- Stocks card -->
+              <div class='col-3'>
+                  <div class='card'>
+                      <div class='card-body flex-fill'>
+                          <h5 class='card-title'>Your Shares</h5>
+                          <h6 class='card-subtitle mb-2 text-muted'>Keep track of your shares</h6>
+                          <div class='card-body scroll'>
+                              <h6 class='card-subtitle mb-2 text-muted'>Stock going up</h6>
+                              {% for shares in sharesObj %}
+                                  {% if shares.stockID.stock_dayChange > 0 %}
+                                      <li class='list-group-item'>
+                                        <div class = 'row'>
+                                          <div class = 'col'>
+                                            <a href="/stock/buy/{{shares.stockID.stock_ticker}}">{{ shares.stockID.stock_name }}</a>
+                                          </div>
+                                          <div class='col-5 text-right' style="color:green">
+                                              {{ shares.stockID.stock_dayChange }}
+                                              <i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i>
+                                          </div>
+                                        </div>
+                                      </li>
+                                  {% endif %}
+                              {% endfor %}
+                              <br>
+                              <h6 class='card-subtitle mb-2 text-muted'>Stock going down</h6>
+                              {% for shares in sharesObj %}
+                                  {% if shares.stockID.stock_dayChange < 0 %}
+                                      <li class='list-group-item'>
+                                        <div class = 'row'>
+                                          <div class = 'col'>
+                                            <a href="/stock/buy/{{shares.stockID.stock_ticker}}">{{ shares.stockID.stock_name }}</a>
+                                          </div>
+                                          <div class='col-5 text-right' style="color:red">
+                                              {{ shares.stockID.stock_dayChange }}
+                                              <i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i>
+                                          </div>
+                                        </div>
+                                      </li>
+                                  {% endif %}
+                              {% endfor %}
+                          </div>
+                          <a href='/stock/stocklist' class='btn btn-primary'>View all stock</a>
+                      </div>
+                  </div>
+              </div>
+                <!-- Trading account card -->
+                <div class='col-2'>
+                    <div class='card'>
+                          <div class= 'card-body'>
+                            <h5 class='card-title'>Trading Accounts</h5>
+                            <h6 class='card-subtitle mb-2 text-muted'>Your trading accounts</h6>
+                            <div class='card-body scroll'>
+                                {% if default_trading %}
+                                    <li class='list-group-item'><a href="trading/{{ default_trading.id }}">{{ default_trading.trading_name }}</a></li>
+                                {% endif %}
+                                {% for accounts in list_accounts %}
+                                    {% if accounts.id != default_trading.id %}
+                                        <li class='list-group-item'><a href="trading/{{ accounts.id }}">{{ accounts.trading_name }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                        </div>
+                          <a href='/trading' class='btn btn-primary'>View accounts</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Reccomendation account card -->
+                <div class='col-3'>
+                    <div class='card'>
+                          <div class= 'card-body'>
+                            <h5 class='card-title'>Recommendations<i style='color:red' class="fa fa-exclamation-triangle fa-fw text-muted" data-toggle="tooltip" data-placement="top" title="BEWARE: THIS IS HIGHLY EXPERIMENTAL AND MAY BE INNACCURATE"></i></h5>
+                            <h6 class='card-subtitle mb-2 text-muted'>Recommendation based on sell volume, You should look into buying these!</h6>
+                            <div class='card-body scroll'>
+                              {% for share in topShares %}
+                                      <li class='list-group-item'>
+                                        <div class = 'row'>
+                                          <div class = 'col'>
+                                            <a href="/stock/buy/{{share.stock_ticker}}">{{ share.stock_name }}</a>
+                                          </div>
+                                          {% if share.stock_dayChange > 0 %}
+                                          <div class='col-5 text-right' style="color:green">
+                                              {{ share.stock_dayChange }}
+                                              <i class="material-icons" style ="vertical-align:middle;">arrow_drop_up</i>
+                                          </div>
+                                          {% elif share.stock_dayChange < 0 %}
+                                          <div class='col-5 text-right' style="color:red">
+                                              {{ share.stock_dayChange }}
+                                              <i class="material-icons" style ="vertical-align:middle;">arrow_drop_down</i>
+                                          </div>
+                                          {% else %}
+                                          <div class='col-5 text-right' style="color:green">
+                                              {{ share.stock_dayChange }}
+                                          </div>
+                                          {% endif %}
+                                        </div>
+                                      </li>
+                              {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+                <br>
+                <div class='row'>
+                <!-- Leaderboard card-->
+                <div class='col'>
+                    <div class='card'>
+                        <div class='card-body'>
+                            <h5 class='card-title'>Leaderboard</h5>
+                            <h6 class='card-subtitle mb-2 text-muted'>Top 5 Users</h6>
+                            <hr>
+                            <div class='row'>
+                                <div class='col-sm-5 text-left'>
+                                <h6 class='card-subtitle mb-2 text-muted'>User</h6>
+                                    {% for leader in leaderObj %}
+                                        <ul class='list-group list-group-flush'>
+                                            <h6><li class='list-group-item'>{{ leader.user }}</li></h6>
+                                        </ul>
+                                    {% endfor %}
+                                </div>
+                                <div class='col-sm-7 text-right'>
+                                <h6 class='card-subtitle mb-2 text-muted text-left'>Funds</h6>
+                                    {% for leader in leaderObj %}
+                                        <ul class='list-group list-group-flush'>
+                                            <h6><li class='list-group-item'>${{ leader.totalAssetValue }}</li></h6>
+                                        </ul>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class='row justify-content-md-center'>
+                                <a href='/leaderboard' class='btn btn-primary'>View leaderboard</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     {% else %}
         <h2> Welcome to Hurricanes Exchange, please login </h2>
     {% endif %}
 
+{% endblock %}
+
+{% block javascript %}
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+{{ userHistorical|json_script:"historicalData"}}
+
+<script type="text/javascript">
+  // Create the chart
+  document.getElementById("id_shares_amount").max = {{stock_available}}
+
+  //var value = JSON.parse(document.getElementById('historicalData').textContent);
+
+  Highcharts.stockChart('userAsset_container', {
+        rangeSelector: {
+            selected: 1
+        },
+        title: {
+            text: ""
+        },
+      series:  [{
+            data:  JSON.parse(document.getElementById('historicalData').textContent),
+            tooltip: {
+                valueDecimals: 3
+            },
+            turboThreshold: 0
+        }],
+    });
+</script>
 {% endblock %}
