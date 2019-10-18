@@ -1,14 +1,64 @@
-Github URL:
--------------
+
+# Github URL:
+
 https://github.com/rmit-s3603315-benjamin-randall/HurricaneExchange/
 
-Live project:
-------------------
+# Live project:
+
 https://hurricane-exchange-staging.herokuapp.com
 
-Release Notes
-----------------
+# Setup client/developer machine:
 
+Development on this project requires a linux system, more specifically Ubuntu 18.04.
+If planning for development on Windows or MacOS a linux virtual machine would be required. 
+This setup guide will only go into details for setting up on Ubuntu, if using any other linux system the installation steps may differ. You will need Python3, pip3, git and Postgresql to be installed 
+
+## Local Development Setup
+
+- Install Packages
+
+		$ sudo apt-get update
+		$ sudo apt-get install python3-pi
+		$ sudo apt install git
+		$ sudo apt install postgresql postgresql-contrib
+
+- Clone the Github Repo to your local machine with the following line 
+
+		$ git clone https://github.com/rmit-s3603315-benjamin-randall/HurricaneExchange.git
+- Navigate into the new file:
+
+		$ cd HurricaneExchange
+- Install the required Libraries
+
+		$ sudo pip3 install -r requirements.txt
+- setup your database, type the following commands in order, make sure the spelling is all correct:
+
+		$ sudo -i -u postgres
+		$ createuser --interactive
+		$ admin
+		$ y
+		$ psql
+		$ \password admin
+		- type in hurricanes123 as your password (make sure this is accurate or else the database will not work)
+		$ CREATE DATABASE hurricanes owner admin;
+		$ \q
+		$ exit
+- Run the migrations for hurricane exchange:
+
+		$ python3 manage.py migrate
+- Create an admin account:
+
+		$ python3 manage.py createsuperuser
+		Enter a user name and follow the prompts
+- Populate the stock database(this may take a few minutes)
+
+		$ python3 manage.py populatestockdb
+- Run the server: 
+
+		$ python3 manage.py runserver
+
+
+# Release Notes
 	v0.1 Alpha:
 
 
