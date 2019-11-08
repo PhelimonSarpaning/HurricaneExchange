@@ -8,8 +8,8 @@ import requests
 import requests.exceptions
 import tempfile
 import pyasx
-import pyasx.config
-import pyasx.data
+import pyasx2.config
+import pyasx2.data
 
 
 def get_listed_securities():
@@ -25,7 +25,7 @@ def get_listed_securities():
             'isin': 'AU000000IJH2'
         }
     ]
-    :raises pyasx.data.LookupError:
+    :raises pyasx2.data.LookupError:
     """
 
     # NOTE the format of the TSV file has changed breaking the following code. There is a bad
@@ -38,12 +38,12 @@ def get_listed_securities():
     # # GET CSV file of ASX codes, as a stream
     # try:
 
-    #     response = requests.get(pyasx.config.get('asx_securities_tsv'), stream=True)
+    #     response = requests.get(pyasx2.config.get('asx_securities_tsv'), stream=True)
     #     response.raise_for_status()  # throw exception for bad status codes
 
     # except requests.exceptions.HTTPError as ex:
 
-    #     raise pyasx.data.LookupError("Failed to lookup listed securities; %s" % str(ex))
+    #     raise pyasx2.data.LookupError("Failed to lookup listed securities; %s" % str(ex))
 
     # # parse the CSV result, piping it to a temp file to make the process more memory efficient
     # with tempfile.NamedTemporaryFile("w+") as temp_stream:
@@ -138,9 +138,9 @@ def _normalise_security_info(raw):
     security_info['indices'] = _normalise_security_indices_info(raw)
 
     # parse dates to datetime objects
-    security_info['last_trade_date'] = pyasx.data._parse_datetime(security_info['last_trade_date'])
-    security_info['year_high_date'] = pyasx.data._parse_datetime(security_info['year_high_date'])
-    security_info['year_low_date'] = pyasx.data._parse_datetime(security_info['year_low_date'])
+    security_info['last_trade_date'] = pyasx2.data._parse_datetime(security_info['last_trade_date'])
+    security_info['year_high_date'] = pyasx2.data._parse_datetime(security_info['year_high_date'])
+    security_info['year_low_date'] = pyasx2.data._parse_datetime(security_info['year_low_date'])
 
     return security_info
 
@@ -151,13 +151,13 @@ def get_security_info(ticker):
     can be for any type of listed security, such as company stock, bonds, ETFs
     etc.
     :param ticker: The ticker symbol of the security to lookup.
-    :raises pyasx.data.LookupError:
+    :raises pyasx2.data.LookupError:
     """
 
     assert(len(ticker) >= 3)
 
     # build the endpoint to pull security info
-    endpoint_pattern = pyasx.config.get('asx_single_json')
+    endpoint_pattern = pyasx2.config.get('asx_single_json')
     endpoint = endpoint_pattern % ticker.upper()
 
     # GET the share info
@@ -167,7 +167,7 @@ def get_security_info(ticker):
         if response.status_code == 404:
             # 404 not found, therefore unknown ticker
 
-            raise pyasx.data.UnknownTickerException(
+            raise pyasx2.data.UnknownTickerException(
                 "Unknown security ticker %s" % ticker
             )
 
@@ -181,7 +181,7 @@ def get_security_info(ticker):
 
             except HTTPError as ex:
 
-                raise pyasx.data.LookupError(
+                raise pyasx2.data.LookupError(
                     "Failed to lookup company info for %s; HTTP status %s" % (
                         ticker, str(ex)
                     )
