@@ -1,5 +1,5 @@
 """
-Configuration manager for pyasx. Loads values from pyasx/config.yml.
+Configuration manager for pyasx2. Loads values from pyasx/config.yml.
 """
 
 
@@ -35,7 +35,7 @@ def load():
 def get(key):
     """
     Returns the value of the given configuration item.
-    :param key: The configuration item to get, e.g. pyasx.config.get('endpoints', 'asx_index_csv')
+    :param key: The configuration item to get, e.g. pyasx2.config.get('endpoints', 'asx_index_csv')
     """
 
     global _config
