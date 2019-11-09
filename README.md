@@ -60,7 +60,7 @@ This setup guide will only go into details for setting up on Ubuntu, if using an
 
 # Release Notes
 
-	v0.5 Alpha
+	v0.5 Alpha (Final Release 9th November 2019)
 		A few minor changes:
 		- The stock page now displays a loading spinner while the stock list loads
 		- Integrated local version of pyasx, as the library was removed from pip and Github. The library has no license specification. We are not redistributing the library and are not modifying the code.
