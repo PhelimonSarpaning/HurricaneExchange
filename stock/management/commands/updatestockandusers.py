@@ -3,7 +3,7 @@ from stock.models import Shares, Stock
 from trading.models import Trading_Account
 from users.models import UserFund, UserAssetValue
 from django.contrib.auth.models import User
-import pyasx.data.companies
+import pyasx2.data.companies
 
 STOCKAMOUNT_DIVISOR = 10000000000
 
@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = "refresh stock information on the database"
 
     def handle(self, *args, **options):
-        listedCompanies = pyasx.data.companies.pyasx.data.companies.get_listed_companies()
+        listedCompanies = pyasx2.data.companies.pyasx2.data.companies.get_listed_companies()
 
         for company in listedCompanies:
             try:
@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 print('Stock "%s" does not exist, added to database' % company["ticker"])
 
             try:
-                currStockInfo = pyasx.data.companies.get_company_info(company["ticker"])
+                currStockInfo = pyasx2.data.companies.get_company_info(company["ticker"])
                 currStock = Stock.objects.get(stock_name=company["name"])
                 print(currStockInfo["primary_share"]["last_price"])
                 currStock.stock_price= float(currStockInfo["primary_share"]["last_price"])
@@ -36,7 +36,7 @@ class Command(BaseCommand):
                 print(currStock.stock_rating)
                 currStock.save();
                 print('Stock "%s" has valid Info, prices updated' % company["ticker"])
-            except (pyasx.data.UnknownTickerException, ValueError) as e:
+            except (pyasx2.data.UnknownTickerException, ValueError) as e:
                 currStock.stock_hasValidInfo = False;
                 print('Stock "%s" does not have valid Info, ValidInfo set to False' % company["ticker"])
         #once stocks are updated update the users asset values
